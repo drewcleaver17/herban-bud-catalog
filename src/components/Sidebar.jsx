@@ -1,4 +1,4 @@
-import { CATEGORY_GLYPHS, CATEGORY_LABEL } from '../lib/categories'
+import { CATEGORY_GLYPHS } from '../lib/categories'
 
 const CATEGORY_ACCENT = {
   'Pre-Rolls':   'from-[#CDB4DB]/10 to-[#CDB4DB]/5 border-[#CDB4DB]/20',
@@ -8,19 +8,19 @@ const CATEGORY_ACCENT = {
   'VAPES':       'from-[#E8B86B]/10 to-[#E8B86B]/5 border-[#E8B86B]/20',
 }
 
-function CategoryTile({ category, label, count, active, onClick }) {
+function CategoryTile({ category, label, count, active, onClick, compact }) {
   const glyph = CATEGORY_GLYPHS[category] || '•'
   const accent = CATEGORY_ACCENT[category] || 'from-paper/10 to-paper/5 border-paper/15'
   return (
     <button
       onClick={onClick}
-      className={`group w-full text-left rounded-sm border transition-all p-2.5 flex items-center gap-3 bg-gradient-to-br ${accent} ${
+      className={`group w-full text-left rounded-sm border transition-all ${compact ? 'p-2' : 'p-2.5'} flex items-center gap-3 bg-gradient-to-br ${accent} ${
         active
           ? 'ring-1 ring-accent-warm border-accent-warm/60'
           : 'hover:border-paper/30'
       }`}
     >
-      <div className="w-10 h-10 rounded-sm bg-indigo-950/40 flex items-center justify-center text-lg shrink-0">
+      <div className={`${compact ? 'w-8 h-8' : 'w-10 h-10'} rounded-sm bg-indigo-950/40 flex items-center justify-center text-lg shrink-0`}>
         {glyph}
       </div>
       <div className="min-w-0 flex-1">
@@ -33,28 +33,55 @@ function CategoryTile({ category, label, count, active, onClick }) {
   )
 }
 
-export default function Sidebar({ categories, filters, setFilters, brands }) {
-  const clearCategory = () => setFilters({ ...filters, category: null })
+export default function Sidebar({ categories, filters, setFilters, brands, variant = 'desktop', onNavigate }) {
+  const isAllProducts = filters.categories.length === 0
+
+  const selectAllProducts = () => {
+    setFilters({ ...filters, categories: [] })
+    if (onNavigate) onNavigate()
+  }
+
+  const toggleCategory = (cat) => {
+    const has = filters.categories.includes(cat)
+    const next = has
+      ? filters.categories.filter((c) => c !== cat)
+      : [...filters.categories, cat]
+    setFilters({ ...filters, categories: next })
+  }
+
+  const toggleBrand = (b) => {
+    const active = filters.brands.includes(b)
+    setFilters({
+      ...filters,
+      brands: active
+        ? filters.brands.filter((x) => x !== b)
+        : [...filters.brands, b],
+    })
+  }
+
+  const isMobile = variant === 'mobile'
 
   return (
-    <aside className="w-64 shrink-0 border-r border-paper/10 bg-indigo-950/40 flex flex-col">
-      <div className="px-4 pt-4 pb-3 border-b border-paper/10">
-        <button onClick={() => setFilters({ ...filters, category: null, brands: [], q: '' })} className="block text-left w-full">
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-paper leading-tight">
-            Herban
-          </h1>
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50">
-            wholesale catalog
-          </span>
-        </button>
-      </div>
+    <aside className={`${isMobile ? 'w-full' : 'w-64 shrink-0 border-r border-paper/10'} bg-indigo-950/40 flex flex-col`}>
+      {!isMobile && (
+        <div className="px-4 pt-4 pb-3 border-b border-paper/10">
+          <button onClick={() => { setFilters({ ...filters, categories: [], brands: [], q: '' }); onNavigate?.() }} className="block text-left w-full">
+            <h1 className="font-display text-2xl font-semibold tracking-tight text-paper leading-tight">
+              Herban
+            </h1>
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50">
+              wholesale catalog
+            </span>
+          </button>
+        </div>
+      )}
 
-      <div className="overflow-y-auto flex-1 py-3">
+      <div className={`${isMobile ? '' : 'overflow-y-auto'} flex-1 py-3`}>
         <div className="px-2 pb-2">
           <button
-            onClick={clearCategory}
+            onClick={selectAllProducts}
             className={`w-full text-left rounded-sm border transition-all p-2.5 flex items-center gap-3 ${
-              filters.category === null
+              isAllProducts
                 ? 'ring-1 ring-accent-warm border-accent-warm/60 bg-paper/5'
                 : 'border-paper/15 bg-paper/[0.02] hover:border-paper/30'
             }`}
@@ -78,18 +105,12 @@ export default function Sidebar({ categories, filters, setFilters, brands }) {
               category={c.category}
               label={c.label}
               count={c.count}
-              active={filters.category === c.category}
-              onClick={() =>
-                setFilters({
-                  ...filters,
-                  category: filters.category === c.category ? null : c.category,
-                })
-              }
+              active={filters.categories.includes(c.category)}
+              onClick={() => toggleCategory(c.category)}
             />
           ))}
         </div>
 
-        {/* Secondary brand filter */}
         <div className="px-4 pt-4 pb-3 border-t border-paper/10 mt-3">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-[10px] uppercase tracking-wider text-paper/40">
@@ -110,14 +131,7 @@ export default function Sidebar({ categories, filters, setFilters, brands }) {
               return (
                 <button
                   key={b}
-                  onClick={() =>
-                    setFilters({
-                      ...filters,
-                      brands: active
-                        ? filters.brands.filter((x) => x !== b)
-                        : [...filters.brands, b],
-                    })
-                  }
+                  onClick={() => toggleBrand(b)}
                   className={`text-[11px] px-2 py-1 rounded-sm border transition-colors ${
                     active
                       ? 'bg-paper text-indigo-900 border-paper'
@@ -130,6 +144,17 @@ export default function Sidebar({ categories, filters, setFilters, brands }) {
             })}
           </div>
         </div>
+
+        {isMobile && (
+          <div className="px-4 pt-4 pb-3 border-t border-paper/10 mt-3">
+            <button
+              onClick={onNavigate}
+              className="w-full px-3 py-2 text-xs font-medium rounded-sm bg-accent-warm text-indigo-900"
+            >
+              Apply &amp; view products
+            </button>
+          </div>
+        )}
       </div>
     </aside>
   )

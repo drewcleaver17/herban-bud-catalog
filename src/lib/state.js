@@ -6,9 +6,10 @@ const LS_PRICES = 'herban.prices.v1'
 
 export const DEFAULT_FILTERS = {
   q: '',
-  category: null,    // null = All Products; otherwise a category string
+  // Multi-select: empty array = All Products. Array of category strings narrows down.
+  categories: [],
   brands: [],        // secondary brand narrow-down
-  sort: { key: 'brand', dir: 'asc' },
+  sort: { key: 'curated', dir: 'asc' },
 }
 
 export function readFromURL() {
@@ -16,7 +17,7 @@ export function readFromURL() {
   const sp = new URLSearchParams(window.location.search)
   const f = { ...DEFAULT_FILTERS }
   if (sp.has('q'))   f.q = sp.get('q') || ''
-  if (sp.has('cat')) f.category = sp.get('cat') || null
+  if (sp.has('cat')) f.categories = sp.get('cat').split(',').filter(Boolean)
   if (sp.has('b'))   f.brands = sp.get('b').split(',').filter(Boolean)
   if (sp.has('s')) {
     const [key, dir] = sp.get('s').split(':')
@@ -29,7 +30,7 @@ export function writeToURL(filters) {
   if (typeof window === 'undefined') return
   const sp = new URLSearchParams()
   if (filters.q)          sp.set('q', filters.q)
-  if (filters.category)   sp.set('cat', filters.category)
+  if (filters.categories.length) sp.set('cat', filters.categories.join(','))
   if (filters.brands.length) sp.set('b', filters.brands.join(','))
   if (filters.sort.key !== DEFAULT_FILTERS.sort.key || filters.sort.dir !== 'asc') {
     sp.set('s', `${filters.sort.key}:${filters.sort.dir}`)

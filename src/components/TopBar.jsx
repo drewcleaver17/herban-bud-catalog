@@ -12,30 +12,51 @@ export default function TopBar({
   activeLabel,
   rfqLineCount,
   onOpenRFQ,
+  isMobile,
+  onOpenMenu,
 }) {
   const [viewName, setViewName] = useState('')
   const [showSaveDialog, setShowSaveDialog] = useState(false)
 
   return (
     <div className="sticky top-0 z-20 bg-indigo-900/95 backdrop-blur border-b border-paper/10">
-      <div className="flex flex-wrap items-center gap-3 px-5 py-3">
-        <div className="flex items-baseline gap-2 shrink-0">
-          <span className="font-mono text-2xs uppercase tracking-[0.18em] text-paper/50">
-            viewing
-          </span>
-          <span className="font-display text-base text-paper">
-            {activeLabel}
-          </span>
-          <span className="font-mono text-2xs text-paper/50 tabular-nums">
-            · {resultCount}
-          </span>
-        </div>
+      <div className="flex flex-wrap items-center gap-2 px-3 py-3 sm:gap-3 sm:px-5">
+        {isMobile && (
+          <>
+            <button
+              onClick={onOpenMenu}
+              className="p-2 -ml-1 text-paper/80 hover:text-paper"
+              aria-label="Open menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"/>
+              </svg>
+            </button>
+            <div className="flex items-baseline gap-2">
+              <h1 className="font-display text-lg text-paper">Herban</h1>
+            </div>
+          </>
+        )}
 
-        <div className="flex-1 min-w-[220px]">
+        {!isMobile && (
+          <div className="flex items-baseline gap-2 shrink-0">
+            <span className="font-mono text-2xs uppercase tracking-[0.18em] text-paper/50">
+              viewing
+            </span>
+            <span className="font-display text-base text-paper">
+              {activeLabel}
+            </span>
+            <span className="font-mono text-2xs text-paper/50 tabular-nums">
+              · {resultCount}
+            </span>
+          </div>
+        )}
+
+        <div className="flex-1 min-w-[140px] order-last sm:order-none w-full sm:w-auto">
           <div className="relative">
             <input
               type="search"
-              placeholder="Search SKUs, brands, categories…"
+              placeholder={isMobile ? 'Search…' : 'Search SKUs, brands, categories…'}
               value={filters.q}
               onChange={(e) => setFilters({ ...filters, q: e.target.value })}
               className="w-full bg-indigo-800/60 border border-paper/15 rounded-sm px-3 py-2 text-sm text-paper placeholder:text-paper/40 focus:border-accent-warm focus:outline-none"
@@ -52,8 +73,8 @@ export default function TopBar({
           </div>
         </div>
 
-        <div className="flex items-center gap-1">
-          {views.length > 0 && (
+        <div className="flex items-center gap-1 ml-auto">
+          {!isMobile && views.length > 0 && (
             <select
               value=""
               onChange={(e) => {
@@ -70,24 +91,27 @@ export default function TopBar({
               ))}
             </select>
           )}
-          <button
-            onClick={() => setShowSaveDialog((s) => !s)}
-            className="px-2.5 py-1.5 text-2xs font-medium rounded-sm border border-paper/15 text-paper/70 hover:text-paper hover:border-paper/40"
-          >
-            Save view
-          </button>
-          <button
-            onClick={onShareURL}
-            className="px-2.5 py-1.5 text-2xs font-medium rounded-sm border border-paper/15 text-paper/70 hover:text-paper hover:border-paper/40"
-            title="Copy shareable link"
-          >
-            Share
-          </button>
+          {!isMobile && (
+            <>
+              <button
+                onClick={() => setShowSaveDialog((s) => !s)}
+                className="px-2.5 py-1.5 text-2xs font-medium rounded-sm border border-paper/15 text-paper/70 hover:text-paper hover:border-paper/40"
+              >
+                Save view
+              </button>
+              <button
+                onClick={onShareURL}
+                className="px-2.5 py-1.5 text-2xs font-medium rounded-sm border border-paper/15 text-paper/70 hover:text-paper hover:border-paper/40"
+                title="Copy shareable link"
+              >
+                Share
+              </button>
+            </>
+          )}
 
-          {/* RFQ button — prominent */}
           <button
             onClick={onOpenRFQ}
-            className={`ml-2 px-3 py-1.5 text-xs font-medium rounded-sm transition-colors flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-medium rounded-sm transition-colors flex items-center gap-1.5 ${
               rfqLineCount > 0
                 ? 'bg-accent-warm text-indigo-900 hover:bg-accent-warm/90'
                 : 'bg-paper/10 text-paper hover:bg-paper/20'
@@ -103,11 +127,20 @@ export default function TopBar({
         </div>
       </div>
 
-      {showSaveDialog && (
+      {/* Mobile secondary row: viewing label + count */}
+      {isMobile && (
+        <div className="flex items-center gap-2 px-3 pb-2 text-2xs">
+          <span className="font-mono uppercase tracking-[0.18em] text-paper/50">viewing</span>
+          <span className="font-display text-sm text-paper truncate">{activeLabel}</span>
+          <span className="font-mono text-paper/50 tabular-nums">· {resultCount}</span>
+        </div>
+      )}
+
+      {showSaveDialog && !isMobile && (
         <div className="flex items-center gap-2 px-5 pb-3">
           <input
             autoFocus
-            placeholder="View name (e.g., 'Dope Pros Pre-Rolls for ABC Smoke Shop')"
+            placeholder="View name"
             value={viewName}
             onChange={(e) => setViewName(e.target.value)}
             onKeyDown={(e) => {

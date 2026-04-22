@@ -3,6 +3,7 @@ import sourceProducts from './data/products.json'
 import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import ProductTable from './components/ProductTable'
+import ProductCards from './components/ProductCards'
 import RFQDrawer from './components/RFQDrawer'
 import AdminDrawer, { loadOverrides } from './components/AdminDrawer'
 import {
@@ -22,17 +23,34 @@ import {
 } from './lib/rfq'
 import { buildCategoryCounts, CATEGORY_LABEL } from './lib/categories'
 
+// Tailwind default md breakpoint is 768px; we flip to mobile below that.
+const MOBILE_BREAKPOINT = 768
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth < MOBILE_BREAKPOINT
+  )
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+  return isMobile
+}
+
 export default function App() {
   const [products, setProducts] = useState(() => loadOverrides() ?? sourceProducts)
   const [filters, setFilters] = useState(() => readFromURL())
   const [views, setViews] = useState(() => loadViews())
   const [buyerPrices, setBuyerPrices] = useState(() => loadBuyerPrices())
 
-  // RFQ: URL params take priority (a shared link), else localStorage
   const [rfq, setRFQ] = useState(() => readRFQFromURL() ?? loadRFQ())
   const [rfqOpen, setRFQOpen] = useState(() => !!readRFQFromURL())
 
   const [adminOpen, setAdminOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search)
@@ -60,7 +78,7 @@ export default function App() {
   const filtered = useMemo(() => {
     const q = filters.q.trim().toLowerCase()
     return products.filter((p) => {
-      if (filters.category && p.category !== filters.category) return false
+      if (filters.categories.length && !filters.categories.includes(p.category)) return false
       if (filters.brands.length && !filters.brands.includes(p.brand)) return false
       if (q) {
         const hay = `${p.brand} ${p.category} ${p.sku} ${p.name} ${p.notes || ''} ${p.tier || ''}`.toLowerCase()
@@ -71,7 +89,11 @@ export default function App() {
   }, [products, filters])
 
   const activeLabel = useMemo(() => {
-    const catLabel = filters.category ? (CATEGORY_LABEL[filters.category] || filters.category) : null
+    const catLabel = filters.categories.length === 1
+      ? (CATEGORY_LABEL[filters.categories[0]] || filters.categories[0])
+      : filters.categories.length > 1
+      ? `${filters.categories.length} categories`
+      : null
     const brandLabel = filters.brands.length === 1
       ? filters.brands[0]
       : filters.brands.length > 1
@@ -81,7 +103,7 @@ export default function App() {
     if (catLabel) return catLabel
     if (brandLabel) return brandLabel
     return 'All products'
-  }, [filters.category, filters.brands])
+  }, [filters.categories, filters.brands])
 
   const rfqLineCount = useMemo(
     () => Object.values(rfq.cart).filter((q) => q > 0).length,
@@ -136,12 +158,15 @@ export default function App() {
 
   return (
     <div className="min-h-full flex">
-      <Sidebar
-        categories={categories}
-        filters={filters}
-        setFilters={setFilters}
-        brands={brands}
-      />
+      {!isMobile && (
+        <Sidebar
+          categories={categories}
+          filters={filters}
+          setFilters={setFilters}
+          brands={brands}
+          variant="desktop"
+        />
+      )}
 
       <div className="flex-1 min-w-0 flex flex-col">
         <TopBar
@@ -156,18 +181,31 @@ export default function App() {
           activeLabel={activeLabel}
           rfqLineCount={rfqLineCount}
           onOpenRFQ={() => setRFQOpen(true)}
+          isMobile={isMobile}
+          onOpenMenu={() => setMobileMenuOpen(true)}
         />
 
         <main className="flex-1">
-          <ProductTable
-            products={filtered}
-            filters={filters}
-            setFilters={setFilters}
-            cart={rfq.cart}
-            setQty={setQty}
-            buyerPrices={buyerPrices}
-            setBuyerPrice={setBuyerPrice}
-          />
+          {isMobile ? (
+            <ProductCards
+              products={filtered}
+              filters={filters}
+              cart={rfq.cart}
+              setQty={setQty}
+              buyerPrices={buyerPrices}
+              setBuyerPrice={setBuyerPrice}
+            />
+          ) : (
+            <ProductTable
+              products={filtered}
+              filters={filters}
+              setFilters={setFilters}
+              cart={rfq.cart}
+              setQty={setQty}
+              buyerPrices={buyerPrices}
+              setBuyerPrice={setBuyerPrice}
+            />
+          )}
         </main>
 
         <footer className="px-5 py-4 border-t border-paper/10 flex items-center justify-between text-2xs font-mono text-paper/40">
@@ -175,11 +213,42 @@ export default function App() {
             {products.length} SKUs · {brands.length} brands ·{' '}
             <span className="text-paper/50">bud.drewcleaver.com</span>
           </span>
-          <span>
+          <span className="hidden sm:inline">
             Prices subject to change. Contact Drew for current availability.
           </span>
         </footer>
       </div>
+
+      {/* Mobile menu (sidebar as slide-down sheet) */}
+      {isMobile && mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 flex flex-col bg-indigo-950/95 backdrop-blur">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-paper/10 shrink-0">
+            <div>
+              <h1 className="font-display text-xl text-paper">Herban</h1>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50">
+                filter &amp; categories
+              </span>
+            </div>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-1.5 text-paper/60 hover:text-paper text-lg"
+              aria-label="Close menu"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <Sidebar
+              categories={categories}
+              filters={filters}
+              setFilters={setFilters}
+              brands={brands}
+              variant="mobile"
+              onNavigate={() => setMobileMenuOpen(false)}
+            />
+          </div>
+        </div>
+      )}
 
       <RFQDrawer
         open={rfqOpen}

@@ -99,7 +99,7 @@ export function rfqTotals(products, cart) {
     lineCount += 1
     unitCount += qty
     if (p.wholesale) wholesaleTotal += qty * p.wholesale
-    if (p.msrp && p.msrp >= p.wholesale) msrpTotal += qty * p.msrp
+    if (p.msrp && p.wholesale && p.msrp >= p.wholesale) msrpTotal += qty * p.msrp
   }
 
   return { lineCount, unitCount, wholesaleTotal, msrpTotal }
@@ -127,11 +127,13 @@ export function rfqAsText(products, rfq) {
   for (const p of products) {
     const qty = rfq.cart[p.id] || 0
     if (qty <= 0) continue
-    const lineCost = (p.wholesale || 0) * qty
-    total += lineCost
-    if (p.msrp && p.msrp >= p.wholesale) retail += p.msrp * qty
+    const hasPrice = p.wholesale != null
+    const lineCost = hasPrice ? p.wholesale * qty : 0
+    if (hasPrice) total += lineCost
+    if (p.msrp && p.wholesale && p.msrp >= p.wholesale) retail += p.msrp * qty
+    const costDisplay = hasPrice ? `$${lineCost.toFixed(2).padStart(7)}` : '     TBD'
     lines.push(
-      `${p.sku.padEnd(22)} ${String(qty).padStart(4)}  $${lineCost.toFixed(2).padStart(7)}  ${p.name}`,
+      `${p.sku.padEnd(22)} ${String(qty).padStart(4)}  ${costDisplay}  ${p.name}`,
     )
   }
   lines.push('-'.repeat(70))

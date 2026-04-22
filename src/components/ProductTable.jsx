@@ -79,6 +79,7 @@ export default function ProductTable({
     const mult = dir === 'desc' ? -1 : 1
     const getVal = (p) => {
       switch (key) {
+        case 'curated':    return p.sortRank ?? 9999
         case 'brand':      return p.brand
         case 'category':   return p.category
         case 'tier':       return TIER_RANK[p.tier] ?? -1
@@ -92,7 +93,7 @@ export default function ProductTable({
         default:           return 0
       }
     }
-    return [...products].sort((a, b) => {
+    const primary = [...products].sort((a, b) => {
       const va = getVal(a)
       const vb = getVal(b)
       if (typeof va === 'string' && typeof vb === 'string') {
@@ -100,6 +101,12 @@ export default function ProductTable({
       }
       return ((va ?? 0) - (vb ?? 0)) * mult
     })
+    // When curated is active, apply a stable secondary sort by wholesale asc
+    // within same rank so rows group naturally (smallest unit first).
+    if (key === 'curated') {
+      return primary
+    }
+    return primary
   }, [products, filters.sort, cart, buyerPrices])
 
   const handleSort = (key) => {
