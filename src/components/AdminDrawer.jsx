@@ -96,6 +96,7 @@ function EditRow({ product, onChange, onDelete }) {
           <option value="Snowcaps">Snowcaps</option>
           <option value="Exotic">Exotic</option>
           <option value="Premium">Premium</option>
+          <option value="Core">Core</option>
         </select>
       </td>
       <td className="p-1">

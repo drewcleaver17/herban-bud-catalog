@@ -25,12 +25,13 @@ export const CATEGORY_GLYPHS = {
   'VAPES':       '💨',
 }
 
-// Dope Pros quality tiers — rank order (higher = better).
-// Only Dope Pros products carry tier labels; other brands leave it null.
-export const TIER_ORDER = ['Snowcaps', 'Exotic', 'Premium']
-export const TIER_RANK = { 'Snowcaps': 3, 'Exotic': 2, 'Premium': 1 }
+// Dope Pros quality tiers + Core (FYRE/Groovy's baseline).
+// Rank order (higher = better) for sorting.
+export const TIER_ORDER = ['Snowcaps', 'Exotic', 'Premium', 'Core']
+export const TIER_RANK = { 'Snowcaps': 4, 'Exotic': 3, 'Premium': 2, 'Core': 1 }
 
-// Tier badge styling. Snowcaps is icy blue, Exotic is lavender, Premium neutral.
+// Tier badge styling. Snowcaps is icy blue, Exotic is lavender,
+// Premium is neutral, Core is the most muted (baseline offering).
 export const TIER_STYLES = {
   'Snowcaps': {
     text: 'text-[#A9D6E5]',
@@ -49,6 +50,12 @@ export const TIER_STYLES = {
     bg:   'bg-paper/5',
     border: 'border-paper/15',
     label: 'Premium',
+  },
+  'Core': {
+    text: 'text-paper/50',
+    bg:   'bg-paper/[0.02]',
+    border: 'border-paper/10',
+    label: 'Core',
   },
 }
 

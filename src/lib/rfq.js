@@ -135,12 +135,15 @@ export function rfqAsText(products, rfq) {
     )
   }
   lines.push('-'.repeat(70))
-  lines.push(`WHOLESALE TOTAL: $${total.toFixed(2)}`)
+  lines.push(`WHOLESALE TOTAL:         $${total.toFixed(2)}`)
   if (retail > 0) {
     const gm = Math.round(((retail - total) / retail) * 100)
-    lines.push(`RETAIL VALUE:    $${retail.toFixed(2)}`)
-    lines.push(`GROSS MARGIN:    ${gm}%`)
+    lines.push(`RETAIL VALUE:            $${retail.toFixed(2)}`)
+    lines.push(`ESTIMATED GROSS MARGIN:  ${gm}%`)
   }
+  lines.push('')
+  lines.push('Request for quote, not an order. Product styles only —')
+  lines.push('specific strains confirmed at fulfillment, subject to availability.')
   if (notes) {
     lines.push('')
     lines.push(`Notes: ${notes}`)

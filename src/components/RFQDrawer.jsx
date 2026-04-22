@@ -175,7 +175,7 @@ export default function RFQDrawer({
                     </tr>
                     <tr>
                       <td className="px-3 py-1 pb-2 font-mono text-2xs uppercase tracking-wider text-paper/40">
-                        Gross margin
+                        Estimated gross margin
                       </td>
                       <td></td>
                       <td className="px-3 py-1 pb-2 text-right text-xs font-mono num text-accent-green">
@@ -189,6 +189,17 @@ export default function RFQDrawer({
                 )}
               </tfoot>
             </table>
+          </div>
+        )}
+
+        {/* Friendly disclaimer — sets expectations before they send */}
+        {cartLines.length > 0 && (
+          <div className="border-t border-paper/10 px-4 py-3 bg-accent-warm/[0.04] shrink-0">
+            <p className="text-[11px] leading-relaxed text-paper/70">
+              This is a request for quote, not an order. Requests are fielded at the product-style
+              level — specific strains, cultivars, and hybrid/indica/sativa mixes are confirmed at
+              fulfillment, subject to availability. Drew will follow up to finalize details.
+            </p>
           </div>
         )}
 
