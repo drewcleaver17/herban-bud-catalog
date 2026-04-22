@@ -15,6 +15,18 @@ const CATEGORY_COLORS = {
   'VAPES':       'text-[#E8B86B]',
 }
 
+// Short product name for dense views. Strips brand prefix + leading tier word.
+function shortName(p) {
+  let n = p.name || ''
+  const prefix = `${p.brand} — `
+  if (n.startsWith(prefix)) n = n.slice(prefix.length)
+  if (p.tier) {
+    const re = new RegExp(`^${p.tier}\\s+`, 'i')
+    n = n.replace(re, '')
+  }
+  return n
+}
+
 function TierBadge({ tier }) {
   if (!tier) return null
   const s = TIER_STYLES[tier]
@@ -57,7 +69,7 @@ function ProductCard({ p, qty, onQty, effectiveMSRP, isOverridden, onMSRP, onRes
               <TierBadge tier={p.tier} />
             </div>
             <div className="font-medium text-sm text-paper">{p.brand}</div>
-            <div className="text-[13px] text-paper/80 leading-snug">{p.name}</div>
+            <div className="text-[13px] text-paper/80 leading-snug">{shortName(p)}</div>
             <div className="font-mono text-[10px] text-paper/40 mt-1">{p.sku}</div>
             {p.notes && !p.notes.toUpperCase().includes('DISCONTINUED') && !p.notes.toUpperCase().includes('NOT AVAILABLE') && (
               <div className="text-[10px] text-paper/40 font-mono mt-1">{p.notes}</div>

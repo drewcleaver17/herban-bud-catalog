@@ -15,6 +15,22 @@ const CATEGORY_COLORS = {
   'VAPES':       'text-[#E8B86B]',
 }
 
+// Short product name for dense table & card views. Strips the "{Brand} — "
+// prefix and any leading tier word (Snowcaps/Exotic/Premium/Core), since
+// both have their own columns. The original `name` is kept intact on the
+// product object for RFQ/admin/email/mobile card header.
+function shortName(p) {
+  let n = p.name || ''
+  const prefix = `${p.brand} — `
+  if (n.startsWith(prefix)) n = n.slice(prefix.length)
+  // Strip leading tier word if it matches this product's tier
+  if (p.tier) {
+    const re = new RegExp(`^${p.tier}\\s+`, 'i')
+    n = n.replace(re, '')
+  }
+  return n
+}
+
 function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title, numeric, width }) {
   const active = currentSort.key === sortKey
   const dir = active ? currentSort.dir : null
@@ -84,7 +100,7 @@ export default function ProductTable({
         case 'category':   return p.category
         case 'tier':       return TIER_RANK[p.tier] ?? -1
         case 'sku':        return p.sku
-        case 'name':       return p.name
+        case 'name':       return shortName(p)
         case 'qty':        return cart[p.id] || 0
         case 'wholesale':  return p.wholesale ?? -Infinity
         case 'msrp':       return msrpFor(p) ?? -Infinity
@@ -134,11 +150,11 @@ export default function ProductTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse font-sans table-fixed">
         <colgroup>
-          <col style={{ width: '110px' }} />{/* Brand */}
           <col style={{ width: '110px' }} />{/* Category */}
+          <col style={{ width: '110px' }} />{/* Brand */}
+          <col />{/* Product — flexible */}
           <col style={{ width: '90px' }} />{/* Tier */}
           <col style={{ width: '160px' }} />{/* SKU */}
-          <col />{/* Product — flexible */}
           <col style={{ width: '80px' }} />{/* Qty */}
           <col style={{ width: '110px' }} />{/* Wholesale */}
           <col style={{ width: '110px' }} />{/* MSRP (editable) */}
@@ -147,11 +163,11 @@ export default function ProductTable({
         </colgroup>
         <thead>
           <tr>
-            <SortHeader label="Brand"     sortKey="brand"     currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Category"  sortKey="category"  currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Brand"     sortKey="brand"     currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Product"   sortKey="name"      currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} title="Dope Pros quality tier (Snowcaps > Exotic > Premium)" />
             <SortHeader label="SKU"       sortKey="sku"       currentSort={filters.sort} onSort={handleSort} />
-            <SortHeader label="Product"   sortKey="name"      currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Qty"       sortKey="qty"       currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Quantity for RFQ" />
             <SortHeader label="Wholesale" sortKey="wholesale" currentSort={filters.sort} onSort={handleSort} align="right" numeric />
             <SortHeader label="MSRP"      sortKey="msrp"      currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Your retail price — editable" />
@@ -177,27 +193,27 @@ export default function ProductTable({
                   inCart ? 'bg-accent-warm/[0.04]' : 'hover:bg-paper/[0.03]'
                 }`}
               >
-                <td className="px-3 py-2 text-xs font-medium text-paper truncate">
-                  {p.brand}
-                </td>
                 <td className={`px-3 py-2 text-2xs font-mono uppercase tracking-wider truncate ${catColor}`}>
                   {p.category}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
-                  <TierBadge tier={p.tier} />
-                </td>
-                <td className="px-3 py-2 text-[11px] font-mono text-paper/80 truncate" title={p.sku}>
-                  {p.sku}
+                <td className="px-3 py-2 text-xs font-medium text-paper truncate">
+                  {p.brand}
                 </td>
                 <td className="px-3 py-2 text-xs text-paper">
                   <span className="block truncate" title={p.name}>
-                    {p.name}
+                    {shortName(p)}
                   </span>
                   {p.notes && !p.notes.toUpperCase().includes('DISCONTINUED') && !p.notes.toUpperCase().includes('NOT AVAILABLE') && (
                     <span className="block text-[10px] text-paper/40 font-mono truncate mt-0.5" title={p.notes}>
                       {p.notes}
                     </span>
                   )}
+                </td>
+                <td className="px-3 py-2 whitespace-nowrap">
+                  <TierBadge tier={p.tier} />
+                </td>
+                <td className="px-3 py-2 text-[11px] font-mono text-paper/80 truncate" title={p.sku}>
+                  {p.sku}
                 </td>
                 <td className="px-3 py-2 text-right">
                   <div className={`inline-flex items-center rounded-sm border transition-colors ${
