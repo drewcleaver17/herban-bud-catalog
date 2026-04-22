@@ -1,42 +1,21 @@
 import { useMemo } from 'react'
 import {
-  convertPrice,
-  formatGrams,
   formatMoney,
   formatPercent,
-  gmPercent,
-  gmPerGram,
+  gmPercentAt,
   msrpLooksBroken,
-  perGram,
 } from '../lib/pricing'
-
-// Short product name: strip the "Brand - " prefix since it's in its own column.
-function shortName(p) {
-  const prefix = `${p.brand} - `
-  if (p.sku.startsWith(prefix)) return p.sku.slice(prefix.length)
-  // Handle "Herban Bud" naming mismatches etc.
-  const firstDash = p.sku.indexOf(' - ')
-  if (firstDash > 0) return p.sku.slice(firstDash + 3)
-  return p.sku
-}
-
-const UOM_LABELS = {
-  pack: 'Pack',
-  gram: '/g',
-  eighth: '/8th',
-  oz: '/oz',
-}
+import { TIER_RANK, TIER_STYLES } from '../lib/categories'
 
 const CATEGORY_COLORS = {
   'Pre-Rolls':   'text-[#CDB4DB]',
   'FLOWER':      'text-[#9FD8A5]',
-  'SNOWCAPS':    'text-[#A9D6E5]',
   'EDIBLES':     'text-[#F6BD60]',
   'Concentrate': 'text-[#F28482]',
   'VAPES':       'text-[#E8B86B]',
 }
 
-function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title, numeric }) {
+function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title, numeric, width }) {
   const active = currentSort.key === sortKey
   const dir = active ? currentSort.dir : null
   const alignClass = align === 'right' ? 'text-right' : 'text-left'
@@ -44,6 +23,7 @@ function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title
     <th
       scope="col"
       title={title}
+      style={width ? { width } : undefined}
       className={`${alignClass} sticky top-0 z-10 bg-indigo-800 text-paper/60 font-mono text-2xs font-medium uppercase tracking-wider px-3 py-2 border-b border-paper/10 whitespace-nowrap select-none`}
     >
       <button
@@ -61,53 +41,55 @@ function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title
   )
 }
 
-function AvailabilityPill({ availability }) {
-  if (availability === 'preorder') {
-    return (
-      <span className="inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wide rounded-sm bg-accent-warm/15 text-accent-warm border border-accent-warm/30">
-        Pre-order
-      </span>
-    )
-  }
-  if (availability === 'discontinued') {
-    return (
-      <span className="inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wide rounded-sm bg-accent-red/10 text-accent-red/80 border border-accent-red/20">
-        Disc.
-      </span>
-    )
-  }
-  if (availability === 'unavailable') {
-    return (
-      <span className="inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wide rounded-sm bg-paper/5 text-paper/50 border border-paper/15">
-        Out
-      </span>
-    )
-  }
+function TierBadge({ tier }) {
+  if (!tier) return <span className="text-paper/20 text-xs">—</span>
+  const s = TIER_STYLES[tier]
+  if (!s) return <span className="text-paper/60 text-2xs">{tier}</span>
   return (
-    <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wide text-accent-green">
-      <span className="w-1.5 h-1.5 rounded-full bg-accent-green" />
-      In stock
+    <span
+      className={`inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm border ${s.text} ${s.bg} ${s.border}`}
+    >
+      {s.label}
     </span>
   )
 }
 
-export default function ProductTable({ products, filters, setFilters }) {
+function marginColorClass(pct) {
+  if (pct == null) return 'text-paper/30'
+  if (pct >= 0.5) return 'text-accent-green'
+  if (pct >= 0.3) return 'text-paper'
+  if (pct >= 0) return 'text-accent-red/90'
+  return 'text-accent-red'
+}
+
+export default function ProductTable({
+  products,
+  filters,
+  setFilters,
+  cart,
+  setQty,
+  buyerPrices,
+  setBuyerPrice,
+}) {
+  // Effective MSRP for a product = buyer override if present, else catalog MSRP.
+  const msrpFor = (p) => (buyerPrices[p.id] ?? p.msrp)
+
   const sorted = useMemo(() => {
     const { key, dir } = filters.sort
     const mult = dir === 'desc' ? -1 : 1
     const getVal = (p) => {
       switch (key) {
-        case 'brand':        return p.brand
-        case 'category':     return p.category
-        case 'sku':          return shortName(p)
-        case 'grams':        return p.grams ?? -Infinity
-        case 'wholesale':    return convertPrice(p.wholesale, p.grams, filters.uom) ?? -Infinity
-        case 'msrp':         return convertPrice(p.msrp, p.grams, filters.uom) ?? -Infinity
-        case 'cost_per_g':   return perGram(p.wholesale, p.grams) ?? Infinity
-        case 'gm_per_g':     return gmPerGram(p) ?? -Infinity
-        case 'gm_pct':       return gmPercent(p) ?? -Infinity
-        case 'availability': return p.availability
-        default:             return 0
+        case 'brand':      return p.brand
+        case 'category':   return p.category
+        case 'tier':       return TIER_RANK[p.tier] ?? -1
+        case 'sku':        return p.sku
+        case 'name':       return p.name
+        case 'qty':        return cart[p.id] || 0
+        case 'wholesale':  return p.wholesale ?? -Infinity
+        case 'msrp':       return msrpFor(p) ?? -Infinity
+        case 'gm_pct':     return gmPercentAt(p.wholesale, msrpFor(p)) ?? -Infinity
+        case 'line_total': return (p.wholesale || 0) * (cart[p.id] || 0)
+        default:           return 0
       }
     }
     return [...products].sort((a, b) => {
@@ -118,7 +100,7 @@ export default function ProductTable({ products, filters, setFilters }) {
       }
       return ((va ?? 0) - (vb ?? 0)) * mult
     })
-  }, [products, filters.sort, filters.uom])
+  }, [products, filters.sort, cart, buyerPrices])
 
   const handleSort = (key) => {
     setFilters({
@@ -129,9 +111,6 @@ export default function ProductTable({ products, filters, setFilters }) {
       },
     })
   }
-
-  const uomLabel = UOM_LABELS[filters.uom]
-  const priceLabel = filters.uom === 'pack' ? 'Pack' : uomLabel
 
   if (products.length === 0) {
     return (
@@ -146,98 +125,144 @@ export default function ProductTable({ products, filters, setFilters }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse font-sans">
+      <table className="w-full border-collapse font-sans table-fixed">
+        <colgroup>
+          <col style={{ width: '110px' }} />{/* Brand */}
+          <col style={{ width: '110px' }} />{/* Category */}
+          <col style={{ width: '90px' }} />{/* Tier */}
+          <col style={{ width: '160px' }} />{/* SKU */}
+          <col />{/* Product — flexible */}
+          <col style={{ width: '80px' }} />{/* Qty */}
+          <col style={{ width: '110px' }} />{/* Wholesale */}
+          <col style={{ width: '110px' }} />{/* MSRP (editable) */}
+          <col style={{ width: '80px' }} />{/* GM% */}
+          <col style={{ width: '100px' }} />{/* Line total */}
+        </colgroup>
         <thead>
           <tr>
-            <SortHeader label="Brand"     sortKey="brand"        currentSort={filters.sort} onSort={handleSort} />
-            <SortHeader label="Category"  sortKey="category"     currentSort={filters.sort} onSort={handleSort} />
-            <SortHeader label="Product"   sortKey="sku"          currentSort={filters.sort} onSort={handleSort} />
-            <SortHeader label="Size"      sortKey="grams"        currentSort={filters.sort} onSort={handleSort} align="right" numeric />
-            <SortHeader label={`Cost ${priceLabel}`}  sortKey="wholesale"    currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Your wholesale cost" />
-            <SortHeader label={`MSRP ${priceLabel}`}  sortKey="msrp"         currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Suggested retail" />
-            <SortHeader label="$/g cost"  sortKey="cost_per_g"   currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Wholesale cost per gram" />
-            <SortHeader label="GM $/g"    sortKey="gm_per_g"     currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Gross margin dollars per gram at MSRP" />
-            <SortHeader label="GM %"      sortKey="gm_pct"       currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Gross margin % at MSRP" />
-            <SortHeader label="Status"    sortKey="availability" currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Brand"     sortKey="brand"     currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Category"  sortKey="category"  currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} title="Dope Pros quality tier (Snowcaps > Exotic > Premium)" />
+            <SortHeader label="SKU"       sortKey="sku"       currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Product"   sortKey="name"      currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Qty"       sortKey="qty"       currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Quantity for RFQ" />
+            <SortHeader label="Wholesale" sortKey="wholesale" currentSort={filters.sort} onSort={handleSort} align="right" numeric />
+            <SortHeader label="MSRP"      sortKey="msrp"      currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Your retail price — editable" />
+            <SortHeader label="GM%"       sortKey="gm_pct"    currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Gross margin % at your MSRP" />
+            <SortHeader label="Line"      sortKey="line_total" currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Qty × wholesale" />
           </tr>
         </thead>
         <tbody>
           {sorted.map((p) => {
-            const broken = msrpLooksBroken(p)
-            const costShown = convertPrice(p.wholesale, p.grams, filters.uom)
-            const msrpShown = convertPrice(p.msrp, p.grams, filters.uom)
-            const gmPct = gmPercent(p)
-            const gmG = gmPerGram(p)
-            const cpg = perGram(p.wholesale, p.grams)
-            const dimmed = p.availability === 'discontinued' || p.availability === 'unavailable'
+            const effectiveMSRP = msrpFor(p)
+            const isOverridden = buyerPrices[p.id] != null && buyerPrices[p.id] !== p.msrp
+            const catalogBroken = msrpLooksBroken(p)
+            const gmPct = gmPercentAt(p.wholesale, effectiveMSRP)
+            const qty = cart[p.id] || 0
+            const lineTotal = (p.wholesale || 0) * qty
             const catColor = CATEGORY_COLORS[p.category] || 'text-paper/70'
+            const inCart = qty > 0
 
             return (
               <tr
                 key={p.id}
-                className={`group border-b border-paper/5 hover:bg-paper/[0.03] transition-colors ${
-                  dimmed ? 'opacity-50' : ''
+                className={`group border-b border-paper/5 transition-colors ${
+                  inCart ? 'bg-accent-warm/[0.04]' : 'hover:bg-paper/[0.03]'
                 }`}
               >
-                <td className="px-3 py-2 text-xs font-medium text-paper whitespace-nowrap">
+                <td className="px-3 py-2 text-xs font-medium text-paper truncate">
                   {p.brand}
                 </td>
-                <td className={`px-3 py-2 text-2xs font-mono uppercase tracking-wider ${catColor}`}>
+                <td className={`px-3 py-2 text-2xs font-mono uppercase tracking-wider truncate ${catColor}`}>
                   {p.category}
                 </td>
-                <td className="px-3 py-2 text-xs text-paper max-w-md">
-                  <span className="block truncate" title={p.sku}>
-                    {shortName(p)}
+                <td className="px-3 py-2 whitespace-nowrap">
+                  <TierBadge tier={p.tier} />
+                </td>
+                <td className="px-3 py-2 text-[11px] font-mono text-paper/80 truncate" title={p.sku}>
+                  {p.sku}
+                </td>
+                <td className="px-3 py-2 text-xs text-paper">
+                  <span className="block truncate" title={p.name}>
+                    {p.name}
                   </span>
-                  {p.notes && !p.notes.toUpperCase().includes('DISCONTINUED') && !p.notes.toUpperCase().includes('NOT AVAILABLE') && !p.notes.toUpperCase().includes('PRE-ORDER') && (
+                  {p.notes && !p.notes.toUpperCase().includes('DISCONTINUED') && !p.notes.toUpperCase().includes('NOT AVAILABLE') && (
                     <span className="block text-[10px] text-paper/40 font-mono truncate mt-0.5" title={p.notes}>
                       {p.notes}
                     </span>
                   )}
                 </td>
-                <td className="px-3 py-2 text-right text-xs font-mono num text-paper/80 whitespace-nowrap">
-                  {formatGrams(p.grams)}
+                <td className="px-3 py-2 text-right">
+                  <div className={`inline-flex items-center rounded-sm border transition-colors ${
+                    inCart
+                      ? 'bg-accent-warm/10 border-accent-warm/40'
+                      : 'bg-indigo-950/40 border-paper/15 focus-within:border-accent-warm'
+                  }`}>
+                    <input
+                      type="number"
+                      min="0"
+                      value={qty || ''}
+                      placeholder="0"
+                      onChange={(e) => setQty(p.id, e.target.value === '' ? 0 : Number(e.target.value))}
+                      className="w-14 bg-transparent text-right px-1.5 py-1 text-xs font-mono num text-paper focus:outline-none placeholder:text-paper/30"
+                      aria-label={`Quantity for ${p.sku}`}
+                    />
+                  </div>
                 </td>
                 <td className="px-3 py-2 text-right text-xs font-mono num text-paper whitespace-nowrap">
-                  {formatMoney(costShown)}
+                  {formatMoney(p.wholesale)}
                 </td>
-                <td className="px-3 py-2 text-right text-xs font-mono num text-paper/80 whitespace-nowrap">
-                  {broken ? (
-                    <span
-                      className="text-accent-warm cursor-help"
-                      title="MSRP is below wholesale — likely a data-entry issue in the source sheet."
-                    >
-                      {formatMoney(msrpShown)} ⚠
-                    </span>
-                  ) : (
-                    formatMoney(msrpShown)
-                  )}
-                </td>
-                <td className="px-3 py-2 text-right text-2xs font-mono num text-paper/60 whitespace-nowrap">
-                  {formatMoney(cpg, 2)}
-                </td>
-                <td className="px-3 py-2 text-right text-2xs font-mono num text-paper/60 whitespace-nowrap">
-                  {formatMoney(gmG, 2)}
+                <td className="px-3 py-2 text-right whitespace-nowrap">
+                  <div className={`inline-flex items-center rounded-sm border transition-colors ${
+                    isOverridden
+                      ? 'bg-accent-warm/10 border-accent-warm/40'
+                      : 'bg-indigo-950/40 border-paper/15 focus-within:border-accent-warm'
+                  }`}>
+                    <span className={`text-[10px] pl-1.5 ${isOverridden ? 'text-accent-warm' : 'text-paper/40'}`}>$</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={effectiveMSRP ?? ''}
+                      onChange={(e) => {
+                        const v = e.target.value
+                        setBuyerPrice(p.id, v === '' ? null : Number(v))
+                      }}
+                      className={`w-16 bg-transparent text-right px-1 py-1 text-xs font-mono num focus:outline-none ${
+                        isOverridden ? 'text-accent-warm' : 'text-paper/80'
+                      }`}
+                      aria-label="Your MSRP"
+                      title={catalogBroken && !isOverridden
+                        ? 'Catalog MSRP is below wholesale — likely a data-entry issue. Override with your own price.'
+                        : undefined}
+                    />
+                    {isOverridden && (
+                      <button
+                        onClick={() => setBuyerPrice(p.id, null)}
+                        className="text-[10px] text-paper/30 hover:text-paper pr-1"
+                        title="Reset to catalog MSRP"
+                        aria-label="Reset MSRP"
+                      >
+                        ↺
+                      </button>
+                    )}
+                  </div>
                 </td>
                 <td className="px-3 py-2 text-right text-xs font-mono num whitespace-nowrap">
                   {gmPct == null ? (
                     <span className="text-paper/30">—</span>
                   ) : (
-                    <span
-                      className={
-                        gmPct >= 0.5
-                          ? 'text-accent-green'
-                          : gmPct >= 0.3
-                          ? 'text-paper'
-                          : 'text-accent-red/90'
-                      }
-                    >
+                    <span className={marginColorClass(gmPct)}>
                       {formatPercent(gmPct, 0)}
                     </span>
                   )}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
-                  <AvailabilityPill availability={p.availability} />
+                <td className="px-3 py-2 text-right text-xs font-mono num whitespace-nowrap">
+                  {qty > 0 ? (
+                    <span className="text-paper">{formatMoney(lineTotal)}</span>
+                  ) : (
+                    <span className="text-paper/20">—</span>
+                  )}
                 </td>
               </tr>
             )

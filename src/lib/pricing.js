@@ -29,6 +29,14 @@ export function gmPercent(p) {
   return (p.msrp - p.wholesale) / p.msrp
 }
 
+// Same as gmPercent but uses an explicit MSRP value (for the editable MSRP
+// column where we want the margin to recompute from a user-entered price).
+export function gmPercentAt(wholesale, msrp) {
+  if (wholesale == null || msrp == null || msrp === 0) return null
+  if (msrp < wholesale) return null
+  return (msrp - wholesale) / msrp
+}
+
 // UOM conversion for the toggle
 export function convertPrice(amountPerUnit, grams, uom) {
   // amountPerUnit is the pack price; we express it in the chosen unit

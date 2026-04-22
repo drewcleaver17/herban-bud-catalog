@@ -47,7 +47,16 @@ function EditRow({ product, onChange, onDelete }) {
         <input
           value={product.sku}
           onChange={(e) => up('sku', e.target.value)}
-          className="w-full bg-indigo-900/60 border border-paper/10 rounded-sm px-1.5 py-1 text-2xs text-paper font-mono"
+          className="w-36 bg-indigo-900/60 border border-paper/10 rounded-sm px-1.5 py-1 text-2xs text-paper font-mono"
+          placeholder="SKU code"
+        />
+      </td>
+      <td className="p-1">
+        <input
+          value={product.name ?? ''}
+          onChange={(e) => up('name', e.target.value)}
+          className="w-full bg-indigo-900/60 border border-paper/10 rounded-sm px-1.5 py-1 text-2xs text-paper"
+          placeholder="Display name"
         />
       </td>
       <td className="p-1">
@@ -79,14 +88,14 @@ function EditRow({ product, onChange, onDelete }) {
       </td>
       <td className="p-1">
         <select
-          value={product.availability}
-          onChange={(e) => up('availability', e.target.value)}
+          value={product.tier ?? ''}
+          onChange={(e) => up('tier', e.target.value || null)}
           className="bg-indigo-900/60 border border-paper/10 rounded-sm px-1.5 py-1 text-2xs text-paper"
         >
-          <option value="available">Available</option>
-          <option value="preorder">Pre-order</option>
-          <option value="unavailable">Out</option>
-          <option value="discontinued">Discontinued</option>
+          <option value="">—</option>
+          <option value="Snowcaps">Snowcaps</option>
+          <option value="Exotic">Exotic</option>
+          <option value="Premium">Premium</option>
         </select>
       </td>
       <td className="p-1">
@@ -139,12 +148,14 @@ export default function AdminDrawer({ open, onClose, products, setProducts, orig
         id: maxId + 1,
         brand: 'Herban Bud',
         category: 'FLOWER',
-        sku: 'New product',
+        sku: 'HB-FLW-NEW',
+        name: 'New product',
         grams: null,
         wholesale: null,
         msrp: null,
         notes: '',
         availability: 'available',
+        tier: null,
       },
     ]
     setProducts(next)
@@ -231,10 +242,11 @@ export default function AdminDrawer({ open, onClose, products, setProducts, orig
               <th className="p-1">Brand</th>
               <th className="p-1">Category</th>
               <th className="p-1">SKU</th>
+              <th className="p-1">Name</th>
               <th className="p-1 text-right">Grams</th>
               <th className="p-1 text-right">Wholesale</th>
               <th className="p-1 text-right">MSRP</th>
-              <th className="p-1">Status</th>
+              <th className="p-1">Tier</th>
               <th className="p-1">Notes</th>
               <th className="p-1 w-8"></th>
             </tr>
