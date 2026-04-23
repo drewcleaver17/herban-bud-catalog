@@ -168,17 +168,17 @@ export default function ProductTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse font-sans table-fixed">
         <colgroup>
-          <col style={{ width: '110px' }} />{/* Category */}
-          <col style={{ width: '110px' }} />{/* Brand */}
-          <col />{/* Product — flexible */}
-          <col style={{ width: '90px' }} />{/* Tier */}
-          <col style={{ width: '80px' }} />{/* Type */}
-          <col style={{ width: '160px' }} />{/* SKU */}
-          <col style={{ width: '80px' }} />{/* Qty */}
-          <col style={{ width: '110px' }} />{/* Wholesale */}
-          <col style={{ width: '110px' }} />{/* MSRP (editable) */}
-          <col style={{ width: '80px' }} />{/* GM% */}
-          <col style={{ width: '100px' }} />{/* Line total */}
+          <col style={{ width: '92px' }} />{/* Category — "Concentrate" (11 chars) is widest */}
+          <col style={{ width: '108px' }} />{/* Brand — "CaliGreenGold" (13 chars) is widest */}
+          <col />{/* Product — flexible, absorbs all tightening above */}
+          <col style={{ width: '82px' }} />{/* Tier — "❄ Snowcaps" widest */}
+          <col style={{ width: '70px' }} />{/* Type — "HYBRID" etc (6 chars) */}
+          <col style={{ width: '140px' }} />{/* SKU — "DP-FLW-PRM-28X1G-TUB" (20 chars) */}
+          <col style={{ width: '72px' }} />{/* Qty — just enough for the number input */}
+          <col style={{ width: '88px' }} />{/* Wholesale — "$125.00" */}
+          <col style={{ width: '96px' }} />{/* MSRP (editable) — input needs slightly more */}
+          <col style={{ width: '64px' }} />{/* GM% — "77%" */}
+          <col style={{ width: '92px' }} />{/* Line — "$225.00" */}
         </colgroup>
         <thead>
           <tr>
