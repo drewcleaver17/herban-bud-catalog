@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { formatMoney, formatPercent, gmPercentAt } from '../lib/pricing'
 import { buildRFQURL, isValidPhone, rfqAsText, rfqTotals } from '../lib/rfq'
+import { TIER_STYLES } from '../lib/categories'
 
 // US state list for the address dropdown — short codes only.
 const US_STATES = [
@@ -9,6 +10,40 @@ const US_STATES = [
   'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
   'VA','WA','WV','WI','WY','DC','PR',
 ]
+
+// Mirror the catalog table's category accent colors so the RFQ cart reads
+// as a continuation of the same visual language.
+const CATEGORY_COLORS = {
+  'Pre-Rolls':   'text-[#CDB4DB]',
+  'FLOWER':      'text-[#9FD8A5]',
+  'EDIBLES':     'text-[#F6BD60]',
+  'Concentrate': 'text-[#F28482]',
+  'VAPES':       'text-[#E8B86B]',
+}
+
+// Strip the "{Brand} — " prefix and leading tier word from product names
+// for the dense column view (Brand & Tier already have their own columns).
+function shortName(p) {
+  let n = p.name || ''
+  const prefix = `${p.brand} — `
+  if (n.startsWith(prefix)) n = n.slice(prefix.length)
+  if (p.tier) {
+    const re = new RegExp(`^${p.tier}\\s+`, 'i')
+    n = n.replace(re, '')
+  }
+  return n
+}
+
+function TierBadge({ tier }) {
+  if (!tier) return null
+  const s = TIER_STYLES[tier]
+  if (!s) return null
+  return (
+    <span className={`inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm border ${s.text} ${s.bg} ${s.border}`}>
+      {s.label}
+    </span>
+  )
+}
 
 export default function RFQDrawer({
   open,
@@ -126,7 +161,11 @@ export default function RFQDrawer({
               <table className="w-full text-xs">
                 <thead className="sticky top-0 bg-indigo-900 z-10">
                   <tr className="text-paper/50 font-mono text-2xs uppercase tracking-wider border-b border-paper/10">
-                    <th className="px-3 py-1.5 text-left">SKU / Product</th>
+                    <th className="px-3 py-1.5 text-left w-24">Category</th>
+                    <th className="px-3 py-1.5 text-left w-24">Brand</th>
+                    <th className="px-3 py-1.5 text-left">Product</th>
+                    <th className="px-3 py-1.5 text-left w-20">Tier</th>
+                    <th className="px-3 py-1.5 text-left w-44">SKU</th>
                     <th className="px-3 py-1.5 text-right w-14">Qty</th>
                     <th className="px-3 py-1.5 text-right w-20">Wholesale</th>
                     <th className="px-3 py-1.5 text-right w-20">MSRP</th>
@@ -136,34 +175,45 @@ export default function RFQDrawer({
                   </tr>
                 </thead>
                 <tbody>
-                  {cartLines.map(({ p, qty, effectiveMSRP, gmPct, lineTotal }) => (
-                    <tr key={p.id} className="border-b border-paper/5 hover:bg-paper/[0.02]">
-                      <td className="px-3 py-1.5">
-                        <div className="font-mono text-[11px] text-paper">{p.sku}</div>
-                        <div className="text-[10px] text-paper/50 truncate max-w-md">{p.name}</div>
-                      </td>
-                      <td className="px-3 py-1.5 text-right">
-                        <input
-                          type="number" min="0" value={qty}
-                          onChange={(e) => setQty(p.id, e.target.value === '' ? 0 : Number(e.target.value))}
-                          className="w-12 bg-indigo-950/40 border border-paper/15 rounded-sm px-1.5 py-0.5 text-right text-xs font-mono num text-paper focus:border-accent-warm focus:outline-none"
-                          aria-label={`Quantity for ${p.sku}`}
-                        />
-                      </td>
-                      <td className="px-3 py-1.5 text-right text-xs font-mono num text-paper whitespace-nowrap">{formatMoney(p.wholesale)}</td>
-                      <td className="px-3 py-1.5 text-right text-xs font-mono num text-paper/70 whitespace-nowrap">{formatMoney(effectiveMSRP)}</td>
-                      <td className={`px-3 py-1.5 text-right text-xs font-mono num whitespace-nowrap ${
-                        gmPct == null ? 'text-paper/30'
-                        : gmPct >= 0.5 ? 'text-accent-green'
-                        : gmPct >= 0.3 ? 'text-paper/70'
-                        : 'text-accent-red/80'
-                      }`}>{gmPct == null ? '—' : formatPercent(gmPct, 0)}</td>
-                      <td className="px-3 py-1.5 text-right text-xs font-mono num text-paper whitespace-nowrap">{p.wholesale != null ? formatMoney(lineTotal) : 'TBD'}</td>
-                      <td className="px-3 py-1.5">
-                        <button onClick={() => setQty(p.id, 0)} className="text-paper/40 hover:text-accent-red text-xs" aria-label={`Remove ${p.sku}`} title="Remove from RFQ">✕</button>
-                      </td>
-                    </tr>
-                  ))}
+                  {cartLines.map(({ p, qty, effectiveMSRP, gmPct, lineTotal }) => {
+                    const catColor = CATEGORY_COLORS[p.category] || 'text-paper/70'
+                    return (
+                      <tr key={p.id} className="border-b border-paper/5 hover:bg-paper/[0.02]">
+                        <td className={`px-3 py-1.5 text-2xs font-mono uppercase tracking-wider ${catColor}`}>
+                          {p.category}
+                        </td>
+                        <td className="px-3 py-1.5 text-xs font-medium text-paper">{p.brand}</td>
+                        <td className="px-3 py-1.5 text-sm text-paper">
+                          {shortName(p)}
+                          {p.notes && !p.notes.toUpperCase().includes('DISCONTINUED') && !p.notes.toUpperCase().includes('NOT AVAILABLE') && (
+                            <span className="block text-[10px] text-paper/40 font-mono mt-0.5">{p.notes}</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-1.5 whitespace-nowrap"><TierBadge tier={p.tier} /></td>
+                        <td className="px-3 py-1.5 font-mono text-[11px] text-paper/80 whitespace-nowrap">{p.sku}</td>
+                        <td className="px-3 py-1.5 text-right">
+                          <input
+                            type="number" min="0" value={qty}
+                            onChange={(e) => setQty(p.id, e.target.value === '' ? 0 : Number(e.target.value))}
+                            className="w-12 bg-indigo-950/40 border border-paper/15 rounded-sm px-1.5 py-0.5 text-right text-xs font-mono num text-paper focus:border-accent-warm focus:outline-none"
+                            aria-label={`Quantity for ${p.sku}`}
+                          />
+                        </td>
+                        <td className="px-3 py-1.5 text-right text-xs font-mono num text-paper whitespace-nowrap">{formatMoney(p.wholesale)}</td>
+                        <td className="px-3 py-1.5 text-right text-xs font-mono num text-paper/70 whitespace-nowrap">{formatMoney(effectiveMSRP)}</td>
+                        <td className={`px-3 py-1.5 text-right text-xs font-mono num whitespace-nowrap ${
+                          gmPct == null ? 'text-paper/30'
+                          : gmPct >= 0.5 ? 'text-accent-green'
+                          : gmPct >= 0.3 ? 'text-paper/70'
+                          : 'text-accent-red/80'
+                        }`}>{gmPct == null ? '—' : formatPercent(gmPct, 0)}</td>
+                        <td className="px-3 py-1.5 text-right text-xs font-mono num text-paper whitespace-nowrap">{p.wholesale != null ? formatMoney(lineTotal) : 'TBD'}</td>
+                        <td className="px-3 py-1.5">
+                          <button onClick={() => setQty(p.id, 0)} className="text-paper/40 hover:text-accent-red text-xs" aria-label={`Remove ${p.sku}`} title="Remove from RFQ">✕</button>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
