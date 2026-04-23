@@ -5,13 +5,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Snowcaps",
-    "sku": "DP-PR-SNO-2X1.5",
+    "sku": "DP-PR-SNO-2X1.5G",
     "name": "Dope Pros — Snowcaps 2-pack Prerolls, 1.5g",
     "grams": 3,
     "wholesale": null,
     "msrp": null,
     "availability": "preorder",
-    "notes": "*INQUIRE FOR PRICING*"
+    "notes": "*INQUIRE FOR PRICING*",
+    "strain": "hybrid"
   },
   {
     "id": 1,
@@ -19,13 +20,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Exotic",
-    "sku": "DP-PR-EXO-1.5",
+    "sku": "DP-PR-EXO-1X1.5G",
     "name": "Dope Pros — Exotic Single Preroll, 1.5g",
     "grams": 1.5,
     "wholesale": 6,
     "msrp": 12.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 2,
@@ -33,13 +35,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Exotic",
-    "sku": "DP-PR-EXO-2X1.5",
+    "sku": "DP-PR-EXO-2X1.5G",
     "name": "Dope Pros — Exotic 2-pack Prerolls, 1.5g",
     "grams": 3,
     "wholesale": 9,
     "msrp": 19.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 3,
@@ -47,13 +50,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Premium",
-    "sku": "DP-PR-PRM-15X1.5",
+    "sku": "DP-PR-PRM-15X1.5G-TUB",
     "name": "Dope Pros — Premium 15-pack Preroll Tub, 1.5g",
     "grams": 22.5,
     "wholesale": 35,
     "msrp": 150,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 4,
@@ -61,13 +65,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Premium",
-    "sku": "DP-PR-PRM-30X1.5",
+    "sku": "DP-PR-PRM-30X1.5G-TUB",
     "name": "Dope Pros — Premium 30-pack Preroll Tub, 1.5g",
     "grams": 45,
     "wholesale": 75,
     "msrp": 300,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 5,
@@ -75,13 +80,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Premium",
-    "sku": "DP-PR-PRM-50X1.5",
+    "sku": "DP-PR-PRM-50X1.5G-TUB",
     "name": "Dope Pros — Premium 50-pack Preroll Tub, 1.5g",
     "grams": 75,
     "wholesale": 125,
     "msrp": 500,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 6,
@@ -89,13 +95,14 @@
     "brand": "Dope Pros",
     "category": "Pre-Rolls",
     "tier": "Premium",
-    "sku": "DP-PR-PRM-5X0.7",
+    "sku": "DP-PR-PRM-5X0.7G",
     "name": "Dope Pros — Premium 5-pack Prerolls, 0.7g",
     "grams": 3.5,
     "wholesale": 16,
     "msrp": 15.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 16,
@@ -103,13 +110,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Snowcaps",
-    "sku": "DP-FLW-SNO-3.5",
+    "sku": "DP-FLW-SNO-3.5G",
     "name": "Dope Pros — Snowcaps Flower, 3.5g",
     "grams": 3.5,
     "wholesale": 25,
     "msrp": 49.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 17,
@@ -117,13 +125,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Snowcaps",
-    "sku": "DP-FLW-SNO-7",
+    "sku": "DP-FLW-SNO-7G",
     "name": "Dope Pros — Snowcaps Flower, 7g",
     "grams": 7,
     "wholesale": 50,
     "msrp": 59.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 18,
@@ -131,13 +140,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Snowcaps",
-    "sku": "DP-FLW-SNO-14",
+    "sku": "DP-FLW-SNO-14G",
     "name": "Dope Pros — Snowcaps Flower, 14g",
     "grams": 14,
     "wholesale": 100,
     "msrp": 104.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 19,
@@ -145,13 +155,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Snowcaps",
-    "sku": "DP-FLW-SNO-14CT",
+    "sku": "DP-FLW-SNO-14X1G-TUB",
     "name": "Dope Pros — Snowcaps 14-pack Flower Tub, 1g",
     "grams": 14,
     "wholesale": 95,
     "msrp": 179.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 20,
@@ -159,13 +170,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Snowcaps",
-    "sku": "DP-FLW-SNO-OZ",
+    "sku": "DP-FLW-SNO-1OZ",
     "name": "Dope Pros — Snowcaps Flower, 1oz",
     "grams": 28,
     "wholesale": 120,
     "msrp": 225,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 12,
@@ -173,13 +185,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Exotic",
-    "sku": "DP-FLW-EXO-3.5",
+    "sku": "DP-FLW-EXO-3.5G",
     "name": "Dope Pros — Exotic Flower, 3.5g",
     "grams": 3.5,
     "wholesale": 20,
     "msrp": 44.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 13,
@@ -187,13 +200,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Exotic",
-    "sku": "DP-FLW-EXO-7",
+    "sku": "DP-FLW-EXO-7G",
     "name": "Dope Pros — Exotic Flower, 7g",
     "grams": 7,
     "wholesale": 35,
     "msrp": 69.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 14,
@@ -201,13 +215,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Exotic",
-    "sku": "DP-FLW-EXO-14",
+    "sku": "DP-FLW-EXO-14G",
     "name": "Dope Pros — Exotic Flower, 14g",
     "grams": 14,
     "wholesale": 65,
     "msrp": 130,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 15,
@@ -215,13 +230,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Exotic",
-    "sku": "DP-FLW-EXO-OZ",
+    "sku": "DP-FLW-EXO-1OZ",
     "name": "Dope Pros — Exotic Flower, 1oz",
     "grams": 28,
     "wholesale": 125,
     "msrp": 250,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 7,
@@ -229,13 +245,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Premium",
-    "sku": "DP-FLW-PRM-3.5",
+    "sku": "DP-FLW-PRM-3.5G",
     "name": "Dope Pros — Premium Flower, 3.5g",
     "grams": 3.5,
     "wholesale": 16,
     "msrp": 34.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 8,
@@ -243,13 +260,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Premium",
-    "sku": "DP-FLW-PRM-7",
+    "sku": "DP-FLW-PRM-7G",
     "name": "Dope Pros — Premium Flower, 7g",
     "grams": 7,
     "wholesale": 30,
     "msrp": 64.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 9,
@@ -257,13 +275,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Premium",
-    "sku": "DP-FLW-PRM-14",
+    "sku": "DP-FLW-PRM-14G",
     "name": "Dope Pros — Premium Flower, 14g",
     "grams": 14,
     "wholesale": 50,
     "msrp": 89.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 10,
@@ -271,13 +290,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Premium",
-    "sku": "DP-FLW-PRM-OZ",
+    "sku": "DP-FLW-PRM-1OZ",
     "name": "Dope Pros — Premium Flower, 1oz",
     "grams": 28,
     "wholesale": 95,
     "msrp": 149.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 11,
@@ -285,13 +305,14 @@
     "brand": "Dope Pros",
     "category": "FLOWER",
     "tier": "Premium",
-    "sku": "DP-FLW-PRM-28CT",
+    "sku": "DP-FLW-PRM-28X1G-TUB",
     "name": "Dope Pros — Premium 28-pack Flower Tub, 1g",
     "grams": 28,
     "wholesale": 125,
     "msrp": 250,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 21,
@@ -305,7 +326,8 @@
     "wholesale": 12.5,
     "msrp": 24.99,
     "availability": "available",
-    "notes": "FLAVORS: BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON, MIXED FRUIT"
+    "notes": "FLAVORS: BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON, MIXED FRUIT",
+    "strain": "blend"
   },
   {
     "id": 24,
@@ -319,7 +341,8 @@
     "wholesale": 12.5,
     "msrp": 24.99,
     "availability": "available",
-    "notes": "FLAVORS: MIXED FRUIT, BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON"
+    "notes": "FLAVORS: MIXED FRUIT, BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON",
+    "strain": "blend"
   },
   {
     "id": 25,
@@ -333,7 +356,8 @@
     "wholesale": 18.75,
     "msrp": 37.5,
     "availability": "available",
-    "notes": "FLAVORS: ORIGINAL, VANILLA CREAM"
+    "notes": "FLAVORS: ORIGINAL, VANILLA CREAM",
+    "strain": "blend"
   },
   {
     "id": 28,
@@ -341,13 +365,14 @@
     "brand": "Herban Bud",
     "category": "EDIBLES",
     "tier": null,
-    "sku": "HB-ED-CAR-125X20MG",
+    "sku": "HB-ED-CAR-125X20MG-TUB",
     "name": "Herban Bud — 125-pack Caramel Tub, 20mg",
     "grams": null,
     "wholesale": 156.25,
     "msrp": 3,
     "availability": "available",
-    "notes": "FLAVORS: ORIGINAL, VANILLA CREAM"
+    "notes": "FLAVORS: ORIGINAL, VANILLA CREAM",
+    "strain": "blend"
   },
   {
     "id": 26,
@@ -361,7 +386,8 @@
     "wholesale": 18.75,
     "msrp": 37.5,
     "availability": "available",
-    "notes": "FLAVORS: TUTTI FRUTTI, GREEN APPLE, LEMON DROP"
+    "notes": "FLAVORS: TUTTI FRUTTI, GREEN APPLE, LEMON DROP",
+    "strain": "blend"
   },
   {
     "id": 27,
@@ -369,13 +395,14 @@
     "brand": "Herban Bud",
     "category": "EDIBLES",
     "tier": null,
-    "sku": "HB-ED-TAF-125X20MG",
+    "sku": "HB-ED-TAF-125X20MG-TUB",
     "name": "Herban Bud — 125-pack Taffy Tub, 20mg",
     "grams": null,
     "wholesale": 156.25,
     "msrp": 3,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 22,
@@ -383,13 +410,14 @@
     "brand": "Herban Bud",
     "category": "Pre-Rolls",
     "tier": null,
-    "sku": "HB-PR-1.5",
+    "sku": "HB-PR-1X1.5G",
     "name": "Herban Bud — Single Preroll, 1.5g",
     "grams": 1.5,
     "wholesale": 5,
     "msrp": 15.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 23,
@@ -397,13 +425,14 @@
     "brand": "Herban Bud",
     "category": "Pre-Rolls",
     "tier": null,
-    "sku": "HB-PR-5X0.7",
+    "sku": "HB-PR-5X0.7G",
     "name": "Herban Bud — 5-pack Prerolls, 0.7g",
     "grams": 3.5,
     "wholesale": 16,
     "msrp": 34.99,
     "availability": "available",
-    "notes": "HALF-GRAM JOINTS"
+    "notes": "HALF-GRAM JOINTS",
+    "strain": "hybrid"
   },
   {
     "id": 34,
@@ -411,13 +440,14 @@
     "brand": "CaliGreenGold",
     "category": "Concentrate",
     "tier": null,
-    "sku": "CGG-CON-ROS-1",
+    "sku": "CGG-CON-ROS-1G",
     "name": "CaliGreenGold — Rosin, 1g",
     "grams": 1,
     "wholesale": 30,
     "msrp": 60,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 35,
@@ -425,13 +455,14 @@
     "brand": "CaliGreenGold",
     "category": "Concentrate",
     "tier": null,
-    "sku": "CGG-CON-TCA-2",
+    "sku": "CGG-CON-TCA-2G",
     "name": "CaliGreenGold — THCa Concentrate, 2g",
     "grams": 2,
     "wholesale": 25.5,
     "msrp": 49.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 36,
@@ -439,13 +470,14 @@
     "brand": "CaliGreenGold",
     "category": "Concentrate",
     "tier": null,
-    "sku": "CGG-CON-TCA-3",
+    "sku": "CGG-CON-TCA-3G",
     "name": "CaliGreenGold — THCa Concentrate, 3g",
     "grams": 3,
     "wholesale": 28,
     "msrp": 54.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 37,
@@ -453,13 +485,14 @@
     "brand": "CaliGreenGold",
     "category": "Concentrate",
     "tier": null,
-    "sku": "CGG-CON-BAD-3",
+    "sku": "CGG-CON-BAD-3G",
     "name": "CaliGreenGold — THCa Badder, 3g",
     "grams": 3,
     "wholesale": 30,
     "msrp": 69.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 38,
@@ -467,13 +500,14 @@
     "brand": "CaliGreenGold",
     "category": "Concentrate",
     "tier": null,
-    "sku": "CGG-CON-GEM-3",
+    "sku": "CGG-CON-GEM-3G",
     "name": "CaliGreenGold — THCa Gems, 3g",
     "grams": 3,
     "wholesale": 27,
     "msrp": 59.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 39,
@@ -481,13 +515,14 @@
     "brand": "CaliGreenGold",
     "category": "Concentrate",
     "tier": null,
-    "sku": "CGG-CON-SUG-3",
+    "sku": "CGG-CON-SUG-3G",
     "name": "CaliGreenGold — THCa Sugar, 3g",
     "grams": 3,
     "wholesale": 27,
     "msrp": 59.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "blend"
   },
   {
     "id": 29,
@@ -495,13 +530,14 @@
     "brand": "FYRE",
     "category": "Pre-Rolls",
     "tier": "Core",
-    "sku": "FYR-PR-COR-2X1.5",
+    "sku": "FYR-PR-COR-2X1.5G",
     "name": "FYRE — 2-pack Prerolls, 1.5g",
     "grams": 3,
     "wholesale": 8,
     "msrp": 16.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 30,
@@ -509,13 +545,14 @@
     "brand": "FYRE",
     "category": "FLOWER",
     "tier": "Core",
-    "sku": "FYR-FLW-COR-3.5",
+    "sku": "FYR-FLW-COR-3.5G",
     "name": "FYRE — Flower, 3.5g",
     "grams": 3.5,
     "wholesale": 12.5,
     "msrp": 25,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 31,
@@ -523,13 +560,14 @@
     "brand": "FYRE",
     "category": "FLOWER",
     "tier": "Core",
-    "sku": "FYR-FLW-COR-7",
+    "sku": "FYR-FLW-COR-7G",
     "name": "FYRE — Flower, 7g",
     "grams": 7,
     "wholesale": 20,
     "msrp": 54.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 32,
@@ -537,13 +575,14 @@
     "brand": "FYRE",
     "category": "FLOWER",
     "tier": "Core",
-    "sku": "FYR-FLW-COR-28CT",
+    "sku": "FYR-FLW-COR-28X1G-TUB",
     "name": "FYRE — 28-pack Flower Tub, 1g",
     "grams": 28,
     "wholesale": 100,
     "msrp": 9.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 33,
@@ -551,13 +590,14 @@
     "brand": "FYRE",
     "category": "VAPES",
     "tier": "Core",
-    "sku": "FYR-VAP-COR-DIS-5CT",
+    "sku": "FYR-VAP-COR-DIS-5X2G",
     "name": "FYRE — 5-pack Disposable Vapes, 2g",
     "grams": 10,
     "wholesale": 127.5,
     "msrp": 49.99,
     "availability": "available",
-    "notes": ""
+    "notes": "",
+    "strain": "hybrid"
   },
   {
     "id": 40,
@@ -565,13 +605,14 @@
     "brand": "Groovy's",
     "category": "Pre-Rolls",
     "tier": "Core",
-    "sku": "GRV-PR-COR-1.5",
+    "sku": "GRV-PR-COR-1X1.5G",
     "name": "Groovy's — Single Preroll, 1.5g",
     "grams": 1.5,
     "wholesale": 6,
     "msrp": 12.99,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "hybrid"
   },
   {
     "id": 41,
@@ -579,13 +620,14 @@
     "brand": "Groovy's",
     "category": "Pre-Rolls",
     "tier": "Core",
-    "sku": "GRV-PR-COR-2",
+    "sku": "GRV-PR-COR-1X2G-RSN",
     "name": "Groovy's — Rosin-Infused Preroll, 2g",
     "grams": 2,
     "wholesale": 15,
     "msrp": 30,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "hybrid"
   },
   {
     "id": 42,
@@ -593,13 +635,14 @@
     "brand": "Groovy's",
     "category": "Pre-Rolls",
     "tier": "Core",
-    "sku": "GRV-PR-COR-5CT",
+    "sku": "GRV-PR-COR-5X1.5G",
     "name": "Groovy's — 5-pack Prerolls, 1.5g",
     "grams": 7.5,
     "wholesale": 18,
     "msrp": 35,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "hybrid"
   },
   {
     "id": 43,
@@ -607,13 +650,14 @@
     "brand": "Groovy's",
     "category": "FLOWER",
     "tier": "Core",
-    "sku": "GRV-FLW-COR-JAR-3.5",
+    "sku": "GRV-FLW-COR-3.5G-JAR",
     "name": "Groovy's — Flower Jar, 3.5g",
     "grams": 3.5,
     "wholesale": 16,
     "msrp": 34.99,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "hybrid"
   },
   {
     "id": 44,
@@ -621,13 +665,14 @@
     "brand": "Groovy's",
     "category": "FLOWER",
     "tier": "Core",
-    "sku": "GRV-FLW-COR-MYL-3.5",
+    "sku": "GRV-FLW-COR-3.5G-MYL",
     "name": "Groovy's — Flower, 3.5g (Mylar)",
     "grams": 3.5,
     "wholesale": 18,
     "msrp": 44.99,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "hybrid"
   },
   {
     "id": 45,
@@ -635,13 +680,14 @@
     "brand": "Groovy's",
     "category": "FLOWER",
     "tier": "Core",
-    "sku": "GRV-FLW-COR-14",
+    "sku": "GRV-FLW-COR-14G-MYL",
     "name": "Groovy's — Flower, 14g (Mylar)",
     "grams": 14,
     "wholesale": 60,
     "msrp": 129.99,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "hybrid"
   },
   {
     "id": 46,
@@ -649,12 +695,13 @@
     "brand": "Groovy's",
     "category": "Concentrate",
     "tier": "Core",
-    "sku": "GRV-CON-COR-ROS-1",
+    "sku": "GRV-CON-COR-ROS-1G",
     "name": "Groovy's — Live Rosin, 1g",
     "grams": 1,
     "wholesale": 25,
     "msrp": 49.99,
     "availability": "preorder",
-    "notes": "*PRE-ORDERS AVAILABLE*"
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "strain": "blend"
   }
 ]

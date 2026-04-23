@@ -19,6 +19,7 @@
 
 import { useMemo, useState } from 'react'
 import { rfqAsText } from '../lib/rfq'
+import { STRAIN_STYLES } from '../lib/categories'
 
 // ─── Money formatter (matches text format conventions) ───
 function fmtMoney(n) {
@@ -317,6 +318,9 @@ function LineItemCard({ index, item }) {
   const { product: p, qty, hasPrice, unit, line } = item
   const cat = (p.category || '').toUpperCase()
   const brandTier = p.tier ? `${p.brand} ${p.tier}` : p.brand
+  // Resolve strain style for the inline chip (right of category/brand line)
+  const strainKey = p.strain ? String(p.strain).toLowerCase() : null
+  const strainStyle = strainKey ? STRAIN_STYLES[strainKey] : null
 
   return (
     <article className="border border-paper/10 rounded-sm p-3 bg-paper/[0.02]">
@@ -337,8 +341,17 @@ function LineItemCard({ index, item }) {
           Pricing TBD
         </div>
       )}
-      <div className="font-mono text-[11px] uppercase tracking-wider text-paper/55 ml-6">
-        {cat} <span className="text-paper/30">/</span> {brandTier}
+      <div className="flex items-center gap-2 flex-wrap ml-6">
+        <div className="font-mono text-[11px] uppercase tracking-wider text-paper/55">
+          {cat} <span className="text-paper/30">/</span> {brandTier}
+        </div>
+        {strainStyle && (
+          <span
+            className={`inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm border ${strainStyle.text} ${strainStyle.bg} ${strainStyle.border}`}
+          >
+            {strainStyle.label}
+          </span>
+        )}
       </div>
       <div className="font-sans text-sm text-paper/80 ml-6 mt-0.5">
         {shortName(p)}

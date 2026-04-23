@@ -81,3 +81,72 @@ export function buildCategoryCounts(products) {
   }
   return result
 }
+
+// ─── Strain type (hybrid / indica / sativa / blend) ───
+// Traditional industry color conventions:
+//   Indica  — purple spectrum (calming, nighttime association)
+//   Sativa  — green (energizing, matches accent-green used elsewhere)
+//   Hybrid  — gold (accent-warm, balanced, matches our brand accent)
+//   Blend   — muted neutral (for mixed/multi-strain products like edibles)
+//
+// Not all products have a strain — edibles, tinctures, and some concentrates
+// may be blends or unclassified. Blank/null strain renders as "—" in the table.
+export const STRAIN_ORDER = ['hybrid', 'indica', 'sativa', 'blend']
+export const STRAIN_LABEL = {
+  hybrid: 'Hybrid',
+  indica: 'Indica',
+  sativa: 'Sativa',
+  blend:  'Blend',
+}
+
+export const STRAIN_STYLES = {
+  hybrid: {
+    // Gold (accent-warm) — balanced between indica/sativa, matches brand accent
+    text: 'text-accent-warm',
+    bg:   'bg-accent-warm/10',
+    border: 'border-accent-warm/30',
+    label: 'Hybrid',
+  },
+  indica: {
+    // Purple — traditional indica color; using a warm lavender that reads
+    // clearly against the indigo background without clashing with Exotic tier
+    text: 'text-[#C4A7E7]',
+    bg:   'bg-[#C4A7E7]/10',
+    border: 'border-[#C4A7E7]/30',
+    label: 'Indica',
+  },
+  sativa: {
+    // Green (accent-green) — traditional sativa color, matches our accent used
+    // elsewhere for positive/active signals (GM% positive, ACH savings nudge)
+    text: 'text-accent-green',
+    bg:   'bg-accent-green/10',
+    border: 'border-accent-green/30',
+    label: 'Sativa',
+  },
+  blend: {
+    // Muted neutral — not a specific strain family, doesn't need color
+    text: 'text-paper/60',
+    bg:   'bg-paper/5',
+    border: 'border-paper/15',
+    label: 'Blend',
+  },
+}
+
+// Count products per strain for the sidebar filter. Only counts products that
+// have a strain set; blanks/nulls are excluded from each strain bucket but
+// still appear in the catalog when "All" is the active filter mode.
+export function buildStrainCounts(products) {
+  const counts = new Map()
+  for (const p of products) {
+    if (!p.strain) continue
+    const key = String(p.strain).toLowerCase()
+    counts.set(key, (counts.get(key) || 0) + 1)
+  }
+  const result = []
+  for (const strain of STRAIN_ORDER) {
+    if (counts.has(strain)) {
+      result.push({ strain, label: STRAIN_LABEL[strain], count: counts.get(strain) })
+    }
+  }
+  return result
+}

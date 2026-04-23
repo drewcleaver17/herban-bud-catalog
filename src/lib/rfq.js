@@ -334,10 +334,19 @@ export function rfqAsText(products, rfq, options = {}) {
     // Description split into two parts — category + brand on one line, the
     // product itself on a second. Avoids the single-long-line wrap that
     // happens when category + brand + tier + product + size all crash into
-    // each other.
+    // each other. Strain appends to the right of brandTier when present,
+    // giving decision makers and warehouse staff the same kitchen-ticket
+    // snapshot of what's being ordered.
     const cat = (p.category || '').toUpperCase()
     const brandTier = p.tier ? `${p.brand} ${p.tier}` : p.brand
-    lines.push(`    ${cat} / ${brandTier}`)
+    const strainLabel = p.strain
+      ? String(p.strain).charAt(0).toUpperCase() + String(p.strain).slice(1).toLowerCase()
+      : null
+    if (strainLabel) {
+      lines.push(`    ${cat} / ${brandTier} / ${strainLabel}`)
+    } else {
+      lines.push(`    ${cat} / ${brandTier}`)
+    }
     lines.push(`    ${shortName(p)}`)
 
     // Per-line product notes (rare — e.g. flavor lists) get their own
