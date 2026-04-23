@@ -199,18 +199,20 @@ function fmtMoneyPad(n, width) {
   return fmtMoney(n).padStart(width)
 }
 
-const LABEL_WIDTH = 22
+// Render "Label: value" pairs. In proportional fonts, padding labels with
+// spaces just makes inconsistent visual gaps. Instead we use a single space
+// after the colon — looks normal in any font, recipient sees clean K/V.
 function labeledLine(label, value) {
   const v = value == null || value === '' ? '—' : value
-  return `${(label + ':').padEnd(LABEL_WIDTH)} ${v}`
+  return `${label}: ${v}`
 }
 function labeledBlock(label, value) {
   if (!value) return [labeledLine(label, '')]
   const lines = value.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
   if (lines.length === 0) return [labeledLine(label, '')]
   const out = [labeledLine(label, lines[0])]
-  const indent = ' '.repeat(LABEL_WIDTH + 1)
-  for (let i = 1; i < lines.length; i++) out.push(indent + lines[i])
+  // Continuation lines: indent slightly so they read as "still part of address"
+  for (let i = 1; i < lines.length; i++) out.push(`  ${lines[i]}`)
   return out
 }
 
@@ -218,17 +220,11 @@ export function rfqAsText(products, rfq, options = {}) {
   const lines = []
   const c = rfq.contact
   const now = options.now || new Date()
-  const id = rfqId(rfq, now)
-
-  // Width: ~118 chars total. Wide enough for the 7-column line item table,
-  // narrow enough to render readably in a desktop email composer.
-  const WIDTH = 118
-  const SEP_HEAVY = '═'.repeat(WIDTH)
-  const SEP_LIGHT = '─'.repeat(WIDTH)
 
   // Pre-compute totals so they can appear in the suggested subject line.
+  // Note: MSRP/retail/GM% are intentionally NOT computed here — they're not
+  // shown in the buyer's outbound text (margin math is buyer-internal only).
   let total = 0
-  let retail = 0
   let lineCount = 0
   let unitCount = 0
   for (const p of products) {
@@ -237,27 +233,29 @@ export function rfqAsText(products, rfq, options = {}) {
     lineCount += 1
     unitCount += qty
     if (p.wholesale != null) total += p.wholesale * qty
-    if (p.msrp && p.wholesale && p.msrp >= p.wholesale) retail += p.msrp * qty
   }
   const totalDue = c.payment === 'cc' ? total * 1.04 : total
   const paymentTag = c.payment === 'cc' ? 'CC' : c.payment === 'ach' ? 'ACH' : '?'
   const buyerLabel = c.company || c.name || '(no name given)'
   const subjectSuggestion = `RFQ — ${buyerLabel} — ${lineCount} ${lineCount === 1 ? 'line' : 'lines'} / ${unitCount} units / ${fmtMoney(totalDue)} (${paymentTag})`
 
+  // Section header: short line, name, short line. Reads as a clean break
+  // in any font without over-relying on monospace alignment.
+  const sectionHeader = (title) => {
+    lines.push('')
+    lines.push(`━━━ ${title} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
+  }
+
   // ─── HEADER ───
-  lines.push(SEP_HEAVY)
-  lines.push('HERBAN BUD — REQUEST FOR QUOTE')
-  lines.push(SEP_HEAVY)
-  // Identifier metadata for archival + email subject suggestion
-  lines.push(labeledLine('RFQ ID', id))
+  lines.push('═══════════════════════════════════════════════════════════════════')
+  lines.push('  HERBAN BUD — REQUEST FOR QUOTE')
+  lines.push('═══════════════════════════════════════════════════════════════════')
+  lines.push('')
   lines.push(labeledLine('Submitted', formatTimestamp(now)))
   lines.push(labeledLine('Suggested subject', subjectSuggestion))
-  lines.push('')
 
-  // ─── CONTACT BLOCK (single column, same as before) ───
-  lines.push(SEP_LIGHT)
-  lines.push('CONTACT')
-  lines.push(SEP_LIGHT)
+  // ─── CONTACT BLOCK ───
+  sectionHeader('CONTACT')
   lines.push(labeledLine('Name', c.name))
   lines.push(labeledLine('Company', c.company))
   lines.push(labeledLine('Email', c.email))
@@ -268,12 +266,9 @@ export function rfqAsText(products, rfq, options = {}) {
     c.payment === 'cc'  ? 'Credit card (+4% fee)' :
     c.payment === 'ach' ? 'ACH / Wire (no fee)' : '—'
   lines.push(labeledLine('Payment method', paymentLabel))
-  lines.push('')
 
   // ─── NOTES ───
-  lines.push(SEP_LIGHT)
-  lines.push('NOTES FROM BUYER')
-  lines.push(SEP_LIGHT)
+  sectionHeader('NOTES FROM BUYER')
   if (c.notes && c.notes.trim()) {
     for (const ln of c.notes.split(/\r?\n/)) {
       lines.push('  ' + ln)
@@ -281,113 +276,77 @@ export function rfqAsText(products, rfq, options = {}) {
   } else {
     lines.push('  (none)')
   }
-  lines.push('')
 
-  // ─── LINE ITEMS — 7 columns mirroring the on-screen RFQ ───
-  // Column widths chosen to fit ~118 chars total. Order matches the screen:
-  // Category | Brand | Product | Tier | SKU | Qty | Wholesale | MSRP | GM% | Line
-  // (10 visual columns, but Wholesale/MSRP/GM%/Line are tight numerics so they
-  //  share the right side compactly.)
-  const W = {
-    cat:    11,  // PRE-ROLLS, FLOWER, EDIBLES, Concentrate, VAPES
-    brand:  14,  // CaliGreenGold = 13 chars
-    prod:   34,  // truncated with … if longer
-    tier:   9,   // SNOWCAPS = 8
-    sku:    23,  // longest is GRV-FLW-COR-3.5G-MYL = 20; pad to 23
-    qty:    4,
-    whole:  9,
-    msrp:   9,
-    gm:     5,
-    line:   10,
-  }
+  // ─── LINE ITEMS — Option A: 3-line stack per item ───
+  // Layout per item:
+  //   ITEM N
+  //   {qty} × {SKU} — ${wholesale_unit} ea — Line ${line_total}
+  //   {Brand} · {Tier} · {ProductDesc}, {size} · [{CATEGORY}]
+  //
+  // Designed for the customer's outbound RFQ email to Drew. Strips MSRP and
+  // GM% — those are the buyer's internal margin math, not data that belongs
+  // in their quote-request to the supplier.
+  sectionHeader('LINE ITEMS')
 
-  const headerCells = [
-    'CATEGORY'.padEnd(W.cat),
-    'BRAND'.padEnd(W.brand),
-    'PRODUCT'.padEnd(W.prod),
-    'TIER'.padEnd(W.tier),
-    'SKU'.padEnd(W.sku),
-    'QTY'.padStart(W.qty),
-    'WHOLESALE'.padStart(W.whole),
-    'MSRP'.padStart(W.msrp),
-    'GM%'.padStart(W.gm),
-    'LINE'.padStart(W.line),
-  ]
-  lines.push(SEP_LIGHT)
-  lines.push('LINE ITEMS')
-  lines.push(SEP_LIGHT)
-  lines.push(headerCells.join(' '))
-  lines.push(SEP_LIGHT)
-
+  let itemNum = 0
   for (const p of products) {
     const qty = rfq.cart[p.id] || 0
     if (qty <= 0) continue
+    itemNum += 1
     const hasPrice = p.wholesale != null
     const lineCost = hasPrice ? p.wholesale * qty : 0
-    const effectiveMsrp = p.msrp
-    // GM% on a per-line basis at MSRP
-    let gmStr = '—'
-    if (hasPrice && effectiveMsrp && effectiveMsrp >= p.wholesale) {
-      const gm = Math.round(((effectiveMsrp - p.wholesale) / effectiveMsrp) * 100)
-      gmStr = `${gm}%`
+
+    // Line 1: item label
+    lines.push(`ITEM ${itemNum}`)
+
+    // Line 2: commercial primaries — qty leftmost, then SKU, then unit price
+    // and line total. This is the "what am I ordering and what does it cost"
+    // line. Format chosen to read naturally as "Quantity × SKU at price".
+    if (hasPrice) {
+      lines.push(`${qty} × ${p.sku} — ${fmtMoney(p.wholesale)} ea — Line ${fmtMoney(lineCost)}`)
+    } else {
+      lines.push(`${qty} × ${p.sku} — Pricing TBD`)
     }
 
-    const prodText = shortName(p)
-    const prodCell = prodText.length > W.prod
-      ? prodText.slice(0, W.prod - 1) + '…'
-      : prodText.padEnd(W.prod)
+    // Line 3: human-readable description. Brand · Tier · ProductDesc · [Cat]
+    // Using shortName() to avoid duplicating "Dope Pros — " since brand is
+    // already its own segment in this line.
+    const descParts = [p.brand]
+    if (p.tier) descParts.push(p.tier)
+    descParts.push(shortName(p))
+    descParts.push(`[${(p.category || '').toUpperCase()}]`)
+    lines.push(descParts.join(' · '))
 
-    const cells = [
-      (p.category || '').toUpperCase().padEnd(W.cat),
-      (p.brand || '').padEnd(W.brand),
-      prodCell,
-      (p.tier || '').toUpperCase().padEnd(W.tier),
-      (p.sku || '').padEnd(W.sku),
-      String(qty).padStart(W.qty),
-      (hasPrice ? fmtMoney(p.wholesale) : '—').padStart(W.whole),
-      (effectiveMsrp != null ? fmtMoney(effectiveMsrp) : '—').padStart(W.msrp),
-      gmStr.padStart(W.gm),
-      (hasPrice ? fmtMoney(lineCost) : 'TBD').padStart(W.line),
-    ]
-    lines.push(cells.join(' '))
+    // Per-line product notes (e.g. flavor lists, warnings) get their own
+    // indented continuation so the buyer's intent passes through unchanged.
+    if (p.notes && p.notes.trim() &&
+        !p.notes.toUpperCase().includes('DISCONTINUED') &&
+        !p.notes.toUpperCase().includes('NOT AVAILABLE')) {
+      lines.push(`Notes: ${p.notes}`)
+    }
+    lines.push('')
   }
-  lines.push(SEP_LIGHT)
-  lines.push('')
+  // Trim trailing blank line before the totals section
+  if (lines[lines.length - 1] === '') lines.pop()
 
   // ─── TOTALS ───
-  lines.push(SEP_LIGHT)
-  lines.push('TOTALS')
-  lines.push(SEP_LIGHT)
-  // Wider value column so "62% (+2 pts)" doesn't get awkwardly squeezed
-  const TOTAL_VAL_W = 16
-  const totalLine = (label, val) =>
-    `${(label + ':').padEnd(LABEL_WIDTH)} ${val.padStart(TOTAL_VAL_W)}`
-  lines.push(totalLine('Wholesale subtotal', fmtMoney(total)))
+  // Buyer-facing totals only: what they're ordering and what they'll pay.
+  // No retail value, no GM% — that's their internal margin math, not data
+  // that belongs in their quote-request to the supplier.
+  sectionHeader('TOTALS')
+  lines.push(labeledLine('Wholesale subtotal', fmtMoney(total)))
   if (c.payment === 'cc') {
     const fee = total * 0.04
-    lines.push(totalLine('Credit card fee (4%)', fmtMoney(fee)))
+    lines.push(labeledLine('Credit card fee (4%)', fmtMoney(fee)))
   }
-  lines.push(totalLine('TOTAL DUE', fmtMoney(totalDue)))
-  if (retail > 0) {
-    lines.push('')
-    lines.push(totalLine('Suggested retail value', fmtMoney(retail)))
-    if (c.payment === 'cc') {
-      const ccGm = Math.round(((retail - (total * 1.04)) / retail) * 100)
-      const achGm = Math.round(((retail - total) / retail) * 100)
-      lines.push(totalLine('Estimated gross margin', `${ccGm}% (CC)`))
-      lines.push(totalLine('GM% if ACH/Wire', `${achGm}% (+${achGm - ccGm} pts)`))
-    } else {
-      const baseGm = Math.round(((retail - total) / retail) * 100)
-      lines.push(totalLine('Estimated gross margin', `${baseGm}%`))
-    }
-  }
-  lines.push('')
+  lines.push(labeledLine('TOTAL DUE', fmtMoney(totalDue)))
 
   // ─── DISCLAIMER ───
-  lines.push(SEP_LIGHT)
+  lines.push('')
+  lines.push('—')
   lines.push('This is a request for quote, not an order. Strains/cultivars/mixes')
   lines.push('confirmed at fulfillment, subject to availability.')
-  lines.push(SEP_HEAVY)
+  lines.push('═══════════════════════════════════════════════════════════════════')
 
   return lines.join('\n')
 }
