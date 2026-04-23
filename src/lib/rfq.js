@@ -308,13 +308,14 @@ export function rfqAsText(products, rfq, options = {}) {
       lines.push(`${qty} × ${p.sku} — Pricing TBD`)
     }
 
-    // Line 3: human-readable description. Brand · Tier · ProductDesc · [Cat]
+    // Line 3: human-readable description. [CATEGORY] · Brand · Tier · ProductDesc
+    // Category goes leftmost — matches how warehouses physically segment
+    // inventory and how buyers think about ordering ("show me your flowers").
     // Using shortName() to avoid duplicating "Dope Pros — " since brand is
     // already its own segment in this line.
-    const descParts = [p.brand]
+    const descParts = [`[${(p.category || '').toUpperCase()}]`, p.brand]
     if (p.tier) descParts.push(p.tier)
     descParts.push(shortName(p))
-    descParts.push(`[${(p.category || '').toUpperCase()}]`)
     lines.push(descParts.join(' · '))
 
     // Per-line product notes (e.g. flavor lists, warnings) get their own
