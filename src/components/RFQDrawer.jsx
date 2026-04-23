@@ -153,7 +153,7 @@ export default function RFQDrawer({
               <tfoot>
                 <tr className="bg-indigo-950/40">
                   <td className="px-3 py-2 font-mono text-2xs uppercase tracking-wider text-paper/60">
-                    Wholesale total
+                    Wholesale subtotal
                   </td>
                   <td></td>
                   <td className="px-3 py-2 text-right text-sm font-mono num text-paper">
@@ -161,6 +161,30 @@ export default function RFQDrawer({
                   </td>
                   <td></td>
                 </tr>
+                {rfq.contact.payment === 'cc' && (
+                  <>
+                    <tr>
+                      <td className="px-3 py-1 font-mono text-2xs uppercase tracking-wider text-paper/60">
+                        Credit card fee (4%)
+                      </td>
+                      <td></td>
+                      <td className="px-3 py-1 text-right text-xs font-mono num text-paper/80">
+                        {formatMoney(totals.wholesaleTotal * 0.04)}
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr className="bg-accent-warm/[0.06]">
+                      <td className="px-3 py-2 font-mono text-2xs uppercase tracking-wider text-paper">
+                        Total due
+                      </td>
+                      <td></td>
+                      <td className="px-3 py-2 text-right text-sm font-mono num text-paper font-semibold">
+                        {formatMoney(totals.wholesaleTotal * 1.04)}
+                      </td>
+                      <td></td>
+                    </tr>
+                  </>
+                )}
                 {totals.msrpTotal > 0 && (
                   <>
                     <tr>
@@ -236,7 +260,14 @@ export default function RFQDrawer({
             />
           </div>
           <textarea
-            placeholder="Notes (delivery, timing, anything else)"
+            placeholder="Delivery address"
+            value={rfq.contact.delivery}
+            onChange={(e) => updateContact('delivery', e.target.value)}
+            rows={3}
+            className="w-full bg-indigo-950/40 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none resize-none"
+          />
+          <textarea
+            placeholder="Notes (timing, mix preferences, anything else)"
             value={rfq.contact.notes}
             onChange={(e) => updateContact('notes', e.target.value)}
             rows={2}
@@ -244,21 +275,80 @@ export default function RFQDrawer({
           />
         </div>
 
+        {/* Payment method — required */}
+        <div className="border-t border-paper/10 px-4 pt-3 pb-4 shrink-0">
+          <div className="font-mono text-2xs uppercase tracking-wider text-paper/40 mb-2">
+            Payment method <span className="text-accent-warm normal-case">— required</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <label className={`flex items-center gap-2 px-3 py-2 rounded-sm border cursor-pointer transition-colors ${
+              rfq.contact.payment === 'cc'
+                ? 'bg-accent-warm/10 border-accent-warm/60 text-paper'
+                : 'bg-indigo-950/40 border-paper/15 text-paper/70 hover:border-paper/40'
+            }`}>
+              <input
+                type="radio"
+                name="payment"
+                value="cc"
+                checked={rfq.contact.payment === 'cc'}
+                onChange={() => updateContact('payment', 'cc')}
+                className="accent-accent-warm shrink-0"
+              />
+              <span className="text-xs">
+                <div className="font-medium">Credit card</div>
+                <div className="text-[10px] text-paper/50 font-mono">+4% fee</div>
+              </span>
+            </label>
+            <label className={`flex items-center gap-2 px-3 py-2 rounded-sm border cursor-pointer transition-colors ${
+              rfq.contact.payment === 'ach'
+                ? 'bg-accent-warm/10 border-accent-warm/60 text-paper'
+                : 'bg-indigo-950/40 border-paper/15 text-paper/70 hover:border-paper/40'
+            }`}>
+              <input
+                type="radio"
+                name="payment"
+                value="ach"
+                checked={rfq.contact.payment === 'ach'}
+                onChange={() => updateContact('payment', 'ach')}
+                className="accent-accent-warm shrink-0"
+              />
+              <span className="text-xs">
+                <div className="font-medium">ACH / Wire</div>
+                <div className="text-[10px] text-paper/50 font-mono">no fee</div>
+              </span>
+            </label>
+          </div>
+        </div>
+
         <div className="border-t border-paper/10 p-4 flex flex-wrap gap-2 shrink-0">
-          <button
-            onClick={copyLink}
-            disabled={cartLines.length === 0}
-            className="flex-1 min-w-[160px] px-3 py-2 text-xs font-medium rounded-sm bg-accent-warm text-indigo-900 hover:bg-accent-warm/90 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            {copied === 'link' ? '✓ Link copied' : 'Copy shareable link'}
-          </button>
-          <button
-            onClick={copyText}
-            disabled={cartLines.length === 0}
-            className="flex-1 min-w-[140px] px-3 py-2 text-xs font-medium rounded-sm border border-paper/20 text-paper hover:border-paper/40 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            {copied === 'text' ? '✓ Text copied' : 'Copy order as text'}
-          </button>
+          {(() => {
+            const ready = cartLines.length > 0 && !!rfq.contact.payment
+            const blockedReason = cartLines.length === 0
+              ? 'Add at least one product'
+              : !rfq.contact.payment
+              ? 'Select a payment method above'
+              : ''
+            return (
+              <>
+                <button
+                  onClick={copyLink}
+                  disabled={!ready}
+                  title={blockedReason}
+                  className="flex-1 min-w-[160px] px-3 py-2 text-xs font-medium rounded-sm bg-accent-warm text-indigo-900 hover:bg-accent-warm/90 disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  {copied === 'link' ? '✓ Link copied' : 'Copy shareable link'}
+                </button>
+                <button
+                  onClick={copyText}
+                  disabled={!ready}
+                  title={blockedReason}
+                  className="flex-1 min-w-[140px] px-3 py-2 text-xs font-medium rounded-sm border border-paper/20 text-paper hover:border-paper/40 disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  {copied === 'text' ? '✓ Text copied' : 'Copy order as text'}
+                </button>
+              </>
+            )
+          })()}
           {cartLines.length > 0 && (
             <button
               onClick={() => {

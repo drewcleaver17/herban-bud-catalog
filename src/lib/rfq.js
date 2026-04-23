@@ -2,10 +2,10 @@
 //
 // The cart + optional contact info serialize into URL params so any
 // RFQ can be shared as a single link:
-//   ?rfq=1:5,3:2,15:10&n=Drew&c=Drew+Co&e=drew@x.com&p=5551234&o=notes
+//   ?rfq=1:5,3:2,15:10&n=Drew&c=Drew+Co&e=drew@x.com&p=5551234&d=addr&o=notes
 //
 // rfq = product_id:qty comma-separated
-// n=name, c=company, e=email, p=phone, o=order notes
+// n=name, c=company, e=email, p=phone, d=delivery address, o=order notes
 
 const LS_RFQ = 'herban.rfq.v1'
 
@@ -16,6 +16,8 @@ export const EMPTY_RFQ = {
     company: '',
     email: '',
     phone: '',
+    delivery: '',
+    payment: '',    // 'cc' | 'ach' — required to enable copy buttons
     notes: '',
   },
 }
@@ -23,7 +25,11 @@ export const EMPTY_RFQ = {
 export function readRFQFromURL() {
   if (typeof window === 'undefined') return null
   const sp = new URLSearchParams(window.location.search)
-  if (!sp.has('rfq') && !sp.has('n') && !sp.has('c') && !sp.has('e') && !sp.has('p')) {
+  if (
+    !sp.has('rfq') && !sp.has('n') && !sp.has('c') &&
+    !sp.has('e') && !sp.has('p') && !sp.has('d') &&
+    !sp.has('pm') && !sp.has('o')
+  ) {
     return null
   }
 
@@ -40,11 +46,13 @@ export function readRFQFromURL() {
   return {
     cart,
     contact: {
-      name:    sp.get('n') || '',
-      company: sp.get('c') || '',
-      email:   sp.get('e') || '',
-      phone:   sp.get('p') || '',
-      notes:   sp.get('o') || '',
+      name:     sp.get('n') || '',
+      company:  sp.get('c') || '',
+      email:    sp.get('e') || '',
+      phone:    sp.get('p') || '',
+      delivery: sp.get('d') || '',
+      payment:  sp.get('pm') || '',
+      notes:    sp.get('o') || '',
     },
   }
 }
@@ -58,12 +66,14 @@ export function buildRFQURL(rfq, baseURL) {
     .map(([id, qty]) => `${id}:${qty}`)
   if (pairs.length) sp.set('rfq', pairs.join(','))
 
-  const { name, company, email, phone, notes } = rfq.contact
-  if (name)    sp.set('n', name)
-  if (company) sp.set('c', company)
-  if (email)   sp.set('e', email)
-  if (phone)   sp.set('p', phone)
-  if (notes)   sp.set('o', notes)
+  const { name, company, email, phone, delivery, payment, notes } = rfq.contact
+  if (name)     sp.set('n', name)
+  if (company)  sp.set('c', company)
+  if (email)    sp.set('e', email)
+  if (phone)    sp.set('p', phone)
+  if (delivery) sp.set('d', delivery)
+  if (payment)  sp.set('pm', payment)
+  if (notes)    sp.set('o', notes)
 
   const qs = sp.toString()
   return qs ? `${base}?${qs}` : base
@@ -74,8 +84,14 @@ export function buildRFQURL(rfq, baseURL) {
 export function loadRFQ() {
   try {
     const raw = localStorage.getItem(LS_RFQ)
-    return raw ? JSON.parse(raw) : { ...EMPTY_RFQ }
-  } catch { return { ...EMPTY_RFQ } }
+    if (!raw) return { ...EMPTY_RFQ, contact: { ...EMPTY_RFQ.contact } }
+    const parsed = JSON.parse(raw)
+    // Merge to ensure new fields exist if old localStorage data is loaded
+    return {
+      cart: parsed.cart || {},
+      contact: { ...EMPTY_RFQ.contact, ...(parsed.contact || {}) },
+    }
+  } catch { return { ...EMPTY_RFQ, contact: { ...EMPTY_RFQ.contact } } }
 }
 
 export function saveRFQ(rfq) {
@@ -105,22 +121,97 @@ export function rfqTotals(products, cart) {
   return { lineCount, unitCount, wholesaleTotal, msrpTotal }
 }
 
-// Plain-text RFQ (for mailto, SMS, or clipboard copy).
+// Plain-text RFQ for clipboard paste into Gmail / Messages / etc.
+//
+// Design choices:
+//  - Every contact field is labeled, even if blank, so Drew can see at a glance
+//    what info the buyer did/didn't provide. Empty fields render as "Label: —"
+//  - Notes appear above the line items (sometimes notes change how to read
+//    the order — e.g. "this is a top-up to last week's PO #1234")
+//  - Line items columns: QTY | PRODUCT | SKU | PRICE
+//  - Multi-line delivery address indents continuation lines under the label
+//  - Money columns right-align with $ sign attached to digits, not the column
+function fmtMoney(n) {
+  if (n == null) return 'TBD'
+  return `$${n.toFixed(2)}`
+}
+
+function fmtMoneyPad(n, width) {
+  return fmtMoney(n).padStart(width)
+}
+
+// "Label:    value" — value column starts at fixed indent for alignment.
+const LABEL_WIDTH = 22  // "Estimated gross margin" = 22 chars
+function labeledLine(label, value) {
+  const v = value == null || value === '' ? '—' : value
+  return `${(label + ':').padEnd(LABEL_WIDTH)} ${v}`
+}
+
+// Multi-line value — first line gets the label, continuation lines indent
+// to align under the value column.
+function labeledBlock(label, value) {
+  if (!value) return [labeledLine(label, '')]
+  const lines = value.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+  if (lines.length === 0) return [labeledLine(label, '')]
+  const out = [labeledLine(label, lines[0])]
+  const indent = ' '.repeat(LABEL_WIDTH + 1)
+  for (let i = 1; i < lines.length; i++) out.push(indent + lines[i])
+  return out
+}
+
 export function rfqAsText(products, rfq) {
   const lines = []
-  const { name, company, email, phone, notes } = rfq.contact
+  const { name, company, email, phone, delivery, payment, notes } = rfq.contact
+  const SEP_HEAVY = '═'.repeat(70)
+  const SEP_LIGHT = '─'.repeat(70)
 
-  if (company || name) {
-    lines.push(`RFQ — ${company || ''}${company && name ? ' / ' : ''}${name || ''}`.trim())
-  } else {
-    lines.push('Request for Quote')
-  }
-  if (email || phone) {
-    lines.push([email, phone].filter(Boolean).join(' · '))
-  }
+  lines.push(SEP_HEAVY)
+  lines.push('HERBAN BUD — REQUEST FOR QUOTE')
+  lines.push(SEP_HEAVY)
   lines.push('')
-  lines.push(`${'SKU'.padEnd(22)} ${'QTY'.padStart(4)}  ${'COST'.padStart(8)}  PRODUCT`)
-  lines.push('-'.repeat(70))
+
+  // Contact block — every field labeled, blanks shown as "—"
+  lines.push(labeledLine('Name', name))
+  lines.push(labeledLine('Company', company))
+  lines.push(labeledLine('Email', email))
+  lines.push(labeledLine('Phone', phone))
+  lines.push(...labeledBlock('Delivery address', delivery))
+
+  // Payment is required to enable copy buttons, so it'll always be set when
+  // this output is generated. But still defend against it being blank.
+  const paymentLabel =
+    payment === 'cc'  ? 'Credit card (+4% fee)' :
+    payment === 'ach' ? 'ACH / Wire (no fee)' :
+    ''
+  lines.push(labeledLine('Payment method', paymentLabel))
+  lines.push('')
+
+  // Notes appear here, above line items, when present
+  if (notes && notes.trim()) {
+    lines.push(SEP_LIGHT)
+    lines.push('Notes from buyer:')
+    for (const ln of notes.split(/\r?\n/)) {
+      lines.push('  ' + ln)
+    }
+    lines.push('')
+  }
+
+  // Line items — QTY | PRODUCT | SKU | PRICE
+  // Column widths chosen so output stays readable when pasted into a
+  // monospace context (Gmail's "Plain text mode", SMS, terminal).
+  const QTY_W = 4
+  const PROD_W = 44
+  const SKU_W = 18
+  const PRICE_W = 11
+
+  lines.push(SEP_LIGHT)
+  lines.push(
+    'QTY'.padStart(QTY_W) + '  ' +
+    'PRODUCT'.padEnd(PROD_W) + '  ' +
+    'SKU'.padEnd(SKU_W) + '  ' +
+    'PRICE'.padStart(PRICE_W),
+  )
+  lines.push(SEP_LIGHT)
 
   let total = 0
   let retail = 0
@@ -131,24 +222,53 @@ export function rfqAsText(products, rfq) {
     const lineCost = hasPrice ? p.wholesale * qty : 0
     if (hasPrice) total += lineCost
     if (p.msrp && p.wholesale && p.msrp >= p.wholesale) retail += p.msrp * qty
-    const costDisplay = hasPrice ? `$${lineCost.toFixed(2).padStart(7)}` : '     TBD'
+
+    // Truncate product name only if it overflows — leaves visible signal
+    const prodCell = p.name.length > PROD_W
+      ? p.name.slice(0, PROD_W - 1) + '…'
+      : p.name.padEnd(PROD_W)
+    const skuCell = (p.sku || '').padEnd(SKU_W)
+    const priceCell = hasPrice ? fmtMoneyPad(lineCost, PRICE_W) : 'TBD'.padStart(PRICE_W)
+
     lines.push(
-      `${p.sku.padEnd(22)} ${String(qty).padStart(4)}  ${costDisplay}  ${p.name}`,
+      String(qty).padStart(QTY_W) + '  ' +
+      prodCell + '  ' +
+      skuCell + '  ' +
+      priceCell,
     )
   }
-  lines.push('-'.repeat(70))
-  lines.push(`WHOLESALE TOTAL:         $${total.toFixed(2)}`)
+  lines.push(SEP_LIGHT)
+  lines.push('')
+
+  // Totals — labels left-aligned, money right-aligned in a fixed column
+  // for clean visual scan.
+  const TOTAL_VAL_W = 12
+  const totalLine = (label, val) =>
+    `${(label + ':').padEnd(LABEL_WIDTH)} ${val.padStart(TOTAL_VAL_W)}`
+  lines.push(totalLine('Wholesale subtotal', fmtMoney(total)))
+  if (payment === 'cc') {
+    const fee = total * 0.04
+    const grand = total + fee
+    lines.push(totalLine('Credit card fee (4%)', fmtMoney(fee)))
+    lines.push(totalLine('TOTAL DUE', fmtMoney(grand)))
+  } else {
+    lines.push(totalLine('TOTAL DUE', fmtMoney(total)))
+  }
   if (retail > 0) {
     const gm = Math.round(((retail - total) / retail) * 100)
-    lines.push(`RETAIL VALUE:            $${retail.toFixed(2)}`)
-    lines.push(`ESTIMATED GROSS MARGIN:  ${gm}%`)
+    lines.push(totalLine('Suggested retail value', fmtMoney(retail)))
+    lines.push(totalLine('Estimated gross margin', `${gm}%`))
   }
   lines.push('')
-  lines.push('Request for quote, not an order. Product styles only —')
-  lines.push('specific strains confirmed at fulfillment, subject to availability.')
-  if (notes) {
-    lines.push('')
-    lines.push(`Notes: ${notes}`)
-  }
+
+  lines.push(SEP_LIGHT)
+  lines.push('')
+  lines.push('This is a request for quote, not an order. Requests are fielded')
+  lines.push('at the product-style level — specific strains, cultivars, and')
+  lines.push('hybrid/indica/sativa mixes are confirmed at fulfillment, subject')
+  lines.push('to availability. Drew will follow up to finalize details.')
+  lines.push('')
+  lines.push(SEP_HEAVY)
+
   return lines.join('\n')
 }
