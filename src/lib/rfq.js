@@ -1,37 +1,49 @@
 // RFQ (Request For Quote) encoding/decoding.
 //
-// The cart + optional contact info serialize into URL params so any
-// RFQ can be shared as a single link:
-//   ?rfq=1:5,3:2,15:10&n=Drew&c=Drew+Co&e=drew@x.com&p=5551234&d=addr&o=notes
+// The cart + contact info serialize into URL params so any RFQ can be shared
+// as a single link:
+//   ?rfq=1:5,3:2&n=Drew&c=Co&e=x&p=281...&street=...&city=...&pm=ach&o=notes
 //
-// rfq = product_id:qty comma-separated
-// n=name, c=company, e=email, p=phone, d=delivery address, o=order notes
+// rfq=cart, n=name, c=company, e=email, p=phone, pm=payment, o=notes
+// Address: street, street2, city, state, zip
+// Legacy free-text delivery (pre-v16) stored in `d` — kept for back-compat.
 
 const LS_RFQ = 'herban.rfq.v1'
 
 export const EMPTY_RFQ = {
-  cart: {},       // { [productId]: qty }
+  cart: {},
   contact: {
     name: '',
     company: '',
     email: '',
     phone: '',
+    // Structured address (v16+) — used when any field is filled
+    street: '',
+    street2: '',
+    city: '',
+    state: '',
+    zip: '',
+    // Legacy free-text fallback (pre-v16) — render only if structured all blank
     delivery: '',
-    payment: '',    // 'cc' | 'ach' — required to enable copy buttons
+    payment: '',  // 'cc' | 'ach' — required
     notes: '',
   },
+}
+
+// US phone validator: must contain at least 10 digits ignoring non-digit chars.
+// Accepts "281-330-8004", "(281) 330-8004", "+1 281 330 8004", "2813308004", etc.
+export function isValidPhone(raw) {
+  if (!raw) return false
+  const digits = String(raw).replace(/\D/g, '')
+  return digits.length >= 10
 }
 
 export function readRFQFromURL() {
   if (typeof window === 'undefined') return null
   const sp = new URLSearchParams(window.location.search)
-  if (
-    !sp.has('rfq') && !sp.has('n') && !sp.has('c') &&
-    !sp.has('e') && !sp.has('p') && !sp.has('d') &&
-    !sp.has('pm') && !sp.has('o')
-  ) {
-    return null
-  }
+  const known = ['rfq', 'n', 'c', 'e', 'p', 'd', 'pm', 'o',
+                 'street', 'street2', 'city', 'state', 'zip']
+  if (!known.some((k) => sp.has(k))) return null
 
   const cart = {}
   if (sp.has('rfq')) {
@@ -50,6 +62,11 @@ export function readRFQFromURL() {
       company:  sp.get('c') || '',
       email:    sp.get('e') || '',
       phone:    sp.get('p') || '',
+      street:   sp.get('street') || '',
+      street2:  sp.get('street2') || '',
+      city:     sp.get('city') || '',
+      state:    sp.get('state') || '',
+      zip:      sp.get('zip') || '',
       delivery: sp.get('d') || '',
       payment:  sp.get('pm') || '',
       notes:    sp.get('o') || '',
@@ -66,27 +83,29 @@ export function buildRFQURL(rfq, baseURL) {
     .map(([id, qty]) => `${id}:${qty}`)
   if (pairs.length) sp.set('rfq', pairs.join(','))
 
-  const { name, company, email, phone, delivery, payment, notes } = rfq.contact
-  if (name)     sp.set('n', name)
-  if (company)  sp.set('c', company)
-  if (email)    sp.set('e', email)
-  if (phone)    sp.set('p', phone)
-  if (delivery) sp.set('d', delivery)
-  if (payment)  sp.set('pm', payment)
-  if (notes)    sp.set('o', notes)
+  const c = rfq.contact
+  if (c.name)     sp.set('n', c.name)
+  if (c.company)  sp.set('c', c.company)
+  if (c.email)    sp.set('e', c.email)
+  if (c.phone)    sp.set('p', c.phone)
+  if (c.street)   sp.set('street', c.street)
+  if (c.street2)  sp.set('street2', c.street2)
+  if (c.city)     sp.set('city', c.city)
+  if (c.state)    sp.set('state', c.state)
+  if (c.zip)      sp.set('zip', c.zip)
+  if (c.delivery) sp.set('d', c.delivery)
+  if (c.payment)  sp.set('pm', c.payment)
+  if (c.notes)    sp.set('o', c.notes)
 
   const qs = sp.toString()
   return qs ? `${base}?${qs}` : base
 }
 
-// RFQ persistence — so a buyer's in-progress cart survives a page reload
-// even without a shareable link yet.
 export function loadRFQ() {
   try {
     const raw = localStorage.getItem(LS_RFQ)
     if (!raw) return { ...EMPTY_RFQ, contact: { ...EMPTY_RFQ.contact } }
     const parsed = JSON.parse(raw)
-    // Merge to ensure new fields exist if old localStorage data is loaded
     return {
       cart: parsed.cart || {},
       contact: { ...EMPTY_RFQ.contact, ...(parsed.contact || {}) },
@@ -102,13 +121,11 @@ export function clearRFQ() {
   try { localStorage.removeItem(LS_RFQ) } catch {}
 }
 
-// Count line items and compute totals from product list + cart.
 export function rfqTotals(products, cart) {
   let lineCount = 0
   let unitCount = 0
   let wholesaleTotal = 0
   let msrpTotal = 0
-
   for (const p of products) {
     const qty = cart[p.id] || 0
     if (qty <= 0) continue
@@ -117,38 +134,40 @@ export function rfqTotals(products, cart) {
     if (p.wholesale) wholesaleTotal += qty * p.wholesale
     if (p.msrp && p.wholesale && p.msrp >= p.wholesale) msrpTotal += qty * p.msrp
   }
-
   return { lineCount, unitCount, wholesaleTotal, msrpTotal }
 }
 
-// Plain-text RFQ for clipboard paste into Gmail / Messages / etc.
-//
-// Design choices:
-//  - Every contact field is labeled, even if blank, so Drew can see at a glance
-//    what info the buyer did/didn't provide. Empty fields render as "Label: —"
-//  - Notes appear above the line items (sometimes notes change how to read
-//    the order — e.g. "this is a top-up to last week's PO #1234")
-//  - Line items columns: QTY | PRODUCT | SKU | PRICE
-//  - Multi-line delivery address indents continuation lines under the label
-//  - Money columns right-align with $ sign attached to digits, not the column
+// Render structured address into multi-line block; falls back to legacy
+// free-text if no structured fields are filled.
+function formatAddress(c) {
+  const hasStructured = c.street || c.city || c.state || c.zip
+  if (hasStructured) {
+    const lines = []
+    if (c.street) lines.push(c.street)
+    if (c.street2) lines.push(c.street2)
+    const cityLine = [c.city, c.state, c.zip].filter(Boolean).join(', ').replace(', ' + (c.zip || ''), c.zip ? ' ' + c.zip : '')
+    // Slightly cleaner approach: "City, ST 77002"
+    const csz = c.city && c.state && c.zip ? `${c.city}, ${c.state} ${c.zip}`
+              : [c.city, c.state, c.zip].filter(Boolean).join(' ')
+    if (csz) lines.push(csz)
+    return lines.join('\n')
+  }
+  return c.delivery || ''
+}
+
 function fmtMoney(n) {
   if (n == null) return 'TBD'
   return `$${n.toFixed(2)}`
 }
-
 function fmtMoneyPad(n, width) {
   return fmtMoney(n).padStart(width)
 }
 
-// "Label:    value" — value column starts at fixed indent for alignment.
-const LABEL_WIDTH = 22  // "Estimated gross margin" = 22 chars
+const LABEL_WIDTH = 22
 function labeledLine(label, value) {
   const v = value == null || value === '' ? '—' : value
   return `${(label + ':').padEnd(LABEL_WIDTH)} ${v}`
 }
-
-// Multi-line value — first line gets the label, continuation lines indent
-// to align under the value column.
 function labeledBlock(label, value) {
   if (!value) return [labeledLine(label, '')]
   const lines = value.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
@@ -161,7 +180,7 @@ function labeledBlock(label, value) {
 
 export function rfqAsText(products, rfq) {
   const lines = []
-  const { name, company, email, phone, delivery, payment, notes } = rfq.contact
+  const c = rfq.contact
   const SEP_HEAVY = '═'.repeat(70)
   const SEP_LIGHT = '─'.repeat(70)
 
@@ -170,35 +189,27 @@ export function rfqAsText(products, rfq) {
   lines.push(SEP_HEAVY)
   lines.push('')
 
-  // Contact block — every field labeled, blanks shown as "—"
-  lines.push(labeledLine('Name', name))
-  lines.push(labeledLine('Company', company))
-  lines.push(labeledLine('Email', email))
-  lines.push(labeledLine('Phone', phone))
-  lines.push(...labeledBlock('Delivery address', delivery))
+  lines.push(labeledLine('Name', c.name))
+  lines.push(labeledLine('Company', c.company))
+  lines.push(labeledLine('Email', c.email))
+  lines.push(labeledLine('Phone', c.phone))
+  lines.push(...labeledBlock('Delivery address', formatAddress(c)))
 
-  // Payment is required to enable copy buttons, so it'll always be set when
-  // this output is generated. But still defend against it being blank.
   const paymentLabel =
-    payment === 'cc'  ? 'Credit card (+4% fee)' :
-    payment === 'ach' ? 'ACH / Wire (no fee)' :
-    ''
+    c.payment === 'cc'  ? 'Credit card (+4% fee)' :
+    c.payment === 'ach' ? 'ACH / Wire (no fee)' : ''
   lines.push(labeledLine('Payment method', paymentLabel))
   lines.push('')
 
-  // Notes appear here, above line items, when present
-  if (notes && notes.trim()) {
+  if (c.notes && c.notes.trim()) {
     lines.push(SEP_LIGHT)
     lines.push('Notes from buyer:')
-    for (const ln of notes.split(/\r?\n/)) {
+    for (const ln of c.notes.split(/\r?\n/)) {
       lines.push('  ' + ln)
     }
     lines.push('')
   }
 
-  // Line items — QTY | PRODUCT | SKU | PRICE
-  // Column widths chosen so output stays readable when pasted into a
-  // monospace context (Gmail's "Plain text mode", SMS, terminal).
   const QTY_W = 4
   const PROD_W = 44
   const SKU_W = 18
@@ -223,7 +234,6 @@ export function rfqAsText(products, rfq) {
     if (hasPrice) total += lineCost
     if (p.msrp && p.wholesale && p.msrp >= p.wholesale) retail += p.msrp * qty
 
-    // Truncate product name only if it overflows — leaves visible signal
     const prodCell = p.name.length > PROD_W
       ? p.name.slice(0, PROD_W - 1) + '…'
       : p.name.padEnd(PROD_W)
@@ -240,13 +250,11 @@ export function rfqAsText(products, rfq) {
   lines.push(SEP_LIGHT)
   lines.push('')
 
-  // Totals — labels left-aligned, money right-aligned in a fixed column
-  // for clean visual scan.
   const TOTAL_VAL_W = 12
   const totalLine = (label, val) =>
     `${(label + ':').padEnd(LABEL_WIDTH)} ${val.padStart(TOTAL_VAL_W)}`
   lines.push(totalLine('Wholesale subtotal', fmtMoney(total)))
-  if (payment === 'cc') {
+  if (c.payment === 'cc') {
     const fee = total * 0.04
     const grand = total + fee
     lines.push(totalLine('Credit card fee (4%)', fmtMoney(fee)))
@@ -255,9 +263,14 @@ export function rfqAsText(products, rfq) {
     lines.push(totalLine('TOTAL DUE', fmtMoney(total)))
   }
   if (retail > 0) {
-    const gm = Math.round(((retail - total) / retail) * 100)
+    const baseGm = Math.round(((retail - total) / retail) * 100)
     lines.push(totalLine('Suggested retail value', fmtMoney(retail)))
-    lines.push(totalLine('Estimated gross margin', `${gm}%`))
+    if (c.payment === 'cc') {
+      const ccGm = Math.round(((retail - (total * 1.04)) / retail) * 100)
+      lines.push(totalLine('Estimated gross margin', `${ccGm}%`))
+    } else {
+      lines.push(totalLine('Estimated gross margin', `${baseGm}%`))
+    }
   }
   lines.push('')
 
