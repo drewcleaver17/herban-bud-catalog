@@ -104,7 +104,10 @@ export default function RFQDrawer({
         onClick={onClose}
       />
 
-      <aside className="w-full max-w-3xl bg-indigo-900 border-l border-paper/10 flex flex-col h-full shadow-2xl">
+      {/* Drawer width: narrow keeps current behavior on mobile/tablet,
+          wide stretches to nearly full-width on desktop (leaves room for the
+          category sidebar so users can still click out). */}
+      <aside className="w-full max-w-3xl lg:max-w-[calc(100vw-16rem)] bg-indigo-900 border-l border-paper/10 flex flex-col h-full shadow-2xl">
         {/* HEADER */}
         <div className="px-5 py-3 border-b border-paper/10 flex items-center gap-3 shrink-0">
           <h2 className="font-display text-xl text-paper">Your RFQ</h2>
