@@ -80,12 +80,10 @@ export default function RFQDrawer({
   const blockedReason = cartLines.length === 0
     ? 'Add at least one product'
     : !rfq.contact.payment
-    ? 'Select a payment method below'
+    ? 'Select a payment method'
     : ''
 
-  // Margin math for nudge — buyer's view, not Drew's.
-  // GM% (ACH) = (retail − wholesale) / retail
-  // GM% (CC)  = (retail − wholesale*1.04) / retail
+  // Margin math for the ACH nudge
   const ccFee = totals.wholesaleTotal * 0.04
   const totalDueACH = totals.wholesaleTotal
   const totalDueCC = totals.wholesaleTotal + ccFee
@@ -201,189 +199,197 @@ export default function RFQDrawer({
               </table>
             </div>
 
-            {/* ─────────── FIXED FOOTER (everything below this is pinned) ─────────── */}
+            {/* ─────────── FIXED FOOTER — 3-column on lg, stacks on narrow ─────────── */}
 
-            {/* CONTACT FORM — compact 2-col grid */}
-            <div className="border-t border-paper/10 px-4 py-3 shrink-0 bg-indigo-950/30">
-              <div className="font-mono text-2xs uppercase tracking-wider text-paper/40 mb-2">
-                Contact (optional)
-              </div>
-              <div className="grid grid-cols-2 gap-2 mb-2">
-                <input
-                  placeholder="Name"
-                  value={rfq.contact.name}
-                  onChange={(e) => updateContact('name', e.target.value)}
-                  className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
-                />
-                <input
-                  placeholder="Company"
-                  value={rfq.contact.company}
-                  onChange={(e) => updateContact('company', e.target.value)}
-                  className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={rfq.contact.email}
-                  onChange={(e) => updateContact('email', e.target.value)}
-                  className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone"
-                  value={rfq.contact.phone}
-                  onChange={(e) => updateContact('phone', e.target.value)}
-                  className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <textarea
-                  placeholder="Delivery address"
-                  value={rfq.contact.delivery}
-                  onChange={(e) => updateContact('delivery', e.target.value)}
-                  rows={2}
-                  className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none resize-none"
-                />
-                <textarea
-                  placeholder="Notes (timing, mix preferences, etc.)"
-                  value={rfq.contact.notes}
-                  onChange={(e) => updateContact('notes', e.target.value)}
-                  rows={2}
-                  className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none resize-none"
-                />
-              </div>
-            </div>
+            {/* 3-column grid: contact (Col1) | textareas (Col2) | payment+totals (Col3)
+                Below lg: stacks vertically (single column) so mobile still works. */}
+            <div className="border-t border-paper/10 shrink-0 grid grid-cols-1 lg:grid-cols-3 gap-px bg-paper/10">
 
-            {/* PAYMENT METHOD — required */}
-            <div className="border-t border-paper/10 px-4 py-3 shrink-0">
-              <div className="font-mono text-2xs uppercase tracking-wider text-paper/40 mb-2">
-                Payment method <span className="text-accent-warm normal-case">— required</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <label className={`flex items-center gap-2 px-3 py-1.5 rounded-sm border cursor-pointer transition-colors ${
-                  rfq.contact.payment === 'cc'
-                    ? 'bg-accent-warm/10 border-accent-warm/60 text-paper'
-                    : 'bg-indigo-950/40 border-paper/15 text-paper/70 hover:border-paper/40'
-                }`}>
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="cc"
-                    checked={rfq.contact.payment === 'cc'}
-                    onChange={() => updateContact('payment', 'cc')}
-                    className="accent-accent-warm shrink-0"
-                  />
-                  <span className="text-xs leading-tight">
-                    <div className="font-medium">Credit card</div>
-                    <div className="text-[10px] text-paper/50 font-mono">+4% fee</div>
-                  </span>
-                </label>
-                <label className={`flex items-center gap-2 px-3 py-1.5 rounded-sm border cursor-pointer transition-colors ${
-                  rfq.contact.payment === 'ach'
-                    ? 'bg-accent-warm/10 border-accent-warm/60 text-paper'
-                    : 'bg-indigo-950/40 border-paper/15 text-paper/70 hover:border-paper/40'
-                }`}>
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="ach"
-                    checked={rfq.contact.payment === 'ach'}
-                    onChange={() => updateContact('payment', 'ach')}
-                    className="accent-accent-warm shrink-0"
-                  />
-                  <span className="text-xs leading-tight">
-                    <div className="font-medium">ACH / Wire</div>
-                    <div className="text-[10px] text-paper/50 font-mono">no fee</div>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            {/* TOTALS */}
-            <div className="border-t border-paper/10 px-4 py-2 bg-indigo-950/40 shrink-0">
-              <div className="space-y-0.5 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-2xs uppercase tracking-wider text-paper/60">
-                    Wholesale subtotal
-                  </span>
-                  <span className="font-mono num text-paper">
-                    {formatMoney(totals.wholesaleTotal)}
-                  </span>
+              {/* COL 1 — Contact essentials (Name/Co/Email/Phone, 2x2 grid) */}
+              <div className="px-4 py-3 bg-indigo-950/30">
+                <div className="font-mono text-2xs uppercase tracking-wider text-paper/40 mb-2">
+                  Contact (optional)
                 </div>
-                {rfq.contact.payment === 'cc' && (
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    placeholder="Name"
+                    value={rfq.contact.name}
+                    onChange={(e) => updateContact('name', e.target.value)}
+                    className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
+                  />
+                  <input
+                    placeholder="Company"
+                    value={rfq.contact.company}
+                    onChange={(e) => updateContact('company', e.target.value)}
+                    className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={rfq.contact.email}
+                    onChange={(e) => updateContact('email', e.target.value)}
+                    className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone"
+                    value={rfq.contact.phone}
+                    onChange={(e) => updateContact('phone', e.target.value)}
+                    className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* COL 2 — Logistics text areas (Delivery / Notes, full height) */}
+              <div className="px-4 py-3 bg-indigo-950/30">
+                <div className="font-mono text-2xs uppercase tracking-wider text-paper/40 mb-2">
+                  Logistics
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <textarea
+                    placeholder="Delivery address"
+                    value={rfq.contact.delivery}
+                    onChange={(e) => updateContact('delivery', e.target.value)}
+                    rows={3}
+                    className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none resize-none"
+                  />
+                  <textarea
+                    placeholder="Notes (timing, mix preferences, etc.)"
+                    value={rfq.contact.notes}
+                    onChange={(e) => updateContact('notes', e.target.value)}
+                    rows={3}
+                    className="bg-indigo-950/60 border border-paper/15 rounded-sm px-2 py-1.5 text-xs text-paper focus:border-accent-warm focus:outline-none resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* COL 3 — Payment + Totals (the "summary" rail) */}
+              <div className="px-4 py-3 bg-indigo-950/40">
+                {/* Payment radio sits right above totals so users see the math
+                    change instantly when they pick CC vs ACH */}
+                <div className="font-mono text-2xs uppercase tracking-wider text-paper/40 mb-2">
+                  Payment <span className="text-accent-warm normal-case">— required</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1.5 mb-3">
+                  <label className={`flex items-center gap-1.5 px-2 py-1.5 rounded-sm border cursor-pointer transition-colors ${
+                    rfq.contact.payment === 'cc'
+                      ? 'bg-accent-warm/10 border-accent-warm/60 text-paper'
+                      : 'bg-indigo-950/60 border-paper/15 text-paper/70 hover:border-paper/40'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="cc"
+                      checked={rfq.contact.payment === 'cc'}
+                      onChange={() => updateContact('payment', 'cc')}
+                      className="accent-accent-warm shrink-0"
+                    />
+                    <span className="text-xs leading-tight">
+                      <div className="font-medium">Credit card</div>
+                      <div className="text-[10px] text-paper/50 font-mono">+4% fee</div>
+                    </span>
+                  </label>
+                  <label className={`flex items-center gap-1.5 px-2 py-1.5 rounded-sm border cursor-pointer transition-colors ${
+                    rfq.contact.payment === 'ach'
+                      ? 'bg-accent-warm/10 border-accent-warm/60 text-paper'
+                      : 'bg-indigo-950/60 border-paper/15 text-paper/70 hover:border-paper/40'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="ach"
+                      checked={rfq.contact.payment === 'ach'}
+                      onChange={() => updateContact('payment', 'ach')}
+                      className="accent-accent-warm shrink-0"
+                    />
+                    <span className="text-xs leading-tight">
+                      <div className="font-medium">ACH / Wire</div>
+                      <div className="text-[10px] text-paper/50 font-mono">no fee</div>
+                    </span>
+                  </label>
+                </div>
+
+                {/* Totals lines */}
+                <div className="space-y-0.5 text-xs">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-2xs uppercase tracking-wider text-paper/60">
-                      Credit card fee (4%)
+                      Wholesale subtotal
                     </span>
-                    <span className="font-mono num text-paper/80">
-                      {formatMoney(ccFee)}
+                    <span className="font-mono num text-paper">
+                      {formatMoney(totals.wholesaleTotal)}
                     </span>
                   </div>
-                )}
-                <div className="flex items-center justify-between pt-1.5 mt-1 border-t border-paper/10 bg-accent-warm/[0.06] -mx-4 px-4 py-1.5">
-                  <span className="font-mono text-2xs uppercase tracking-wider text-paper">
-                    Total due
-                  </span>
-                  <span className="font-mono num text-base text-paper font-semibold">
-                    {formatMoney(rfq.contact.payment === 'cc' ? totalDueCC : totalDueACH)}
-                  </span>
-                </div>
-
-                {/* Margin block — varies by payment selection */}
-                {totals.msrpTotal > 0 && (
-                  <div className="pt-1.5 mt-1 border-t border-paper/10 space-y-0.5">
+                  {rfq.contact.payment === 'cc' && (
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
-                        Suggested retail value
+                      <span className="font-mono text-2xs uppercase tracking-wider text-paper/60">
+                        CC fee (4%)
                       </span>
-                      <span className="font-mono num text-paper/60">
-                        {formatMoney(totals.msrpTotal)}
+                      <span className="font-mono num text-paper/80">
+                        {formatMoney(ccFee)}
                       </span>
                     </div>
-                    {/* When CC: show CC margin + nudge line for ACH alternative */}
-                    {rfq.contact.payment === 'cc' && (
-                      <>
+                  )}
+                  <div className="flex items-center justify-between pt-1.5 mt-1 border-t border-paper/10 bg-accent-warm/[0.06] -mx-4 px-4 py-1.5">
+                    <span className="font-mono text-2xs uppercase tracking-wider text-paper">
+                      Total due
+                    </span>
+                    <span className="font-mono num text-base text-paper font-semibold">
+                      {formatMoney(rfq.contact.payment === 'cc' ? totalDueCC : totalDueACH)}
+                    </span>
+                  </div>
+
+                  {totals.msrpTotal > 0 && (
+                    <div className="pt-1.5 mt-1 border-t border-paper/10 space-y-0.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
+                          Suggested retail
+                        </span>
+                        <span className="font-mono num text-paper/60">
+                          {formatMoney(totals.msrpTotal)}
+                        </span>
+                      </div>
+                      {rfq.contact.payment === 'cc' && (
+                        <>
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
+                              Est. GM (CC)
+                            </span>
+                            <span className="font-mono num text-paper">{gmCC}%</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-accent-green/[0.08] -mx-4 px-4 py-1 border-l-2 border-accent-green/60">
+                            <span className="font-mono text-2xs uppercase tracking-wider text-accent-green/90">
+                              GM% if ACH
+                            </span>
+                            <span className="font-mono num text-accent-green">
+                              {gmACH}%
+                              {marginPointsLost > 0 && (
+                                <span className="text-2xs text-accent-green/70 ml-1.5">
+                                  (+{marginPointsLost} pts)
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                      {rfq.contact.payment === 'ach' && (
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
-                            Est. gross margin (CC)
+                            Est. gross margin
                           </span>
-                          <span className="font-mono num text-paper">{gmCC}%</span>
+                          <span className="font-mono num text-accent-green">{gmACH}%</span>
                         </div>
-                        <div className="flex items-center justify-between bg-accent-green/[0.08] -mx-4 px-4 py-1 border-l-2 border-accent-green/60">
-                          <span className="font-mono text-2xs uppercase tracking-wider text-accent-green/90">
-                            GM% if ACH/Wire
+                      )}
+                      {!rfq.contact.payment && (
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
+                            Est. GM (no fee)
                           </span>
-                          <span className="font-mono num text-accent-green">
-                            {gmACH}%
-                            {marginPointsLost > 0 && (
-                              <span className="text-2xs text-accent-green/70 ml-1.5">
-                                (+{marginPointsLost} pts)
-                              </span>
-                            )}
-                          </span>
+                          <span className="font-mono num text-paper/60">{gmACH}%</span>
                         </div>
-                      </>
-                    )}
-                    {/* When ACH: show single GM% line */}
-                    {rfq.contact.payment === 'ach' && (
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
-                          Estimated gross margin
-                        </span>
-                        <span className="font-mono num text-accent-green">{gmACH}%</span>
-                      </div>
-                    )}
-                    {/* When neither selected: show ACH-equivalent baseline */}
-                    {!rfq.contact.payment && (
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-2xs uppercase tracking-wider text-paper/40">
-                          Est. gross margin (at no fee)
-                        </span>
-                        <span className="font-mono num text-paper/60">{gmACH}%</span>
-                      </div>
-                    )}
-                  </div>
-                )}
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
