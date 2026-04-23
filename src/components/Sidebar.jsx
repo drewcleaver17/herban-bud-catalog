@@ -1,4 +1,4 @@
-import { CATEGORY_GLYPHS, STRAIN_ORDER, STRAIN_LABEL, STRAIN_STYLES, buildStrainCounts } from '../lib/categories'
+import { CATEGORY_GLYPHS, TYPE_ORDER, TYPE_LABEL, TYPE_STYLES, buildTypeCounts } from '../lib/categories'
 
 const CATEGORY_ACCENT = {
   'Pre-Rolls':   'from-[#CDB4DB]/10 to-[#CDB4DB]/5 border-[#CDB4DB]/20',
@@ -35,7 +35,7 @@ function CategoryTile({ category, label, count, active, onClick, compact }) {
 
 export default function Sidebar({ categories, filters, setFilters, brands, products = [], variant = 'desktop', onNavigate }) {
   const isAllProducts = filters.categories.length === 0
-  const strainCounts = buildStrainCounts(products)
+  const typeCounts = buildTypeCounts(products)
 
   const selectAllProducts = () => {
     setFilters({ ...filters, categories: [] })
@@ -60,13 +60,13 @@ export default function Sidebar({ categories, filters, setFilters, brands, produ
     })
   }
 
-  const toggleStrain = (s) => {
-    const active = filters.strains.includes(s)
+  const toggleType = (t) => {
+    const active = filters.types.includes(t)
     setFilters({
       ...filters,
-      strains: active
-        ? filters.strains.filter((x) => x !== s)
-        : [...filters.strains, s],
+      types: active
+        ? filters.types.filter((x) => x !== t)
+        : [...filters.types, t],
     })
   }
 
@@ -76,7 +76,7 @@ export default function Sidebar({ categories, filters, setFilters, brands, produ
     <aside className={`${isMobile ? 'w-full' : 'w-64 shrink-0 border-r border-paper/10'} bg-indigo-950/40 flex flex-col`}>
       {!isMobile && (
         <div className="px-4 pt-4 pb-3 border-b border-paper/10">
-          <button onClick={() => { setFilters({ ...filters, categories: [], brands: [], strains: [], q: '' }); onNavigate?.() }} className="block text-left w-full">
+          <button onClick={() => { setFilters({ ...filters, categories: [], brands: [], types: [], q: '' }); onNavigate?.() }} className="block text-left w-full">
             <h1 className="font-display text-2xl font-semibold tracking-tight text-paper leading-tight">
               Herban
             </h1>
@@ -156,47 +156,53 @@ export default function Sidebar({ categories, filters, setFilters, brands, produ
           </div>
         </div>
 
-        {/* ─── Filter by strain (indica / sativa / hybrid / blend) ─── */}
-        {/* Empty strains array = "All" (default). Each pill uses its own strain
-             color (indica purple, sativa green, hybrid gold, blend neutral).
-             Active pills show a solid background; inactive show an outline. */}
-        {strainCounts.length > 0 && (
-          <div className="px-4 pt-4 pb-3 border-t border-paper/10 mt-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-paper/40">
-                Filter by strain
-              </span>
-              {filters.strains.length > 0 && (
-                <button
-                  onClick={() => setFilters({ ...filters, strains: [] })}
-                  className="text-[10px] text-paper/40 hover:text-paper underline-offset-2 hover:underline"
-                >
-                  clear
-                </button>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-1">
-              {strainCounts.map(({ strain, label, count }) => {
-                const active = filters.strains.includes(strain)
-                const s = STRAIN_STYLES[strain]
-                return (
-                  <button
-                    key={strain}
-                    onClick={() => toggleStrain(strain)}
-                    className={`text-[11px] px-2 py-1 rounded-sm border transition-colors flex items-center gap-1.5 ${
-                      active
-                        ? `${s.bg} ${s.text} ${s.border} ring-1 ring-current`
-                        : `bg-transparent ${s.text} ${s.border} hover:bg-paper/5`
-                    }`}
-                  >
-                    <span>{label}</span>
-                    <span className="text-[10px] text-paper/40 tabular-nums">{count}</span>
-                  </button>
-                )
-              })}
-            </div>
+        {/* ─── Filter by type (hybrid / indica / sativa / blend / cbd) ─── */}
+        {/* Empty types array = "All" (default). Each pill uses its own type
+             color (indica purple, sativa green, hybrid gold, blend neutral,
+             cbd blue). Active pills show a ring; inactive show an outline.
+             All 5 types always render, even with count=0 — keeps the filter
+             layout stable as the catalog grows (e.g. CBD products coming). */}
+        <div className="px-4 pt-4 pb-3 border-t border-paper/10 mt-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-paper/40">
+              Filter by type
+            </span>
+            {filters.types.length > 0 && (
+              <button
+                onClick={() => setFilters({ ...filters, types: [] })}
+                className="text-[10px] text-paper/40 hover:text-paper underline-offset-2 hover:underline"
+              >
+                clear
+              </button>
+            )}
           </div>
-        )}
+          <div className="flex flex-wrap gap-1">
+            {typeCounts.map(({ type, label, count }) => {
+              const active = filters.types.includes(type)
+              const isEmpty = count === 0
+              const s = TYPE_STYLES[type]
+              // Empty-count pills get dimmed styling and are still clickable
+              // (so users can pre-select before products exist in that type)
+              return (
+                <button
+                  key={type}
+                  onClick={() => toggleType(type)}
+                  disabled={isEmpty && !active}
+                  className={`text-[11px] px-2 py-1 rounded-sm border transition-colors flex items-center gap-1.5 ${
+                    active
+                      ? `${s.bg} ${s.text} ${s.border} ring-1 ring-current`
+                      : isEmpty
+                      ? `bg-transparent ${s.text} ${s.border} opacity-30 cursor-not-allowed`
+                      : `bg-transparent ${s.text} ${s.border} hover:bg-paper/5`
+                  }`}
+                >
+                  <span>{label}</span>
+                  <span className="text-[10px] text-paper/40 tabular-nums">{count}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
 
         {isMobile && (
           <div className="px-4 pt-4 pb-3 border-t border-paper/10 mt-3">

@@ -12,7 +12,37 @@
     "msrp": null,
     "availability": "preorder",
     "notes": "*INQUIRE FOR PRICING*",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 100,
+    "sortRank": 101,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Snowcaps",
+    "sku": "DP-PR-SNO-2X1.5G-IND",
+    "name": "Dope Pros — Snowcaps 2-pack Prerolls, 1.5g (Indica)",
+    "grams": 3,
+    "wholesale": null,
+    "msrp": null,
+    "availability": "preorder",
+    "notes": "*INQUIRE FOR PRICING*",
+    "type": "indica"
+  },
+  {
+    "id": 101,
+    "sortRank": 102,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Snowcaps",
+    "sku": "DP-PR-SNO-2X1.5G-SAT",
+    "name": "Dope Pros — Snowcaps 2-pack Prerolls, 1.5g (Sativa)",
+    "grams": 3,
+    "wholesale": null,
+    "msrp": null,
+    "availability": "preorder",
+    "notes": "*INQUIRE FOR PRICING*",
+    "type": "sativa"
   },
   {
     "id": 1,
@@ -27,7 +57,7 @@
     "msrp": 12.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 2,
@@ -42,7 +72,67 @@
     "msrp": 19.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 102,
+    "sortRank": 111,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Exotic",
+    "sku": "DP-PR-EXO-1X1.5G-IND",
+    "name": "Dope Pros — Exotic Single Preroll, 1.5g (Indica)",
+    "grams": 1.5,
+    "wholesale": 6,
+    "msrp": 12.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 104,
+    "sortRank": 111,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Exotic",
+    "sku": "DP-PR-EXO-2X1.5G-IND",
+    "name": "Dope Pros — Exotic 2-pack Prerolls, 1.5g (Indica)",
+    "grams": 3,
+    "wholesale": 9,
+    "msrp": 19.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 103,
+    "sortRank": 112,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Exotic",
+    "sku": "DP-PR-EXO-1X1.5G-SAT",
+    "name": "Dope Pros — Exotic Single Preroll, 1.5g (Sativa)",
+    "grams": 1.5,
+    "wholesale": 6,
+    "msrp": 12.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 105,
+    "sortRank": 112,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Exotic",
+    "sku": "DP-PR-EXO-2X1.5G-SAT",
+    "name": "Dope Pros — Exotic 2-pack Prerolls, 1.5g (Sativa)",
+    "grams": 3,
+    "wholesale": 9,
+    "msrp": 19.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 3,
@@ -57,7 +147,7 @@
     "msrp": 150,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 4,
@@ -72,7 +162,7 @@
     "msrp": 300,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 5,
@@ -87,7 +177,7 @@
     "msrp": 500,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 6,
@@ -102,7 +192,127 @@
     "msrp": 15.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 106,
+    "sortRank": 121,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-5X0.7G-IND",
+    "name": "Dope Pros — Premium 5-pack Prerolls, 0.7g (Indica)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 15.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 108,
+    "sortRank": 121,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-15X1.5G-IND-TUB",
+    "name": "Dope Pros — Premium 15-pack Preroll Tub, 1.5g (Indica)",
+    "grams": 22.5,
+    "wholesale": 35,
+    "msrp": 150,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 110,
+    "sortRank": 121,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-30X1.5G-IND-TUB",
+    "name": "Dope Pros — Premium 30-pack Preroll Tub, 1.5g (Indica)",
+    "grams": 45,
+    "wholesale": 75,
+    "msrp": 300,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 112,
+    "sortRank": 121,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-50X1.5G-IND-TUB",
+    "name": "Dope Pros — Premium 50-pack Preroll Tub, 1.5g (Indica)",
+    "grams": 75,
+    "wholesale": 125,
+    "msrp": 500,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 107,
+    "sortRank": 122,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-5X0.7G-SAT",
+    "name": "Dope Pros — Premium 5-pack Prerolls, 0.7g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 15.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 109,
+    "sortRank": 122,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-15X1.5G-SAT-TUB",
+    "name": "Dope Pros — Premium 15-pack Preroll Tub, 1.5g (Sativa)",
+    "grams": 22.5,
+    "wholesale": 35,
+    "msrp": 150,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 111,
+    "sortRank": 122,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-30X1.5G-SAT-TUB",
+    "name": "Dope Pros — Premium 30-pack Preroll Tub, 1.5g (Sativa)",
+    "grams": 45,
+    "wholesale": 75,
+    "msrp": 300,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 113,
+    "sortRank": 122,
+    "brand": "Dope Pros",
+    "category": "Pre-Rolls",
+    "tier": "Premium",
+    "sku": "DP-PR-PRM-50X1.5G-SAT-TUB",
+    "name": "Dope Pros — Premium 50-pack Preroll Tub, 1.5g (Sativa)",
+    "grams": 75,
+    "wholesale": 125,
+    "msrp": 500,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 16,
@@ -117,7 +327,7 @@
     "msrp": 49.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 17,
@@ -132,7 +342,7 @@
     "msrp": 59.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 18,
@@ -147,7 +357,7 @@
     "msrp": 104.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 19,
@@ -162,7 +372,7 @@
     "msrp": 179.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 20,
@@ -177,7 +387,157 @@
     "msrp": 225,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 114,
+    "sortRank": 201,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-3.5G-IND",
+    "name": "Dope Pros — Snowcaps Flower, 3.5g (Indica)",
+    "grams": 3.5,
+    "wholesale": 25,
+    "msrp": 49.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 116,
+    "sortRank": 201,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-7G-IND",
+    "name": "Dope Pros — Snowcaps Flower, 7g (Indica)",
+    "grams": 7,
+    "wholesale": 50,
+    "msrp": 59.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 118,
+    "sortRank": 201,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-14X1G-IND-TUB",
+    "name": "Dope Pros — Snowcaps 14-pack Flower Tub, 1g (Indica)",
+    "grams": 14,
+    "wholesale": 95,
+    "msrp": 179.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 120,
+    "sortRank": 201,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-14G-IND",
+    "name": "Dope Pros — Snowcaps Flower, 14g (Indica)",
+    "grams": 14,
+    "wholesale": 100,
+    "msrp": 104.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 122,
+    "sortRank": 201,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-1OZ-IND",
+    "name": "Dope Pros — Snowcaps Flower, 1oz (Indica)",
+    "grams": 28,
+    "wholesale": 120,
+    "msrp": 225,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 115,
+    "sortRank": 202,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-3.5G-SAT",
+    "name": "Dope Pros — Snowcaps Flower, 3.5g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 25,
+    "msrp": 49.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 117,
+    "sortRank": 202,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-7G-SAT",
+    "name": "Dope Pros — Snowcaps Flower, 7g (Sativa)",
+    "grams": 7,
+    "wholesale": 50,
+    "msrp": 59.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 119,
+    "sortRank": 202,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-14X1G-SAT-TUB",
+    "name": "Dope Pros — Snowcaps 14-pack Flower Tub, 1g (Sativa)",
+    "grams": 14,
+    "wholesale": 95,
+    "msrp": 179.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 121,
+    "sortRank": 202,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-14G-SAT",
+    "name": "Dope Pros — Snowcaps Flower, 14g (Sativa)",
+    "grams": 14,
+    "wholesale": 100,
+    "msrp": 104.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 123,
+    "sortRank": 202,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Snowcaps",
+    "sku": "DP-FLW-SNO-1OZ-SAT",
+    "name": "Dope Pros — Snowcaps Flower, 1oz (Sativa)",
+    "grams": 28,
+    "wholesale": 120,
+    "msrp": 225,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 12,
@@ -192,7 +552,7 @@
     "msrp": 44.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 13,
@@ -207,7 +567,7 @@
     "msrp": 69.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 14,
@@ -222,7 +582,7 @@
     "msrp": 130,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 15,
@@ -237,7 +597,127 @@
     "msrp": 250,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 124,
+    "sortRank": 211,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-3.5G-IND",
+    "name": "Dope Pros — Exotic Flower, 3.5g (Indica)",
+    "grams": 3.5,
+    "wholesale": 20,
+    "msrp": 44.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 126,
+    "sortRank": 211,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-7G-IND",
+    "name": "Dope Pros — Exotic Flower, 7g (Indica)",
+    "grams": 7,
+    "wholesale": 35,
+    "msrp": 69.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 128,
+    "sortRank": 211,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-14G-IND",
+    "name": "Dope Pros — Exotic Flower, 14g (Indica)",
+    "grams": 14,
+    "wholesale": 65,
+    "msrp": 130,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 130,
+    "sortRank": 211,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-1OZ-IND",
+    "name": "Dope Pros — Exotic Flower, 1oz (Indica)",
+    "grams": 28,
+    "wholesale": 125,
+    "msrp": 250,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 125,
+    "sortRank": 212,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-3.5G-SAT",
+    "name": "Dope Pros — Exotic Flower, 3.5g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 20,
+    "msrp": 44.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 127,
+    "sortRank": 212,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-7G-SAT",
+    "name": "Dope Pros — Exotic Flower, 7g (Sativa)",
+    "grams": 7,
+    "wholesale": 35,
+    "msrp": 69.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 129,
+    "sortRank": 212,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-14G-SAT",
+    "name": "Dope Pros — Exotic Flower, 14g (Sativa)",
+    "grams": 14,
+    "wholesale": 65,
+    "msrp": 130,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 131,
+    "sortRank": 212,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Exotic",
+    "sku": "DP-FLW-EXO-1OZ-SAT",
+    "name": "Dope Pros — Exotic Flower, 1oz (Sativa)",
+    "grams": 28,
+    "wholesale": 125,
+    "msrp": 250,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 7,
@@ -252,7 +732,7 @@
     "msrp": 34.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 8,
@@ -267,7 +747,7 @@
     "msrp": 64.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 9,
@@ -282,7 +762,7 @@
     "msrp": 89.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 10,
@@ -297,7 +777,7 @@
     "msrp": 149.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 11,
@@ -312,7 +792,157 @@
     "msrp": 250,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 132,
+    "sortRank": 221,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-3.5G-IND",
+    "name": "Dope Pros — Premium Flower, 3.5g (Indica)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 34.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 134,
+    "sortRank": 221,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-7G-IND",
+    "name": "Dope Pros — Premium Flower, 7g (Indica)",
+    "grams": 7,
+    "wholesale": 30,
+    "msrp": 64.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 136,
+    "sortRank": 221,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-14G-IND",
+    "name": "Dope Pros — Premium Flower, 14g (Indica)",
+    "grams": 14,
+    "wholesale": 50,
+    "msrp": 89.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 138,
+    "sortRank": 221,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-1OZ-IND",
+    "name": "Dope Pros — Premium Flower, 1oz (Indica)",
+    "grams": 28,
+    "wholesale": 95,
+    "msrp": 149.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 140,
+    "sortRank": 221,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-28X1G-IND-TUB",
+    "name": "Dope Pros — Premium 28-pack Flower Tub, 1g (Indica)",
+    "grams": 28,
+    "wholesale": 125,
+    "msrp": 250,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 133,
+    "sortRank": 222,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-3.5G-SAT",
+    "name": "Dope Pros — Premium Flower, 3.5g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 34.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 135,
+    "sortRank": 222,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-7G-SAT",
+    "name": "Dope Pros — Premium Flower, 7g (Sativa)",
+    "grams": 7,
+    "wholesale": 30,
+    "msrp": 64.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 137,
+    "sortRank": 222,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-14G-SAT",
+    "name": "Dope Pros — Premium Flower, 14g (Sativa)",
+    "grams": 14,
+    "wholesale": 50,
+    "msrp": 89.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 139,
+    "sortRank": 222,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-1OZ-SAT",
+    "name": "Dope Pros — Premium Flower, 1oz (Sativa)",
+    "grams": 28,
+    "wholesale": 95,
+    "msrp": 149.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 141,
+    "sortRank": 222,
+    "brand": "Dope Pros",
+    "category": "FLOWER",
+    "tier": "Premium",
+    "sku": "DP-FLW-PRM-28X1G-SAT-TUB",
+    "name": "Dope Pros — Premium 28-pack Flower Tub, 1g (Sativa)",
+    "grams": 28,
+    "wholesale": 125,
+    "msrp": 250,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 21,
@@ -327,14 +957,14 @@
     "msrp": 24.99,
     "availability": "available",
     "notes": "FLAVORS: BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON, MIXED FRUIT",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 24,
     "sortRank": 500,
     "brand": "Herban Bud",
     "category": "EDIBLES",
-    "tier": null,
+    "tier": "Live Rosin",
     "sku": "HB-ED-GUM-10X30MG",
     "name": "Herban Bud — 10-pack Gummies, 30mg",
     "grams": null,
@@ -342,14 +972,14 @@
     "msrp": 24.99,
     "availability": "available",
     "notes": "FLAVORS: MIXED FRUIT, BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 25,
     "sortRank": 510,
     "brand": "Herban Bud",
     "category": "EDIBLES",
-    "tier": null,
+    "tier": "Live Rosin",
     "sku": "HB-ED-CAR-15X20MG",
     "name": "Herban Bud — 15-pack Caramels, 20mg",
     "grams": null,
@@ -357,14 +987,14 @@
     "msrp": 37.5,
     "availability": "available",
     "notes": "FLAVORS: ORIGINAL, VANILLA CREAM",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 28,
     "sortRank": 510,
     "brand": "Herban Bud",
     "category": "EDIBLES",
-    "tier": null,
+    "tier": "Live Rosin",
     "sku": "HB-ED-CAR-125X20MG-TUB",
     "name": "Herban Bud — 125-pack Caramel Tub, 20mg",
     "grams": null,
@@ -372,14 +1002,14 @@
     "msrp": 3,
     "availability": "available",
     "notes": "FLAVORS: ORIGINAL, VANILLA CREAM",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 26,
     "sortRank": 520,
     "brand": "Herban Bud",
     "category": "EDIBLES",
-    "tier": null,
+    "tier": "Live Rosin",
     "sku": "HB-ED-TAF-15X20MG",
     "name": "Herban Bud — 15-pack Taffy, 20mg",
     "grams": null,
@@ -387,14 +1017,14 @@
     "msrp": 37.5,
     "availability": "available",
     "notes": "FLAVORS: TUTTI FRUTTI, GREEN APPLE, LEMON DROP",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 27,
     "sortRank": 520,
     "brand": "Herban Bud",
     "category": "EDIBLES",
-    "tier": null,
+    "tier": "Live Rosin",
     "sku": "HB-ED-TAF-125X20MG-TUB",
     "name": "Herban Bud — 125-pack Taffy Tub, 20mg",
     "grams": null,
@@ -402,7 +1032,7 @@
     "msrp": 3,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 22,
@@ -417,7 +1047,7 @@
     "msrp": 15.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 23,
@@ -432,7 +1062,67 @@
     "msrp": 34.99,
     "availability": "available",
     "notes": "HALF-GRAM JOINTS",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 142,
+    "sortRank": 601,
+    "brand": "Herban Bud",
+    "category": "Pre-Rolls",
+    "tier": null,
+    "sku": "HB-PR-1X1.5G-IND",
+    "name": "Herban Bud — Single Preroll, 1.5g (Indica)",
+    "grams": 1.5,
+    "wholesale": 5,
+    "msrp": 15.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 144,
+    "sortRank": 601,
+    "brand": "Herban Bud",
+    "category": "Pre-Rolls",
+    "tier": null,
+    "sku": "HB-PR-5X0.7G-IND",
+    "name": "Herban Bud — 5-pack Prerolls, 0.7g (Indica)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 34.99,
+    "availability": "available",
+    "notes": "HALF-GRAM JOINTS",
+    "type": "indica"
+  },
+  {
+    "id": 143,
+    "sortRank": 602,
+    "brand": "Herban Bud",
+    "category": "Pre-Rolls",
+    "tier": null,
+    "sku": "HB-PR-1X1.5G-SAT",
+    "name": "Herban Bud — Single Preroll, 1.5g (Sativa)",
+    "grams": 1.5,
+    "wholesale": 5,
+    "msrp": 15.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 145,
+    "sortRank": 602,
+    "brand": "Herban Bud",
+    "category": "Pre-Rolls",
+    "tier": null,
+    "sku": "HB-PR-5X0.7G-SAT",
+    "name": "Herban Bud — 5-pack Prerolls, 0.7g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 34.99,
+    "availability": "available",
+    "notes": "HALF-GRAM JOINTS",
+    "type": "sativa"
   },
   {
     "id": 34,
@@ -447,7 +1137,7 @@
     "msrp": 60,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 35,
@@ -462,7 +1152,7 @@
     "msrp": 49.99,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 36,
@@ -477,7 +1167,7 @@
     "msrp": 54.99,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 37,
@@ -492,7 +1182,7 @@
     "msrp": 69.99,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 38,
@@ -507,7 +1197,7 @@
     "msrp": 59.99,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 39,
@@ -522,7 +1212,7 @@
     "msrp": 59.99,
     "availability": "available",
     "notes": "",
-    "strain": "blend"
+    "type": "blend"
   },
   {
     "id": 29,
@@ -537,7 +1227,37 @@
     "msrp": 16.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 146,
+    "sortRank": 911,
+    "brand": "FYRE",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "FYR-PR-COR-2X1.5G-IND",
+    "name": "FYRE — 2-pack Prerolls, 1.5g (Indica)",
+    "grams": 3,
+    "wholesale": 8,
+    "msrp": 16.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 147,
+    "sortRank": 912,
+    "brand": "FYRE",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "FYR-PR-COR-2X1.5G-SAT",
+    "name": "FYRE — 2-pack Prerolls, 1.5g (Sativa)",
+    "grams": 3,
+    "wholesale": 8,
+    "msrp": 16.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 30,
@@ -552,7 +1272,7 @@
     "msrp": 25,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 31,
@@ -567,7 +1287,7 @@
     "msrp": 54.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 32,
@@ -582,7 +1302,97 @@
     "msrp": 9.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 148,
+    "sortRank": 921,
+    "brand": "FYRE",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "FYR-FLW-COR-3.5G-IND",
+    "name": "FYRE — Flower, 3.5g (Indica)",
+    "grams": 3.5,
+    "wholesale": 12.5,
+    "msrp": 25,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 150,
+    "sortRank": 921,
+    "brand": "FYRE",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "FYR-FLW-COR-7G-IND",
+    "name": "FYRE — Flower, 7g (Indica)",
+    "grams": 7,
+    "wholesale": 20,
+    "msrp": 54.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 152,
+    "sortRank": 921,
+    "brand": "FYRE",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "FYR-FLW-COR-28X1G-IND-TUB",
+    "name": "FYRE — 28-pack Flower Tub, 1g (Indica)",
+    "grams": 28,
+    "wholesale": 100,
+    "msrp": 9.99,
+    "availability": "available",
+    "notes": "",
+    "type": "indica"
+  },
+  {
+    "id": 149,
+    "sortRank": 922,
+    "brand": "FYRE",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "FYR-FLW-COR-3.5G-SAT",
+    "name": "FYRE — Flower, 3.5g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 12.5,
+    "msrp": 25,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 151,
+    "sortRank": 922,
+    "brand": "FYRE",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "FYR-FLW-COR-7G-SAT",
+    "name": "FYRE — Flower, 7g (Sativa)",
+    "grams": 7,
+    "wholesale": 20,
+    "msrp": 54.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
+  },
+  {
+    "id": 153,
+    "sortRank": 922,
+    "brand": "FYRE",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "FYR-FLW-COR-28X1G-SAT-TUB",
+    "name": "FYRE — 28-pack Flower Tub, 1g (Sativa)",
+    "grams": 28,
+    "wholesale": 100,
+    "msrp": 9.99,
+    "availability": "available",
+    "notes": "",
+    "type": "sativa"
   },
   {
     "id": 33,
@@ -597,7 +1407,7 @@
     "msrp": 49.99,
     "availability": "available",
     "notes": "",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 40,
@@ -612,7 +1422,7 @@
     "msrp": 12.99,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 41,
@@ -627,7 +1437,7 @@
     "msrp": 30,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 42,
@@ -642,7 +1452,97 @@
     "msrp": 35,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 154,
+    "sortRank": 1001,
+    "brand": "Groovy's",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "GRV-PR-COR-1X1.5G-IND",
+    "name": "Groovy's — Single Preroll, 1.5g (Indica)",
+    "grams": 1.5,
+    "wholesale": 6,
+    "msrp": 12.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "indica"
+  },
+  {
+    "id": 156,
+    "sortRank": 1001,
+    "brand": "Groovy's",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "GRV-PR-COR-1X2G-IND-RSN",
+    "name": "Groovy's — Rosin-Infused Preroll, 2g (Indica)",
+    "grams": 2,
+    "wholesale": 15,
+    "msrp": 30,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "indica"
+  },
+  {
+    "id": 158,
+    "sortRank": 1001,
+    "brand": "Groovy's",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "GRV-PR-COR-5X1.5G-IND",
+    "name": "Groovy's — 5-pack Prerolls, 1.5g (Indica)",
+    "grams": 7.5,
+    "wholesale": 18,
+    "msrp": 35,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "indica"
+  },
+  {
+    "id": 155,
+    "sortRank": 1002,
+    "brand": "Groovy's",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "GRV-PR-COR-1X1.5G-SAT",
+    "name": "Groovy's — Single Preroll, 1.5g (Sativa)",
+    "grams": 1.5,
+    "wholesale": 6,
+    "msrp": 12.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "sativa"
+  },
+  {
+    "id": 157,
+    "sortRank": 1002,
+    "brand": "Groovy's",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "GRV-PR-COR-1X2G-SAT-RSN",
+    "name": "Groovy's — Rosin-Infused Preroll, 2g (Sativa)",
+    "grams": 2,
+    "wholesale": 15,
+    "msrp": 30,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "sativa"
+  },
+  {
+    "id": 159,
+    "sortRank": 1002,
+    "brand": "Groovy's",
+    "category": "Pre-Rolls",
+    "tier": "Core",
+    "sku": "GRV-PR-COR-5X1.5G-SAT",
+    "name": "Groovy's — 5-pack Prerolls, 1.5g (Sativa)",
+    "grams": 7.5,
+    "wholesale": 18,
+    "msrp": 35,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "sativa"
   },
   {
     "id": 43,
@@ -657,7 +1557,7 @@
     "msrp": 34.99,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 44,
@@ -672,7 +1572,7 @@
     "msrp": 44.99,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "hybrid"
+    "type": "hybrid"
   },
   {
     "id": 45,
@@ -687,7 +1587,97 @@
     "msrp": 129.99,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "hybrid"
+    "type": "hybrid"
+  },
+  {
+    "id": 160,
+    "sortRank": 1011,
+    "brand": "Groovy's",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "GRV-FLW-COR-3.5G-IND-JAR",
+    "name": "Groovy's — Flower Jar, 3.5g (Indica)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 34.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "indica"
+  },
+  {
+    "id": 162,
+    "sortRank": 1011,
+    "brand": "Groovy's",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "GRV-FLW-COR-3.5G-IND-MYL",
+    "name": "Groovy's — Flower, 3.5g (Mylar) (Indica)",
+    "grams": 3.5,
+    "wholesale": 18,
+    "msrp": 44.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "indica"
+  },
+  {
+    "id": 164,
+    "sortRank": 1011,
+    "brand": "Groovy's",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "GRV-FLW-COR-14G-IND-MYL",
+    "name": "Groovy's — Flower, 14g (Mylar) (Indica)",
+    "grams": 14,
+    "wholesale": 60,
+    "msrp": 129.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "indica"
+  },
+  {
+    "id": 161,
+    "sortRank": 1012,
+    "brand": "Groovy's",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "GRV-FLW-COR-3.5G-SAT-JAR",
+    "name": "Groovy's — Flower Jar, 3.5g (Sativa)",
+    "grams": 3.5,
+    "wholesale": 16,
+    "msrp": 34.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "sativa"
+  },
+  {
+    "id": 163,
+    "sortRank": 1012,
+    "brand": "Groovy's",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "GRV-FLW-COR-3.5G-SAT-MYL",
+    "name": "Groovy's — Flower, 3.5g (Mylar) (Sativa)",
+    "grams": 3.5,
+    "wholesale": 18,
+    "msrp": 44.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "sativa"
+  },
+  {
+    "id": 165,
+    "sortRank": 1012,
+    "brand": "Groovy's",
+    "category": "FLOWER",
+    "tier": "Core",
+    "sku": "GRV-FLW-COR-14G-SAT-MYL",
+    "name": "Groovy's — Flower, 14g (Mylar) (Sativa)",
+    "grams": 14,
+    "wholesale": 60,
+    "msrp": 129.99,
+    "availability": "preorder",
+    "notes": "*PRE-ORDERS AVAILABLE*",
+    "type": "sativa"
   },
   {
     "id": 46,
@@ -702,6 +1692,6 @@
     "msrp": 49.99,
     "availability": "preorder",
     "notes": "*PRE-ORDERS AVAILABLE*",
-    "strain": "blend"
+    "type": "blend"
   }
 ]

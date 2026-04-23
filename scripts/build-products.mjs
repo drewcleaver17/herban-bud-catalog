@@ -17,15 +17,15 @@ const JSON_PATH = path.join(ROOT, 'src', 'data', 'products.json')
 
 const REQUIRED_COLUMNS = [
   'id', 'sortRank', 'brand', 'category', 'tier', 'sku', 'name',
-  'grams', 'wholesale', 'msrp', 'availability', 'notes', 'strain_type',
+  'grams', 'wholesale', 'msrp', 'availability', 'notes', 'type',
 ]
 
 const VALID_CATEGORIES = new Set(['Pre-Rolls', 'FLOWER', 'EDIBLES', 'Concentrate', 'VAPES'])
-const VALID_TIERS       = new Set(['Snowcaps', 'Exotic', 'Premium', 'Core', ''])
+const VALID_TIERS       = new Set(['Snowcaps', 'Exotic', 'Live Rosin', 'Premium', 'Core', ''])
 const VALID_AVAILABILITY = new Set(['available', 'preorder', 'unavailable', 'discontinued', ''])
-// strain_type is lowercased before validation; blank is allowed because not
-// every product has a strain classification (e.g. edibles, blends, tinctures).
-const VALID_STRAINS = new Set(['hybrid', 'indica', 'sativa', 'blend', ''])
+// type is lowercased before validation; blank is allowed because not every
+// product has a type classification.
+const VALID_TYPES = new Set(['hybrid', 'indica', 'sativa', 'blend', 'cbd', ''])
 
 // Minimal CSV parser that handles quoted fields with embedded commas and quotes.
 // Good enough for the Google Sheets CSV export format. If the CSV grows more
@@ -102,10 +102,10 @@ function main() {
     const msrp     = toNum(row[idx.msrp])
     const availability = (row[idx.availability] || '').trim()
     const notes    = (row[idx.notes] || '').trim()
-    // Strain type is normalized to lowercase before validation + storage so
+    // Type is normalized to lowercase before validation + storage so
     // "Hybrid" / "HYBRID" / "hybrid" in the CSV all become "hybrid" in JSON.
-    const strainRaw = (row[idx.strain_type] || '').trim()
-    const strain    = strainRaw.toLowerCase()
+    const typeRaw = (row[idx.type] || '').trim()
+    const type    = typeRaw.toLowerCase()
 
     // Validations — collect all errors before bailing, so one build surfaces
     // everything wrong at once instead of whack-a-mole.
@@ -130,8 +130,8 @@ function main() {
     if (availability && !VALID_AVAILABILITY.has(availability))
       errors.push(`Line ${lineNum}: invalid availability "${availability}" (valid: available, preorder, unavailable, discontinued)`)
 
-    if (!VALID_STRAINS.has(strain))
-      errors.push(`Line ${lineNum}: invalid strain_type "${strainRaw}" (valid: hybrid, indica, sativa, blend, or blank)`)
+    if (!VALID_TYPES.has(type))
+      errors.push(`Line ${lineNum}: invalid type "${typeRaw}" (valid: hybrid, indica, sativa, blend, cbd, or blank)`)
 
     products.push({
       id,
@@ -146,7 +146,7 @@ function main() {
       msrp,
       availability: availability || 'available',
       notes,
-      strain: strain || null,
+      type: type || null,
     })
   }
 

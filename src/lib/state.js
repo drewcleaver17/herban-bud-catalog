@@ -9,7 +9,7 @@ export const DEFAULT_FILTERS = {
   // Multi-select: empty array = All Products. Array of category strings narrows down.
   categories: [],
   brands: [],        // secondary brand narrow-down
-  strains: [],       // strain type filter: hybrid, indica, sativa, blend — empty = all
+  types: [],         // product type filter: hybrid, indica, sativa, blend, cbd — empty = all
   sort: { key: 'curated', dir: 'asc' },
 }
 
@@ -20,7 +20,7 @@ export function readFromURL() {
   if (sp.has('q'))   f.q = sp.get('q') || ''
   if (sp.has('cat')) f.categories = sp.get('cat').split(',').filter(Boolean)
   if (sp.has('b'))   f.brands = sp.get('b').split(',').filter(Boolean)
-  if (sp.has('st'))  f.strains = sp.get('st').split(',').filter(Boolean).map((s) => s.toLowerCase())
+  if (sp.has('ty'))  f.types = sp.get('ty').split(',').filter(Boolean).map((s) => s.toLowerCase())
   if (sp.has('s')) {
     const [key, dir] = sp.get('s').split(':')
     if (key) f.sort = { key, dir: dir === 'desc' ? 'desc' : 'asc' }
@@ -34,7 +34,7 @@ export function writeToURL(filters) {
   if (filters.q)          sp.set('q', filters.q)
   if (filters.categories.length) sp.set('cat', filters.categories.join(','))
   if (filters.brands.length) sp.set('b', filters.brands.join(','))
-  if (filters.strains.length) sp.set('st', filters.strains.join(','))
+  if (filters.types.length) sp.set('ty', filters.types.join(','))
   if (filters.sort.key !== DEFAULT_FILTERS.sort.key || filters.sort.dir !== 'asc') {
     sp.set('s', `${filters.sort.key}:${filters.sort.dir}`)
   }

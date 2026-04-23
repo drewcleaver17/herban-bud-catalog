@@ -5,7 +5,7 @@ import {
   gmPercentAt,
   msrpLooksBroken,
 } from '../lib/pricing'
-import { TIER_STYLES, STRAIN_STYLES } from '../lib/categories'
+import { TIER_STYLES, TYPE_STYLES } from '../lib/categories'
 
 const CATEGORY_COLORS = {
   'Pre-Rolls':   'text-[#CDB4DB]',
@@ -40,10 +40,10 @@ function TierBadge({ tier }) {
   )
 }
 
-function StrainBadge({ strain }) {
-  if (!strain) return null
-  const key = String(strain).toLowerCase()
-  const s = STRAIN_STYLES[key]
+function TypeBadge({ type }) {
+  if (!type) return null
+  const key = String(type).toLowerCase()
+  const s = TYPE_STYLES[key]
   if (!s) return null
   return (
     <span
@@ -81,7 +81,7 @@ function ProductCard({ p, qty, onQty, effectiveMSRP, isOverridden, onMSRP, onRes
                 {p.category}
               </span>
               <TierBadge tier={p.tier} />
-              <StrainBadge strain={p.strain} />
+              <TypeBadge type={p.type} />
             </div>
             <div className="font-medium text-sm text-paper">{p.brand}</div>
             <div className="text-[13px] text-paper/80 leading-snug">{shortName(p)}</div>

@@ -80,12 +80,12 @@ export default function App() {
     return products.filter((p) => {
       if (filters.categories.length && !filters.categories.includes(p.category)) return false
       if (filters.brands.length && !filters.brands.includes(p.brand)) return false
-      if (filters.strains.length) {
-        const s = (p.strain || '').toLowerCase()
-        if (!s || !filters.strains.includes(s)) return false
+      if (filters.types.length) {
+        const t = (p.type || '').toLowerCase()
+        if (!t || !filters.types.includes(t)) return false
       }
       if (q) {
-        const hay = `${p.brand} ${p.category} ${p.sku} ${p.name} ${p.notes || ''} ${p.tier || ''} ${p.strain || ''}`.toLowerCase()
+        const hay = `${p.brand} ${p.category} ${p.sku} ${p.name} ${p.notes || ''} ${p.tier || ''} ${p.type || ''}`.toLowerCase()
         if (!hay.includes(q)) return false
       }
       return true
@@ -103,15 +103,15 @@ export default function App() {
       : filters.brands.length > 1
       ? `${filters.brands.length} brands`
       : null
-    const strainLabel = filters.strains.length === 1
-      ? filters.strains[0].charAt(0).toUpperCase() + filters.strains[0].slice(1)
-      : filters.strains.length > 1
-      ? `${filters.strains.length} strains`
+    const typeLabel = filters.types.length === 1
+      ? filters.types[0].charAt(0).toUpperCase() + filters.types[0].slice(1)
+      : filters.types.length > 1
+      ? `${filters.types.length} types`
       : null
-    const parts = [catLabel, brandLabel, strainLabel].filter(Boolean)
+    const parts = [catLabel, brandLabel, typeLabel].filter(Boolean)
     if (parts.length) return parts.join(' · ')
     return 'All products'
-  }, [filters.categories, filters.brands, filters.strains])
+  }, [filters.categories, filters.brands, filters.types])
 
   const rfqLineCount = useMemo(
     () => Object.values(rfq.cart).filter((q) => q > 0).length,

@@ -5,7 +5,7 @@ import {
   gmPercentAt,
   msrpLooksBroken,
 } from '../lib/pricing'
-import { TIER_RANK, TIER_STYLES, STRAIN_STYLES } from '../lib/categories'
+import { TIER_RANK, TIER_STYLES, TYPE_STYLES } from '../lib/categories'
 
 const CATEGORY_COLORS = {
   'Pre-Rolls':   'text-[#CDB4DB]',
@@ -70,14 +70,14 @@ function TierBadge({ tier }) {
   )
 }
 
-// Strain badge — indica purple, sativa green, hybrid gold, blend muted.
-// Products without a strain render as "—" (no badge), consistent with how
+// Type badge — indica purple, sativa green, hybrid gold, blend muted, cbd blue.
+// Products without a type render as "—" (no badge), consistent with how
 // Tier handles absent values.
-function StrainBadge({ strain }) {
-  if (!strain) return <span className="text-paper/20 text-xs">—</span>
-  const key = String(strain).toLowerCase()
-  const s = STRAIN_STYLES[key]
-  if (!s) return <span className="text-paper/60 text-2xs">{strain}</span>
+function TypeBadge({ type }) {
+  if (!type) return <span className="text-paper/20 text-xs">—</span>
+  const key = String(type).toLowerCase()
+  const s = TYPE_STYLES[key]
+  if (!s) return <span className="text-paper/60 text-2xs">{type}</span>
   return (
     <span
       className={`inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm border ${s.text} ${s.bg} ${s.border}`}
@@ -116,7 +116,7 @@ export default function ProductTable({
         case 'brand':      return p.brand
         case 'category':   return p.category
         case 'tier':       return TIER_RANK[p.tier] ?? -1
-        case 'strain':     return (p.strain || '').toLowerCase()
+        case 'type':       return (p.type || '').toLowerCase()
         case 'sku':        return p.sku
         case 'name':       return shortName(p)
         case 'qty':        return cart[p.id] || 0
@@ -172,7 +172,7 @@ export default function ProductTable({
           <col style={{ width: '110px' }} />{/* Brand */}
           <col />{/* Product — flexible */}
           <col style={{ width: '90px' }} />{/* Tier */}
-          <col style={{ width: '80px' }} />{/* Strain */}
+          <col style={{ width: '80px' }} />{/* Type */}
           <col style={{ width: '160px' }} />{/* SKU */}
           <col style={{ width: '80px' }} />{/* Qty */}
           <col style={{ width: '110px' }} />{/* Wholesale */}
@@ -185,8 +185,8 @@ export default function ProductTable({
             <SortHeader label="Category"  sortKey="category"  currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Brand"     sortKey="brand"     currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Product"   sortKey="name"      currentSort={filters.sort} onSort={handleSort} />
-            <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} title="Dope Pros quality tier (Snowcaps > Exotic > Premium)" />
-            <SortHeader label="Strain"    sortKey="strain"    currentSort={filters.sort} onSort={handleSort} title="Indica / Sativa / Hybrid / Blend" />
+            <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} title="Quality tier (Snowcaps > Exotic / Live Rosin > Premium > Core)" />
+            <SortHeader label="Type"      sortKey="type"      currentSort={filters.sort} onSort={handleSort} title="Hybrid / Indica / Sativa / Blend / CBD" />
             <SortHeader label="SKU"       sortKey="sku"       currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Qty"       sortKey="qty"       currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Quantity for RFQ" />
             <SortHeader label="Wholesale" sortKey="wholesale" currentSort={filters.sort} onSort={handleSort} align="right" numeric />
@@ -233,7 +233,7 @@ export default function ProductTable({
                   <TierBadge tier={p.tier} />
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">
-                  <StrainBadge strain={p.strain} />
+                  <TypeBadge type={p.type} />
                 </td>
                 <td className="px-3 py-2 text-[11px] font-mono text-paper/80 truncate" title={p.sku}>
                   {p.sku}

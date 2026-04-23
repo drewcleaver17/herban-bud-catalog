@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { formatMoney, formatPercent, gmPercentAt } from '../lib/pricing'
 import { buildRFQURL, isValidPhone, rfqAsText, rfqTotals } from '../lib/rfq'
-import { TIER_STYLES, STRAIN_STYLES } from '../lib/categories'
+import { TIER_STYLES, TYPE_STYLES } from '../lib/categories'
 
 // US state list for the address dropdown — short codes only.
 const US_STATES = [
@@ -45,11 +45,11 @@ function TierBadge({ tier }) {
   )
 }
 
-function StrainBadge({ strain }) {
-  if (!strain) return <span className="text-paper/20 text-xs">—</span>
-  const key = String(strain).toLowerCase()
-  const s = STRAIN_STYLES[key]
-  if (!s) return <span className="text-paper/60 text-2xs">{strain}</span>
+function TypeBadge({ type }) {
+  if (!type) return <span className="text-paper/20 text-xs">—</span>
+  const key = String(type).toLowerCase()
+  const s = TYPE_STYLES[key]
+  if (!s) return <span className="text-paper/60 text-2xs">{type}</span>
   return (
     <span className={`inline-block px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm border ${s.text} ${s.bg} ${s.border}`}>
       {s.label}
@@ -177,7 +177,7 @@ export default function RFQDrawer({
                     <th className="px-3 py-1.5 text-left w-24">Brand</th>
                     <th className="px-3 py-1.5 text-left">Product</th>
                     <th className="px-3 py-1.5 text-left w-20">Tier</th>
-                    <th className="px-3 py-1.5 text-left w-20">Strain</th>
+                    <th className="px-3 py-1.5 text-left w-20">Type</th>
                     <th className="px-3 py-1.5 text-left w-44">SKU</th>
                     <th className="px-3 py-1.5 text-right w-14">Qty</th>
                     <th className="px-3 py-1.5 text-right w-20">Wholesale</th>
@@ -203,7 +203,7 @@ export default function RFQDrawer({
                           )}
                         </td>
                         <td className="px-3 py-1.5 whitespace-nowrap"><TierBadge tier={p.tier} /></td>
-                        <td className="px-3 py-1.5 whitespace-nowrap"><StrainBadge strain={p.strain} /></td>
+                        <td className="px-3 py-1.5 whitespace-nowrap"><TypeBadge type={p.type} /></td>
                         <td className="px-3 py-1.5 font-mono text-[11px] text-paper/80 whitespace-nowrap">{p.sku}</td>
                         <td className="px-3 py-1.5 text-right">
                           <input

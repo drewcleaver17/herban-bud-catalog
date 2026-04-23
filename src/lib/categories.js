@@ -25,12 +25,16 @@ export const CATEGORY_GLYPHS = {
   'VAPES':       '💨',
 }
 
-// Dope Pros quality tiers + Core (FYRE/Groovy's baseline).
-// Rank order (higher = better) for sorting.
-export const TIER_ORDER = ['Snowcaps', 'Exotic', 'Premium', 'Core']
-export const TIER_RANK = { 'Snowcaps': 4, 'Exotic': 3, 'Premium': 2, 'Core': 1 }
+// Dope Pros quality tiers + Core (FYRE/Groovy's baseline) + Live Rosin
+// (premium craft edibles for Herban Bud / FYRE).
+// Rank order (higher = better) for sorting. Live Rosin sits at 3 alongside
+// Exotic because both are craft-tier offerings — slightly different
+// categories but similar prestige level.
+export const TIER_ORDER = ['Snowcaps', 'Exotic', 'Live Rosin', 'Premium', 'Core']
+export const TIER_RANK = { 'Snowcaps': 4, 'Exotic': 3, 'Live Rosin': 3, 'Premium': 2, 'Core': 1 }
 
 // Tier badge styling. Snowcaps is icy blue, Exotic is lavender,
+// Live Rosin is warm amber/honey (evokes rosin itself — premium craft),
 // Premium is neutral, Core is the most muted (baseline offering).
 export const TIER_STYLES = {
   'Snowcaps': {
@@ -44,6 +48,13 @@ export const TIER_STYLES = {
     bg:   'bg-[#CDB4DB]/10',
     border: 'border-[#CDB4DB]/30',
     label: 'Exotic',
+  },
+  'Live Rosin': {
+    // Warm amber/honey — matches the resin color of actual live rosin extract
+    text: 'text-[#E6A84B]',
+    bg:   'bg-[#E6A84B]/10',
+    border: 'border-[#E6A84B]/30',
+    label: '✦ Live Rosin',
   },
   'Premium': {
     text: 'text-paper/70',
@@ -82,24 +93,27 @@ export function buildCategoryCounts(products) {
   return result
 }
 
-// ─── Strain type (hybrid / indica / sativa / blend) ───
+// ─── Product type (hybrid / indica / sativa / blend / cbd) ───
 // Traditional industry color conventions:
 //   Indica  — purple spectrum (calming, nighttime association)
 //   Sativa  — green (energizing, matches accent-green used elsewhere)
 //   Hybrid  — gold (accent-warm, balanced, matches our brand accent)
-//   Blend   — muted neutral (for mixed/multi-strain products like edibles)
+//   Blend   — muted neutral (for edibles / multi-strain products)
+//   CBD     — blue (therapeutic, distinct from THC-dominant types)
 //
-// Not all products have a strain — edibles, tinctures, and some concentrates
-// may be blends or unclassified. Blank/null strain renders as "—" in the table.
-export const STRAIN_ORDER = ['hybrid', 'indica', 'sativa', 'blend']
-export const STRAIN_LABEL = {
+// "Type" (not "strain") — strain implies specific cultivar like "OG Kush";
+// these are effect-type categories that stay constant across harvests.
+// Blank/null type renders as "—" in the table.
+export const TYPE_ORDER = ['hybrid', 'indica', 'sativa', 'blend', 'cbd']
+export const TYPE_LABEL = {
   hybrid: 'Hybrid',
   indica: 'Indica',
   sativa: 'Sativa',
   blend:  'Blend',
+  cbd:    'CBD',
 }
 
-export const STRAIN_STYLES = {
+export const TYPE_STYLES = {
   hybrid: {
     // Gold (accent-warm) — balanced between indica/sativa, matches brand accent
     text: 'text-accent-warm',
@@ -124,29 +138,34 @@ export const STRAIN_STYLES = {
     label: 'Sativa',
   },
   blend: {
-    // Muted neutral — not a specific strain family, doesn't need color
+    // Muted neutral — for edibles, tinctures, multi-strain products
     text: 'text-paper/60',
     bg:   'bg-paper/5',
     border: 'border-paper/15',
     label: 'Blend',
   },
+  cbd: {
+    // Cool blue — therapeutic, distinct from all THC-dominant type colors
+    text: 'text-[#7FB3D5]',
+    bg:   'bg-[#7FB3D5]/10',
+    border: 'border-[#7FB3D5]/30',
+    label: 'CBD',
+  },
 }
 
-// Count products per strain for the sidebar filter. Only counts products that
-// have a strain set; blanks/nulls are excluded from each strain bucket but
-// still appear in the catalog when "All" is the active filter mode.
-export function buildStrainCounts(products) {
+// Count products per type for the sidebar filter. Returns ALL types in
+// TYPE_ORDER (including those with count=0) so the filter UI always shows
+// the full set of options, even before products exist in a given type.
+export function buildTypeCounts(products) {
   const counts = new Map()
   for (const p of products) {
-    if (!p.strain) continue
-    const key = String(p.strain).toLowerCase()
+    if (!p.type) continue
+    const key = String(p.type).toLowerCase()
     counts.set(key, (counts.get(key) || 0) + 1)
   }
-  const result = []
-  for (const strain of STRAIN_ORDER) {
-    if (counts.has(strain)) {
-      result.push({ strain, label: STRAIN_LABEL[strain], count: counts.get(strain) })
-    }
-  }
-  return result
+  return TYPE_ORDER.map((type) => ({
+    type,
+    label: TYPE_LABEL[type],
+    count: counts.get(type) || 0,
+  }))
 }
