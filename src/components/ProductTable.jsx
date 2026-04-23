@@ -34,7 +34,10 @@ function shortName(p) {
 function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title, numeric, width }) {
   const active = currentSort.key === sortKey
   const dir = active ? currentSort.dir : null
-  const alignClass = align === 'right' ? 'text-right' : 'text-left'
+  const alignClass =
+    align === 'right'  ? 'text-right'  :
+    align === 'center' ? 'text-center' :
+    'text-left'
   return (
     <th
       scope="col"
@@ -45,7 +48,9 @@ function SortHeader({ label, sortKey, currentSort, onSort, align = 'left', title
       <button
         onClick={() => onSort(sortKey)}
         className={`flex items-center gap-1 ${
-          align === 'right' ? 'ml-auto' : ''
+          align === 'right'  ? 'ml-auto' :
+          align === 'center' ? 'mx-auto' :
+          ''
         } hover:text-paper transition-colors ${active ? 'text-paper' : ''}`}
       >
         <span className={numeric ? 'num' : ''}>{label}</span>
@@ -168,25 +173,25 @@ export default function ProductTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse font-sans table-fixed">
         <colgroup>
-          <col style={{ width: '92px' }} />{/* Category — "Concentrate" (11 chars) is widest */}
-          <col style={{ width: '108px' }} />{/* Brand — "CaliGreenGold" (13 chars) is widest */}
-          <col />{/* Product — flexible, absorbs all tightening above */}
-          <col style={{ width: '82px' }} />{/* Tier — "❄ Snowcaps" widest */}
-          <col style={{ width: '70px' }} />{/* Type — "HYBRID" etc (6 chars) */}
-          <col style={{ width: '140px' }} />{/* SKU — "DP-FLW-PRM-28X1G-TUB" (20 chars) */}
-          <col style={{ width: '72px' }} />{/* Qty — just enough for the number input */}
-          <col style={{ width: '88px' }} />{/* Wholesale — "$125.00" */}
-          <col style={{ width: '96px' }} />{/* MSRP (editable) — input needs slightly more */}
-          <col style={{ width: '64px' }} />{/* GM% — "77%" */}
-          <col style={{ width: '92px' }} />{/* Line — "$225.00" */}
+          <col style={{ width: '86px' }} />{/* Category — "Concentrate" (11ch at 2xs mono) */}
+          <col style={{ width: '98px' }} />{/* Brand — "CaliGreenGold" (13ch at xs medium) */}
+          <col />{/* Product — flexible, absorbs remaining slack */}
+          <col style={{ width: '96px' }} />{/* Tier — "❄ Snowcaps" + center padding */}
+          <col style={{ width: '80px' }} />{/* Type — "HYBRID" + center padding */}
+          <col style={{ width: '184px' }} />{/* SKU — longest "DP-FLW-PRM-28X1G-TUB-IND" (24ch) must never truncate */}
+          <col style={{ width: '72px' }} />{/* Qty — number input */}
+          <col style={{ width: '82px' }} />{/* Wholesale — "$125.00" */}
+          <col style={{ width: '92px' }} />{/* MSRP (editable) — input + $ + reset button */}
+          <col style={{ width: '56px' }} />{/* GM% — "77%" */}
+          <col style={{ width: '86px' }} />{/* Line — "$225.00" */}
         </colgroup>
         <thead>
           <tr>
             <SortHeader label="Category"  sortKey="category"  currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Brand"     sortKey="brand"     currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Product"   sortKey="name"      currentSort={filters.sort} onSort={handleSort} />
-            <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} title="Quality tier (Snowcaps > Exotic / Live Rosin > Premium > Core)" />
-            <SortHeader label="Type"      sortKey="type"      currentSort={filters.sort} onSort={handleSort} title="Hybrid / Indica / Sativa / Blend / CBD" />
+            <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} align="center" title="Quality tier (Snowcaps > Exotic / Live Rosin > Premium > Core)" />
+            <SortHeader label="Type"      sortKey="type"      currentSort={filters.sort} onSort={handleSort} align="center" title="Hybrid / Indica / Sativa / Blend / CBD" />
             <SortHeader label="SKU"       sortKey="sku"       currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Qty"       sortKey="qty"       currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Quantity for RFQ" />
             <SortHeader label="Wholesale" sortKey="wholesale" currentSort={filters.sort} onSort={handleSort} align="right" numeric />
@@ -229,13 +234,13 @@ export default function ProductTable({
                     </span>
                   )}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
+                <td className="px-3 py-2 whitespace-nowrap text-center">
                   <TierBadge tier={p.tier} />
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
+                <td className="px-3 py-2 whitespace-nowrap text-center">
                   <TypeBadge type={p.type} />
                 </td>
-                <td className="px-3 py-2 text-[11px] font-mono text-paper/80 truncate" title={p.sku}>
+                <td className="px-3 py-2 text-[11px] font-mono text-paper/80 whitespace-nowrap" title={p.sku}>
                   {p.sku}
                 </td>
                 <td className="px-3 py-2 text-right">
