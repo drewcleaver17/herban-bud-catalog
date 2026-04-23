@@ -222,9 +222,10 @@ export function rfqAsText(products, rfq, options = {}) {
   const now = options.now || new Date()
 
   // Pre-compute totals so they can appear in the suggested subject line.
-  // Note: MSRP/retail/GM% are intentionally NOT computed here — they're not
-  // shown in the buyer's outbound text (margin math is buyer-internal only).
+  // MSRP/retail/GM% are aggregated only — never per-line — and shown at the
+  // bottom as an order-level "score" the buyer's team can reference internally.
   let total = 0
+  let retail = 0
   let lineCount = 0
   let unitCount = 0
   for (const p of products) {
@@ -233,6 +234,7 @@ export function rfqAsText(products, rfq, options = {}) {
     lineCount += 1
     unitCount += qty
     if (p.wholesale != null) total += p.wholesale * qty
+    if (p.msrp && p.wholesale && p.msrp >= p.wholesale) retail += p.msrp * qty
   }
   const totalDue = c.payment === 'cc' ? total * 1.04 : total
   const paymentTag = c.payment === 'cc' ? 'CC' : c.payment === 'ach' ? 'ACH' : '?'
@@ -331,9 +333,13 @@ export function rfqAsText(products, rfq, options = {}) {
   if (lines[lines.length - 1] === '') lines.pop()
 
   // ─── TOTALS ───
-  // Buyer-facing totals only: what they're ordering and what they'll pay.
-  // No retail value, no GM% — that's their internal margin math, not data
-  // that belongs in their quote-request to the supplier.
+  // Wholesale + payment math up top. Then aggregated retail value + gross
+  // margin as an order-level "score" the buyer's team can reference when
+  // forwarding the quote internally for approval. Per-line MSRP/GM% is
+  // intentionally NOT shown — that level of detail is buyer-internal.
+  // Showing the GM-impact-of-CC vs GM-if-ACH framing makes the 4% credit
+  // card fee feel trivial in margin terms (~2 pts), nudging buyers toward
+  // ACH without being preachy.
   sectionHeader('TOTALS')
   lines.push(labeledLine('Wholesale subtotal', fmtMoney(total)))
   if (c.payment === 'cc') {
@@ -341,6 +347,21 @@ export function rfqAsText(products, rfq, options = {}) {
     lines.push(labeledLine('Credit card fee (4%)', fmtMoney(fee)))
   }
   lines.push(labeledLine('TOTAL DUE', fmtMoney(totalDue)))
+
+  if (retail > 0) {
+    lines.push('')
+    lines.push(labeledLine('Suggested retail value', fmtMoney(retail)))
+    if (c.payment === 'cc') {
+      const ccGm = Math.round(((retail - (total * 1.04)) / retail) * 100)
+      const achGm = Math.round(((retail - total) / retail) * 100)
+      const ptsSaved = achGm - ccGm
+      lines.push(labeledLine('Estimated gross margin', `${ccGm}% (CC, after 4% fee)`))
+      lines.push(labeledLine('Gross margin if ACH', `${achGm}% (+${ptsSaved} pts saved)`))
+    } else {
+      const baseGm = Math.round(((retail - total) / retail) * 100)
+      lines.push(labeledLine('Estimated gross margin', `${baseGm}%`))
+    }
+  }
 
   // ─── DISCLAIMER ───
   lines.push('')
