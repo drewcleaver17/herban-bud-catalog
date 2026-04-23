@@ -193,7 +193,10 @@ function rfqId(rfq, now = new Date()) {
 
 function fmtMoney(n) {
   if (n == null) return 'TBD'
-  return `$${n.toFixed(2)}`
+  // Use comma thousands separator for readability on mobile.
+  // $1,125.00 reads cleaner at-a-glance than $1125.00, especially on a
+  // narrow SMS bubble where digit-strings can blur together.
+  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 function fmtMoneyPad(n, width) {
   return fmtMoney(n).padStart(width)
@@ -239,56 +242,76 @@ export function rfqAsText(products, rfq, options = {}) {
   const totalDue = c.payment === 'cc' ? total * 1.04 : total
   const paymentTag = c.payment === 'cc' ? 'CC' : c.payment === 'ach' ? 'ACH' : '?'
   const buyerLabel = c.company || c.name || '(no name given)'
-  const subjectSuggestion = `RFQ — ${buyerLabel} — ${lineCount} ${lineCount === 1 ? 'line' : 'lines'} / ${unitCount} units / ${fmtMoney(totalDue)} (${paymentTag})`
 
-  // Section header: short line, name, short line. Reads as a clean break
-  // in any font without over-relying on monospace alignment.
-  const sectionHeader = (title) => {
+  // Mobile-first Variation 2 format. Design priorities:
+  //   1. No box-drawing characters (═ ━ ─ etc) — they stack into walls of
+  //      "musical staff lines" on iMessage / SMS / narrow email bubbles.
+  //   2. Section headers = uppercase word with blank line above. Visual
+  //      hierarchy comes from whitespace, not decoration.
+  //   3. Each line short enough to not wrap awkwardly in a 30-35 char SMS
+  //      bubble. The commercial info per item is split onto two lines so
+  //      the em-dash never becomes a wrap point that splits "$X.XX ea" from
+  //      its line total.
+  //   4. Terse labels (Subject / Pay / Margin) — saves chars on lines that
+  //      tend to wrap in narrow contexts. Their meaning is obvious in
+  //      position.
+  //   5. Comma-separated dollar amounts ($1,125.00) — easier to parse at
+  //      a glance than $1125.00.
+  //
+  // Reads correctly in: iMessage, SMS, Gmail (mobile + desktop), Slack,
+  // Outlook, plain-text terminal. Same output, no per-channel branching.
+
+  const section = (title) => {
     lines.push('')
-    lines.push(`━━━ ${title} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
+    lines.push('')
+    lines.push(title)
   }
 
   // ─── HEADER ───
-  lines.push('═══════════════════════════════════════════════════════════════════')
-  lines.push('  HERBAN BUD — REQUEST FOR QUOTE')
-  lines.push('═══════════════════════════════════════════════════════════════════')
-  lines.push('')
-  lines.push(labeledLine('Submitted', formatTimestamp(now)))
-  lines.push(labeledLine('Suggested subject', subjectSuggestion))
+  // Roll the subject content into the header itself rather than as a separate
+  // "Suggested subject:" line — saves a line and reads more naturally as
+  // "here's what this RFQ is about" at the top.
+  lines.push('HERBAN BUD RFQ')
+  lines.push(`${buyerLabel} — ${lineCount} ${lineCount === 1 ? 'line' : 'lines'} / ${unitCount} ${unitCount === 1 ? 'unit' : 'units'}`)
+  lines.push(`${fmtMoney(totalDue)} (${paymentTag})`)
+  lines.push(`Submitted ${formatTimestamp(now)}`)
 
-  // ─── CONTACT BLOCK ───
-  sectionHeader('CONTACT')
-  lines.push(labeledLine('Name', c.name))
-  lines.push(labeledLine('Company', c.company))
-  lines.push(labeledLine('Email', c.email))
-  lines.push(labeledLine('Phone', c.phone))
-  lines.push(...labeledBlock('Delivery address', formatAddress(c)))
+  // ─── CONTACT ───
+  // No "Name:" / "Email:" prefixes — values are self-evident in position.
+  // The address is the only field that gets explicit framing because of
+  // potential multi-line wrap.
+  section('CONTACT')
+  if (c.name) lines.push(c.name)
+  if (c.company) lines.push(c.company)
+  if (c.email) lines.push(c.email)
+  if (c.phone) lines.push(c.phone)
+  const addrLines = formatAddress(c).split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+  for (const al of addrLines) lines.push(al)
 
   const paymentLabel =
     c.payment === 'cc'  ? 'Credit card (+4% fee)' :
     c.payment === 'ach' ? 'ACH / Wire (no fee)' : '—'
-  lines.push(labeledLine('Payment method', paymentLabel))
+  lines.push(`Pay: ${paymentLabel}`)
 
   // ─── NOTES ───
-  sectionHeader('NOTES FROM BUYER')
+  section('NOTES')
   if (c.notes && c.notes.trim()) {
     for (const ln of c.notes.split(/\r?\n/)) {
-      lines.push('  ' + ln)
+      lines.push(ln)
     }
   } else {
-    lines.push('  (none)')
+    lines.push('(none)')
   }
 
-  // ─── LINE ITEMS — Option A: 3-line stack per item ───
-  // Layout per item:
-  //   ITEM N
-  //   {qty} × {SKU} — ${wholesale_unit} ea — Line ${line_total}
-  //   {Brand} · {Tier} · {ProductDesc}, {size} · [{CATEGORY}]
-  //
-  // Designed for the customer's outbound RFQ email to Drew. Strips MSRP and
-  // GM% — those are the buyer's internal margin math, not data that belongs
-  // in their quote-request to the supplier.
-  sectionHeader('LINE ITEMS')
+  // ─── ORDER (line items) ───
+  // 4-line stack per item, optimized to never wrap on narrow bubbles:
+  //   1.  {qty} × {SKU}
+  //       {$X.XX} ea = {$Y.YY}
+  //       {CATEGORY} / {Brand} {Tier}
+  //       {ProductDesc, size}
+  // The "1." numbering replaces "ITEM 1" — saves a line per item AND reads
+  // more like a natural conversational order list.
+  section('ORDER')
 
   let itemNum = 0
   for (const p of products) {
@@ -298,77 +321,71 @@ export function rfqAsText(products, rfq, options = {}) {
     const hasPrice = p.wholesale != null
     const lineCost = hasPrice ? p.wholesale * qty : 0
 
-    // Line 1: item label
-    lines.push(`ITEM ${itemNum}`)
-
-    // Line 2: commercial primaries — qty leftmost, then SKU, then unit price
-    // and line total. This is the "what am I ordering and what does it cost"
-    // line. Format chosen to read naturally as "Quantity × SKU at price".
+    lines.push('')
+    lines.push(`${itemNum}.  ${qty} × ${p.sku}`)
     if (hasPrice) {
-      lines.push(`${qty} × ${p.sku} — ${fmtMoney(p.wholesale)} ea — Line ${fmtMoney(lineCost)}`)
+      // Math-style "= total" reads faster than "— Line $total" on a small
+      // screen, and pairs visually with the "× qty" on the line above.
+      lines.push(`    ${fmtMoney(p.wholesale)} ea = ${fmtMoney(lineCost)}`)
     } else {
-      lines.push(`${qty} × ${p.sku} — Pricing TBD`)
+      lines.push('    Pricing TBD')
     }
 
-    // Line 3: human-readable description. [CATEGORY] · Brand · Tier · ProductDesc
-    // Category goes leftmost — matches how warehouses physically segment
-    // inventory and how buyers think about ordering ("show me your flowers").
-    // Using shortName() to avoid duplicating "Dope Pros — " since brand is
-    // already its own segment in this line.
-    const descParts = [`[${(p.category || '').toUpperCase()}]`, p.brand]
-    if (p.tier) descParts.push(p.tier)
-    descParts.push(shortName(p))
-    lines.push(descParts.join(' · '))
+    // Description split into two parts — category + brand on one line, the
+    // product itself on a second. Avoids the single-long-line wrap that
+    // happens when category + brand + tier + product + size all crash into
+    // each other.
+    const cat = (p.category || '').toUpperCase()
+    const brandTier = p.tier ? `${p.brand} ${p.tier}` : p.brand
+    lines.push(`    ${cat} / ${brandTier}`)
+    lines.push(`    ${shortName(p)}`)
 
-    // Per-line product notes (e.g. flavor lists, warnings) get their own
-    // indented continuation so the buyer's intent passes through unchanged.
+    // Per-line product notes (rare — e.g. flavor lists) get their own
+    // continuation line so the buyer's intent passes through unchanged.
     if (p.notes && p.notes.trim() &&
         !p.notes.toUpperCase().includes('DISCONTINUED') &&
         !p.notes.toUpperCase().includes('NOT AVAILABLE')) {
-      lines.push(`Notes: ${p.notes}`)
+      lines.push(`    Note: ${p.notes}`)
     }
-    lines.push('')
   }
-  // Trim trailing blank line before the totals section
-  if (lines[lines.length - 1] === '') lines.pop()
 
   // ─── TOTALS ───
-  // Wholesale + payment math up top. Then aggregated retail value + gross
-  // margin as an order-level "score" the buyer's team can reference when
-  // forwarding the quote internally for approval. Per-line MSRP/GM% is
-  // intentionally NOT shown — that level of detail is buyer-internal.
-  // Showing the GM-impact-of-CC vs GM-if-ACH framing makes the 4% credit
-  // card fee feel trivial in margin terms (~2 pts), nudging buyers toward
-  // ACH without being preachy.
-  sectionHeader('TOTALS')
-  lines.push(labeledLine('Wholesale subtotal', fmtMoney(total)))
+  // Aggregated MSRP/GM% as the order-level "score" that travels with the
+  // RFQ through the buyer's internal email/text threads. Per-line MSRP/GM%
+  // stay hidden — that's buyer-internal shopping detail, not RFQ content.
+  // CC GM line shows "after 4% fee" so the fee impact reads as ~2 margin
+  // points (trivial-feeling) rather than a 4% penalty.
+  section('TOTALS')
+  lines.push(`Subtotal: ${fmtMoney(total)}`)
   if (c.payment === 'cc') {
     const fee = total * 0.04
-    lines.push(labeledLine('Credit card fee (4%)', fmtMoney(fee)))
+    lines.push(`CC fee (4%): ${fmtMoney(fee)}`)
   }
-  lines.push(labeledLine('TOTAL DUE', fmtMoney(totalDue)))
+  lines.push(`Total due: ${fmtMoney(totalDue)}`)
 
   if (retail > 0) {
     lines.push('')
-    lines.push(labeledLine('Suggested retail value', fmtMoney(retail)))
+    lines.push(`Retail value: ${fmtMoney(retail)}`)
     if (c.payment === 'cc') {
       const ccGm = Math.round(((retail - (total * 1.04)) / retail) * 100)
       const achGm = Math.round(((retail - total) / retail) * 100)
       const ptsSaved = achGm - ccGm
-      lines.push(labeledLine('Estimated gross margin', `${ccGm}% (CC, after 4% fee)`))
-      lines.push(labeledLine('Gross margin if ACH', `${achGm}% (+${ptsSaved} pts saved)`))
+      lines.push(`Margin: ${ccGm}% (CC, after 4% fee)`)
+      lines.push(`Margin if ACH: ${achGm}% (+${ptsSaved} pts saved)`)
     } else {
       const baseGm = Math.round(((retail - total) / retail) * 100)
-      lines.push(labeledLine('Estimated gross margin', `${baseGm}%`))
+      lines.push(`Margin: ${baseGm}%`)
     }
   }
 
   // ─── DISCLAIMER ───
+  // Single shortened sentence. The full original ("Strains/cultivars/mixes
+  // confirmed at fulfillment, subject to availability") gets condensed to
+  // its essential point — the recipient just needs to know "not yet final."
   lines.push('')
   lines.push('—')
-  lines.push('This is a request for quote, not an order. Strains/cultivars/mixes')
-  lines.push('confirmed at fulfillment, subject to availability.')
-  lines.push('═══════════════════════════════════════════════════════════════════')
+  lines.push('Request for quote, not an order. Strains')
+  lines.push('confirmed at fulfillment.')
 
   return lines.join('\n')
 }
