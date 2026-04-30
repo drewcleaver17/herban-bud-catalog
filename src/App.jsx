@@ -220,7 +220,7 @@ export default function App() {
         <footer className="px-5 py-4 border-t border-paper/10 flex items-center justify-between text-2xs font-mono text-paper/40">
           <span>
             {products.length} SKUs · {brands.length} brands ·{' '}
-            <span className="text-paper/50">bud.drewcleaver.com</span>
+            <span className="text-paper/50">herban.drewcleaver.com</span>
           </span>
           <span className="hidden sm:inline">
             Prices subject to change. Contact Drew for current availability.

@@ -283,7 +283,7 @@ export default function QuoteView({ products, rfq }) {
           confirmed at fulfillment, subject to availability.
         </p>
         <p className="font-mono text-[10px] text-paper/35 mt-3 text-center">
-          bud.drewcleaver.com
+          herban.drewcleaver.com
         </p>
       </section>
 

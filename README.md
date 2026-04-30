@@ -1,6 +1,6 @@
 # Herban — Wholesale Catalog
 
-Drew Cleaver's B2B sales tool. Customer-facing catalog live at **bud.drewcleaver.com**.
+Drew Cleaver's B2B sales tool. Customer-facing catalog live at **herban.drewcleaver.com**.
 
 Covers all 5 brands in Drew's book: Dope Pros, Herban Bud, FYRE, CaliGreenGold, Groovy's.
 
@@ -23,7 +23,7 @@ Dev server runs at `http://localhost:5173`.
 
 ## Build & deploy
 
-Push to `main`. The GitHub Action builds and deploys to Pages automatically. DNS is handled via Hover → the `CNAME` file in `public/` pins the site to `bud.drewcleaver.com`.
+Push to `main`. The GitHub Action builds and deploys to Pages automatically. DNS is handled via Hover → the `CNAME` file in `public/` pins the site to `herban.drewcleaver.com`.
 
 ```bash
 npm run build     # produces dist/
@@ -36,7 +36,7 @@ Two ways, pick whichever is more convenient:
 
 ### Option A — Admin editor in the browser (recommended)
 
-1. Go to `https://bud.drewcleaver.com/?admin=1` (or press **Cmd/Ctrl + Shift + E** anywhere on the site)
+1. Go to `https://herban.drewcleaver.com/?admin=1` (or press **Cmd/Ctrl + Shift + E** anywhere on the site)
 2. Edit rows inline — brand, category, SKU, grams, wholesale, MSRP, status, notes
 3. Add new rows with **+ Add row**
 4. Edits save to your browser's localStorage instantly and preview live when you close the drawer. Customers never see them — they're local to your browser.
