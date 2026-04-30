@@ -1,32 +1,32 @@
 id,sortRank,brand,category,tier,sku,name,grams,wholesale,msrp,availability,notes,type
-2,110,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1.5G,"Dope Pros — Exotic 2-pack Prerolls, 1.5g",3.0,9.0,19.99,available,,hybrid
-104,111,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1.5G-IND,"Dope Pros — Exotic 2-pack Prerolls, 1.5g (Indica)",3.0,9.0,19.99,available,,indica
-105,112,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1.5G-SAT,"Dope Pros — Exotic 2-pack Prerolls, 1.5g (Sativa)",3.0,9.0,19.99,available,,sativa
-166,112,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1G,"Dope Pros — Exotic 2-pack Prerolls, 1g",2,4,9.99,available,,hybrid
-167,113,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1G-IND,"Dope Pros — Exotic 2-pack Prerolls, 1g (Indica)",2,4,9.99,available,,indica
-168,114,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1G-SAT,"Dope Pros — Exotic 2-pack Prerolls, 1g (Sativa)",2,4,9.99,available,,sativa
-169,205,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1G,"Dope Pros — Exotic Flower, 1g",1,7,9.99,available,,hybrid
-170,206,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1G-IND,"Dope Pros — Exotic Flower, 1g (Indica)",1,7,9.99,available,,indica
-171,207,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1G-SAT,"Dope Pros — Exotic Flower, 1g (Sativa)",1,7,9.99,available,,sativa
-14,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-14G,"Dope Pros — Exotic Flower, 14g",14.0,65.0,130.0,available,,hybrid
-15,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1OZ,"Dope Pros — Exotic Flower, 1oz",28.0,125.0,250.0,available,,hybrid
-12,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-3.5G,"Dope Pros — Exotic Flower, 3.5g",3.5,20.0,44.99,available,,hybrid
-13,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-7G,"Dope Pros — Exotic Flower, 7g",7.0,35.0,69.99,available,,hybrid
-128,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-14G-IND,"Dope Pros — Exotic Flower, 14g (Indica)",14.0,65.0,130.0,available,,indica
-130,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1OZ-IND,"Dope Pros — Exotic Flower, 1oz (Indica)",28.0,125.0,250.0,available,,indica
-124,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-3.5G-IND,"Dope Pros — Exotic Flower, 3.5g (Indica)",3.5,20.0,44.99,available,,indica
-126,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-7G-IND,"Dope Pros — Exotic Flower, 7g (Indica)",7.0,35.0,69.99,available,,indica
-129,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-14G-SAT,"Dope Pros — Exotic Flower, 14g (Sativa)",14.0,65.0,130.0,available,,sativa
-131,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1OZ-SAT,"Dope Pros — Exotic Flower, 1oz (Sativa)",28.0,125.0,250.0,available,,sativa
-125,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-3.5G-SAT,"Dope Pros — Exotic Flower, 3.5g (Sativa)",3.5,20.0,44.99,available,,sativa
-127,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-7G-SAT,"Dope Pros — Exotic Flower, 7g (Sativa)",7.0,35.0,69.99,available,,sativa
-172,240,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-QP,"Dope Pros — Exotic Flower, QP",113.4,400,,available,Inquire for MSRP,hybrid
-173,241,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-QP-IND,"Dope Pros — Exotic Flower, QP (Indica)",113.4,400,,available,Inquire for MSRP,indica
-174,242,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-QP-SAT,"Dope Pros — Exotic Flower, QP (Sativa)",113.4,400,,available,Inquire for MSRP,sativa
-175,245,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-LB,"Dope Pros — Exotic Flower, 1lb",453.6,1400,,available,Inquire for MSRP,hybrid
-176,246,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-LB-IND,"Dope Pros — Exotic Flower, 1lb (Indica)",453.6,1400,,available,Inquire for MSRP,indica
-177,247,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-LB-SAT,"Dope Pros — Exotic Flower, 1lb (Sativa)",453.6,1400,,available,Inquire for MSRP,sativa
-24,500,Herban Bud,EDIBLES,Live Rosin,HB-ED-GUM-10X30MG,"Herban Bud — 10-pack Gummies, 30mg",,12.5,24.99,available,"FLAVORS: MIXED FRUIT, BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON",blend
-178,600,Herban Bud,EDIBLES,Live Rosin,HB-ED-GUM-10X5MG-CBD10,"Herban Bud — 10-pack CBD-Dominant Gummies, 5mg THCa / 10mg CBD",,12.5,31.25,available,CBD-dominant,hybrid
-179,700,Dope Pros,Concentrate,,DP-CON-ROS-1G,"Dope Pros — Rosin, 1g",1,30,75,available,,hybrid
-39,800,CaliGreenGold,Concentrate,,CGG-CON-SUG-3G,"CaliGreenGold — THCa Sugar, 3g",3.0,27.0,59.99,available,,blend
+2,110,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1.5G,"Exotic Pre-Roll, 2-pack, 1.5g ea",3.0,6,15,available,,hybrid
+104,111,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1.5G-IND,"Exotic Pre-Roll, 2-pack, 1.5g ea",3.0,6,15,available,,indica
+105,112,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1.5G-SAT,"Exotic Pre-Roll, 2-pack, 1.5g ea",3.0,6,15,available,,sativa
+166,112,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1G,"Exotic Pre-Roll, 2-pack, 1g ea",2,4,10,available,,hybrid
+167,113,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1G-IND,"Exotic Pre-Roll, 2-pack, 1g ea",2,4,10,available,,indica
+168,114,Dope Pros,Pre-Rolls,Exotic,DP-PR-EXO-2X1G-SAT,"Exotic Pre-Roll, 2-pack, 1g ea",2,4,10,available,,sativa
+169,205,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1G,"Exotic Flower, 1g",1,7,17,available,,hybrid
+170,206,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1G-IND,"Exotic Flower, 1g",1,7,17,available,,indica
+171,207,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1G-SAT,"Exotic Flower, 1g",1,7,17,available,,sativa
+14,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-14G,"Exotic Flower, 14g (1/2 oz)",14.0,65,130,available,,hybrid
+15,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1OZ,"Exotic Flower, 28g (1 oz)",28.0,125,250,available,,hybrid
+12,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-3.5G,"Exotic Flower, 3.5g (1/8 oz)",3.5,20,50,available,,hybrid
+13,210,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-7G,"Exotic Flower, 7g (1/4 oz)",7.0,35,70,available,,hybrid
+128,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-14G-IND,"Exotic Flower, 14g (1/2 oz)",14.0,65,130,available,,indica
+130,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1OZ-IND,"Exotic Flower, 28g (1 oz)",28.0,125,250,available,,indica
+124,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-3.5G-IND,"Exotic Flower, 3.5g (1/8 oz)",3.5,20,50,available,,indica
+126,211,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-7G-IND,"Exotic Flower, 7g (1/4 oz)",7.0,35,70,available,,indica
+129,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-14G-SAT,"Exotic Flower, 14g (1/2 oz)",14.0,65,130,available,,sativa
+131,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-1OZ-SAT,"Exotic Flower, 28g (1 oz)",28.0,125,250,available,,sativa
+125,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-3.5G-SAT,"Exotic Flower, 3.5g (1/8 oz)",3.5,20,50,available,,sativa
+127,212,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-7G-SAT,"Exotic Flower, 7g (1/4 oz)",7.0,35,70,available,,sativa
+172,240,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-QP,"Exotic Flower, 113g (QP / 4 oz)",113.4,400,,available,Inquire for MSRP,hybrid
+173,241,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-QP-IND,"Exotic Flower, 113g (QP / 4 oz)",113.4,400,,available,Inquire for MSRP,indica
+174,242,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-QP-SAT,"Exotic Flower, 113g (QP / 4 oz)",113.4,400,,available,Inquire for MSRP,sativa
+175,245,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-LB,"Exotic Flower, 454g (1 lb)",453.6,1400,,available,Inquire for MSRP,hybrid
+176,246,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-LB-IND,"Exotic Flower, 454g (1 lb)",453.6,1400,,available,Inquire for MSRP,indica
+177,247,Dope Pros,FLOWER,Exotic,DP-FLW-EXO-LB-SAT,"Exotic Flower, 454g (1 lb)",453.6,1400,,available,Inquire for MSRP,sativa
+24,500,Herban Bud,EDIBLES,Live Rosin,HB-ED-GUM-10X30MG,"D9 Live Rosin Gummies, 10-pack, 30mg ea",,13,31,available,"FLAVORS: MIXED FRUIT, BLUE RAZZ, CHERRY PIE, LEMON DROP, GREEN APPLE, ORANGE MANGO, WATERMELON",blend
+178,600,Herban Bud,EDIBLES,Live Rosin,HB-ED-GUM-10X5MG-CBD10,"CBD-Dominant Live Rosin Gummies, 10-pack, 5mg THCa + 10mg CBD ea",,13,31,available,CBD-dominant,hybrid
+179,700,Dope Pros,Concentrate,,DP-CON-ROS-1G,"Live Rosin, 1g",1,30,75,available,,hybrid
+39,800,CaliGreenGold,Concentrate,,CGG-CON-SUG-3G,"THCa Sugar, 3g",3.0,28,70,available,,blend
