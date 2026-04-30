@@ -8,34 +8,16 @@ const BRAND = {
   ink: "#292663", inkSoft: "#3d3a7a", paper: "#FAF8F3", line: "#E8E4D9",
   gold: "#C9A961", sage: "#6B8E6F", dust: "#B8A99A",
 };
-const MARKUP = 2.0;
+const MARKUP = 2.5;
 
 const INITIAL_PRODUCTS = [
-  { sku: "DP-PR-EX-1.5-1", brand: "Dope Pros", category: "Pre-Rolls", name: "Exotic Preroll (Single)", pack: "1 × 1.5g", weight_g: 1.5, cost: 6.0, tier: "Exotic", compliance: "THCa", coa: true, stock: 48 },
-  { sku: "DP-PR-PR-1.5-15T", brand: "Dope Pros", category: "Pre-Rolls", name: "Premium Prerolls Tub (15ct)", pack: "15 × 1.5g", weight_g: 22.5, cost: 35.0, tier: "Premium", compliance: "THCa", coa: true, stock: 12 },
-  { sku: "DP-PR-PR-1.5-30T", brand: "Dope Pros", category: "Pre-Rolls", name: "Premium Prerolls Tub (30ct)", pack: "30 × 1.5g", weight_g: 45.0, cost: 75.0, tier: "Premium", compliance: "THCa", coa: true, stock: 6 },
-  { sku: "DP-PR-BC-0.7-5", brand: "Dope Pros", category: "Pre-Rolls", name: "Baby Cowboys Prerolls (5ct)", pack: "5 × 0.7g", weight_g: 3.5, cost: 16.0, tier: "Premium", compliance: "THCa", coa: true, stock: 3 },
-  { sku: "HB-PR-BJ-0.7-5", brand: "Herban Bud", category: "Pre-Rolls", name: "Baby J's Prerolls (5ct)", pack: "5 × 0.7g", weight_g: 3.5, cost: 16.0, tier: "Premium", compliance: "THCa", coa: true, stock: 24 },
-  { sku: "FY-PR-PR-1.5-2", brand: "FYRE", category: "Pre-Rolls", name: "Premium Prerolls (2ct)", pack: "2 × 1.5g", weight_g: 3.0, cost: 8.0, tier: "Premium", compliance: "THCa", coa: true, stock: 0 },
-  { sku: "GR-PR-HH-2.0-1", brand: "Groovy's", category: "Pre-Rolls", name: "Hash Hole Pre-Roll", pack: "1 × 2g", weight_g: 2.0, cost: 15.0, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 18 },
-  { sku: "DP-FL-PR-3.5", brand: "Dope Pros", category: "Flower", name: "Premium Flower — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 16.0, tier: "Premium", compliance: "THCa", coa: true, stock: 32 },
-  { sku: "DP-FL-PR-28", brand: "Dope Pros", category: "Flower", name: "Premium Flower — 1oz", pack: "28g", weight_g: 28.0, cost: 95.0, tier: "Premium", compliance: "THCa", coa: true, stock: 8 },
-  { sku: "DP-FL-EX-3.5", brand: "Dope Pros", category: "Flower", name: "Exotic Flower — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 20.0, tier: "Exotic", compliance: "THCa", coa: true, stock: 21 },
-  { sku: "HB-FL-PR-3.5", brand: "Herban Bud", category: "Flower", name: "Premium Flower — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 15.0, tier: "Premium", compliance: "THCa", coa: true, stock: 40 },
-  { sku: "HB-FL-EX-3.5", brand: "Herban Bud", category: "Flower", name: "Exotic Flower — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 18.5, tier: "Exotic", compliance: "THCa", coa: true, stock: 2 },
-  { sku: "FY-FL-PR-3.5", brand: "FYRE", category: "Flower", name: "Premium Flower — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 12.5, tier: "Premium", compliance: "THCa", coa: true, stock: 15 },
-  { sku: "GR-FL-EX-3.5", brand: "Groovy's", category: "Flower", name: "8th Exotic Flower", pack: "3.5g", weight_g: 3.5, cost: 18.0, tier: "Exotic", compliance: "THCa", coa: true, stock: 11 },
-  { sku: "DP-SC-3.5", brand: "Dope Pros", category: "Snowcaps", name: "Snowcaps — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 25.0, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 14 },
-  { sku: "DP-SC-14T", brand: "Dope Pros", category: "Snowcaps", name: "Snowcaps Tub (14ct)", pack: "14 × 1g", weight_g: 14.0, cost: 105.0, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 5 },
-  { sku: "FY-SC-3.5", brand: "FYRE", category: "Snowcaps", name: "Snowcaps — 3.5g", pack: "3.5g", weight_g: 3.5, cost: 20.0, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 0 },
-  { sku: "FY-VP-TA-2-5", brand: "FYRE", category: "Vapes", name: "2g THCa Disposable (5ct)", pack: "5 × 2g", weight_g: 10.0, cost: 127.5, tier: "Premium", compliance: "THCa", coa: true, stock: 7 },
-  { sku: "DP-ED-LR-30-10", brand: "Dope Pros", category: "Edibles", name: "30mg D9 Live Rosin Gummies (10ct)", pack: "10 × 30mg", weight_g: null, cost: 12.5, tier: "Premium", compliance: "D9", coa: true, stock: 50 },
-  { sku: "HB-ED-CA-20-15", brand: "Herban Bud", category: "Edibles", name: "20mg D9 Caramels (15ct)", pack: "15 × 20mg", weight_g: null, cost: 18.75, tier: "Core", compliance: "D9", coa: true, stock: 22 },
-  { sku: "HB-ED-TF-20-125T", brand: "Herban Bud", category: "Edibles", name: "20mg Variety Taffy Tub (125ct)", pack: "125 × 20mg", weight_g: null, cost: 156.25, tier: "Core", compliance: "D9", coa: true, stock: 4 },
-  { sku: "FY-ED-CB-5-30T", brand: "FYRE", category: "Edibles", name: "5mg THC/CBD Gummy Tub (30ct)", pack: "30 × 5mg", weight_g: null, cost: 60.0, tier: "Core", compliance: "D9", coa: true, stock: 9 },
-  { sku: "DP-CN-RO-1", brand: "Dope Pros", category: "Concentrate", name: "1g Rosin", pack: "1g", weight_g: 1.0, cost: 30.0, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 13 },
-  { sku: "CG-CN-CO-3", brand: "CaliGreenGold", category: "Concentrate", name: "3g THCa Concentrate", pack: "3g", weight_g: 3.0, cost: 28.0, tier: "Premium", compliance: "THCa", coa: true, stock: 17 },
-  { sku: "GR-CN-LR-1", brand: "Groovy's", category: "Concentrate", name: "Tier 1 Live Rosin", pack: "1g", weight_g: 1.0, cost: 25.0, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 1 },
+  { sku: "DP-PR-EX-1.5-2", brand: "Dope Pros", category: "Pre-Rolls", name: "Exotic Prerolls (2-pack)", pack: "2 \u00d7 1.5g", weight_g: 3.0, cost: 6.00, tier: "Exotic", compliance: "THCa", coa: true, stock: 24, variant_sizes: [], variant_types: ["Hybrid", "Indica", "Sativa"] },
+  { sku: "DP-PR-EX-1.0-2", brand: "Dope Pros", category: "Pre-Rolls", name: "Exotic Prerolls (2-pack, 1g)", pack: "2 \u00d7 1g", weight_g: 2.0, cost: 4.00, tier: "Exotic", compliance: "THCa", coa: true, stock: 24, variant_sizes: [], variant_types: ["Hybrid", "Indica", "Sativa"] },
+  { sku: "DP-FL-EX", brand: "Dope Pros", category: "Flower", name: "Exotic Flower", pack: "Multi-size", weight_g: 3.5, cost: 20.00, tier: "Exotic", compliance: "THCa", coa: true, stock: 21, variant_sizes: ["1g", "3.5g", "7g", "14g", "28g", "QP", "LB"], variant_types: ["Hybrid", "Indica", "Sativa"] },
+  { sku: "HB-ED-LR-30-10", brand: "Herban Bud", category: "Edibles", name: "30mg D9 Live Rosin Gummies (10ct)", pack: "10 \u00d7 30mg", weight_g: null, cost: 12.50, tier: "Premium", compliance: "D9", coa: true, stock: 50, variant_sizes: [], variant_types: [] },
+  { sku: "HB-ED-CBD-5-10-10", brand: "Herban Bud", category: "Edibles", name: "5mg THCa / 10mg CBD Live Rosin Gummies (10ct)", pack: "10 \u00d7 (5mg THCa + 10mg CBD)", weight_g: null, cost: 12.50, tier: "Core", compliance: "CBD-dom", coa: true, stock: 0, variant_sizes: [], variant_types: [] },
+  { sku: "DP-CN-RO-1", brand: "Dope Pros", category: "Concentrate", name: "1g Rosin", pack: "1g", weight_g: 1.0, cost: 30.00, tier: "Top-Shelf", compliance: "THCa", coa: true, stock: 13, variant_sizes: [], variant_types: [] },
+  { sku: "CG-CN-CO-3", brand: "CaliGreenGold", category: "Concentrate", name: "3g THCa Sugar", pack: "3g", weight_g: 3.0, cost: 28.00, tier: "Premium", compliance: "THCa", coa: true, stock: 17, variant_sizes: [], variant_types: [] },
 ];
 
 const fmtMoney = (n) => (n == null ? "—" : `$${n.toFixed(2)}`);
@@ -613,7 +595,19 @@ function CustomerView({ products }) {
                 return (
                   <tr key={p.sku} className="border-b" style={{ borderColor: BRAND.line, backgroundColor: i % 2 === 1 ? BRAND.paper : "white", opacity: p.stock === 0 ? 0.5 : 1 }}>
                     <td className="px-3 py-2 mono text-[11px]" style={{ color: BRAND.ink }}>{p.sku}</td>
-                    <td className="px-3 py-2 font-medium">{p.name}</td>
+                    <td className="px-3 py-2 font-medium">
+                      <div>{p.name}</div>
+                      {(p.variant_sizes?.length > 0 || p.variant_types?.length > 0) && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {p.variant_sizes?.map((s) => (
+                            <span key={`s-${s}`} className="text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5 border" style={{ borderColor: BRAND.line, color: BRAND.dust }}>{s}</span>
+                          ))}
+                          {p.variant_types?.map((t) => (
+                            <span key={`t-${t}`} className="text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5" style={{ backgroundColor: BRAND.paper, color: BRAND.ink }}>{t}</span>
+                          ))}
+                        </div>
+                      )}
+                    </td>
                     <td className="px-3 py-2" style={{ color: BRAND.dust }}>{p.brand}</td>
                     <td className="px-3 py-2" style={{ color: BRAND.dust }}>{p.category}</td>
                     <td className="px-3 py-2">
