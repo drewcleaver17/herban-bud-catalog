@@ -272,7 +272,7 @@ export default function ProductTable({
                     <span className={`text-[10px] pl-1.5 ${isOverridden ? 'text-accent-warm' : 'text-paper/40'}`}>$</span>
                     <input
                       type="number"
-                      step="0.01"
+                      step="1"
                       min="0"
                       value={effectiveMSRP ?? ''}
                       onChange={(e) => {

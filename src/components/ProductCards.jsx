@@ -176,7 +176,7 @@ function ProductCard({ p, qty, onQty, effectiveMSRP, isOverridden, onMSRP, onRes
               <span className={`text-[11px] pl-2 ${isOverridden ? 'text-accent-warm' : 'text-paper/40'}`}>$</span>
               <input
                 type="number"
-                step="0.01"
+                step="1"
                 min="0"
                 value={effectiveMSRP ?? ''}
                 onChange={(e) => onMSRP(e.target.value === '' ? null : Number(e.target.value))}
