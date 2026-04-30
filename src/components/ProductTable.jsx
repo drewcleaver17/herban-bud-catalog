@@ -176,6 +176,7 @@ export default function ProductTable({
           <col style={{ width: '86px' }} />{/* Category — "Concentrate" (11ch at 2xs mono) */}
           <col style={{ width: '98px' }} />{/* Brand — "CaliGreenGold" (13ch at xs medium) */}
           <col />{/* Product — flexible, absorbs remaining slack */}
+          <col style={{ width: '96px' }} />{/* Tier — "❄ Snowcaps" + center padding */}
           <col style={{ width: '80px' }} />{/* Type — "HYBRID" + center padding */}
           <col style={{ width: '184px' }} />{/* SKU — longest "DP-FLW-PRM-28X1G-TUB-IND" (24ch) must never truncate */}
           <col style={{ width: '72px' }} />{/* Qty — number input */}
@@ -189,6 +190,7 @@ export default function ProductTable({
             <SortHeader label="Category"  sortKey="category"  currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Brand"     sortKey="brand"     currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Product"   sortKey="name"      currentSort={filters.sort} onSort={handleSort} />
+            <SortHeader label="Tier"      sortKey="tier"      currentSort={filters.sort} onSort={handleSort} align="center" title="Quality tier (Snowcaps > Exotic / Live Rosin > Premium > Core)" />
             <SortHeader label="Type"      sortKey="type"      currentSort={filters.sort} onSort={handleSort} align="center" title="Hybrid / Indica / Sativa / Blend / CBD" />
             <SortHeader label="SKU"       sortKey="sku"       currentSort={filters.sort} onSort={handleSort} />
             <SortHeader label="Qty"       sortKey="qty"       currentSort={filters.sort} onSort={handleSort} align="right" numeric title="Quantity for RFQ" />
@@ -233,6 +235,7 @@ export default function ProductTable({
                   )}
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap text-center">
+                  <TierBadge tier={p.tier} />
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap text-center">
                   <TypeBadge type={p.type} />

@@ -80,6 +80,7 @@ function ProductCard({ p, qty, onQty, effectiveMSRP, isOverridden, onMSRP, onRes
               <span className={`text-2xs font-mono uppercase tracking-wider ${catColor}`}>
                 {p.category}
               </span>
+              <TierBadge tier={p.tier} />
               <TypeBadge type={p.type} />
             </div>
             <div className="font-medium text-sm text-paper">{p.brand}</div>
