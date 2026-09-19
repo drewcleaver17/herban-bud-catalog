@@ -116,7 +116,7 @@ export default function RFQDrawer({
 
   if (!open) return null
 
-  // Validation: phone must be valid US 10+ digit number to enable copy.
+  // Full RFQ text requires contact/payment details. Product links do not.
   const phoneValid = isValidPhone(rfq.contact.phone)
   const hasPhone = rfq.contact.phone.trim().length > 0
   const ready = cartLines.length > 0 && !!rfq.contact.payment && phoneValid
@@ -428,19 +428,19 @@ export default function RFQDrawer({
               </div>
             </div>
 
-            {/* ONE-LINE DISCLAIMER + BUTTONS — combined into single row to save vertical space */}
+            {/* Export choices explain which information leaves this browser. */}
             <div className="border-t border-paper/10 px-3 py-2 shrink-0 flex flex-wrap items-center gap-2 bg-accent-warm/[0.04]">
               <p className="text-[10px] leading-snug text-paper/60 flex-1 min-w-[200px]">
-                Request for quote, not an order. Strains/cultivars/mixes confirmed at fulfillment. Drew will follow up.
+                Product links include quantities and payment choice, without contact details, addresses or notes. Full RFQ text includes those details; send it only to your intended recipient. Neither button submits an order.
               </p>
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={copyLink}
-                  disabled={!ready}
-                  title={blockedReason}
+                  disabled={cartLines.length === 0}
+                  title="Share products and quantities without customer contact details"
                   className="px-3 py-1.5 text-xs font-medium rounded-sm bg-accent-warm text-indigo-900 hover:bg-accent-warm/90 disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  {copied === 'link' ? '✓ Link copied' : 'Copy shareable link'}
+                  {copied === 'link' ? '✓ Product link copied' : 'Copy product link'}
                 </button>
                 <button
                   onClick={copyText}
@@ -448,7 +448,7 @@ export default function RFQDrawer({
                   title={blockedReason}
                   className="px-3 py-1.5 text-xs font-medium rounded-sm border border-paper/20 text-paper hover:border-paper/40 disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  {copied === 'text' ? '✓ Text copied' : 'Copy order as text'}
+                  {copied === 'text' ? '✓ Text copied' : 'Copy full RFQ text'}
                 </button>
                 <button
                   onClick={() => { if (confirm('Clear all items from your RFQ?')) onClearRFQ() }}

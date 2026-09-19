@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test": "node --test",
     "dev": "npm run build:data && vite",
     "build:data": "node scripts/build-products.mjs",
     "build": "npm run build:data && vite build",
