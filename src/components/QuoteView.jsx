@@ -194,6 +194,11 @@ export default function QuoteView({ products, rfq }) {
       {/* ─── CONTACT ─── */}
       <section className="px-5 pt-7">
         <SectionLabel>Contact</SectionLabel>
+        {!c.name && !c.company && !c.email && !c.phone && addressLines.length === 0 && (
+          <p className="mt-3 text-xs text-paper/65">
+            Customer contact details and delivery instructions are not included in new product links. Request the full RFQ text from the sender if you need them.
+          </p>
+        )}
         <div className="mt-3 font-mono text-sm text-paper/85 space-y-0.5">
           {c.name && <div>{c.name}</div>}
           {c.company && c.company !== c.name && <div>{c.company}</div>}

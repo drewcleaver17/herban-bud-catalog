@@ -1,12 +1,12 @@
 // RFQ (Request For Quote) encoding/decoding.
 //
-// The cart + contact info serialize into URL params so any RFQ can be shared
-// as a single link:
-//   ?rfq=1:5,3:2&n=Drew&c=Co&e=x&p=281...&street=...&city=...&pm=ach&o=notes
+// New share links contain product quantities and an optional payment method:
+//   ?rfq=1:5,3:2&pm=ach
+// Contact details, delivery addresses and free-text notes stay out of new URLs.
+// Full RFQ text is a separate, explicit export for sending to the recipient.
 //
-// rfq=cart, n=name, c=company, e=email, p=phone, pm=payment, o=notes
-// Address: street, street2, city, state, zip
-// Legacy free-text delivery (pre-v16) stored in `d` — kept for back-compat.
+// Legacy links can still be read below. This cannot revoke previously shared
+// URLs or erase existing copies of their contents.
 
 const LS_RFQ = 'herban.rfq.v1'
 
@@ -75,7 +75,10 @@ export function readRFQFromURL() {
 }
 
 export function buildRFQURL(rfq, baseURL) {
-  const base = baseURL ?? `${window.location.origin}${window.location.pathname}`
+  const base = new URL(baseURL ?? window.location.href)
+  // Never inherit contact details from an old URL passed as the base.
+  base.search = ''
+  base.hash = ''
   const sp = new URLSearchParams()
 
   const pairs = Object.entries(rfq.cart)
@@ -83,22 +86,12 @@ export function buildRFQURL(rfq, baseURL) {
     .map(([id, qty]) => `${id}:${qty}`)
   if (pairs.length) sp.set('rfq', pairs.join(','))
 
-  const c = rfq.contact
-  if (c.name)     sp.set('n', c.name)
-  if (c.company)  sp.set('c', c.company)
-  if (c.email)    sp.set('e', c.email)
-  if (c.phone)    sp.set('p', c.phone)
-  if (c.street)   sp.set('street', c.street)
-  if (c.street2)  sp.set('street2', c.street2)
-  if (c.city)     sp.set('city', c.city)
-  if (c.state)    sp.set('state', c.state)
-  if (c.zip)      sp.set('zip', c.zip)
-  if (c.delivery) sp.set('d', c.delivery)
-  if (c.payment)  sp.set('pm', c.payment)
-  if (c.notes)    sp.set('o', c.notes)
+  if (['cc', 'ach'].includes(rfq.contact?.payment)) {
+    sp.set('pm', rfq.contact.payment)
+  }
 
-  const qs = sp.toString()
-  return qs ? `${base}?${qs}` : base
+  base.search = sp.toString()
+  return base.toString()
 }
 
 export function loadRFQ() {

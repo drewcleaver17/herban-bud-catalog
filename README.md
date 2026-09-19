@@ -1,124 +1,93 @@
-# Herban — Wholesale Catalog
+# Herban wholesale catalog and quote builder
 
-Drew Cleaver's B2B sales tool. Customer-facing catalog live at **herban.drewcleaver.com**.
+A mobile-friendly B2B sales tool by **Drew Cleaver**. Buyers can browse a multi-brand product catalog, compare pricing, assemble quantities, and copy a request for quote for their intended recipient.
 
-Covers all 5 brands in Drew's book: Dope Pros, Herban Bud, FYRE, CaliGreenGold, Groovy's.
+**[Open the catalog](https://herban.drewcleaver.com)** · **[About Drew](https://drewcleaver.com)**
 
-## Stack
+## The problem it addresses
 
-- Vite 5 + React 18
-- Tailwind CSS 3 (dark-only, indigo/paper palette)
-- Fraunces (display) + Inter (body) + JetBrains Mono (SKUs), loaded from Google Fonts
-- Deploys to GitHub Pages via `.github/workflows/deploy.yml`
-- No backend, no database, no auth — product data is a static JSON file
+A wholesale buyer needs product identity, pack sizes, availability, pricing, and an unambiguous list of requested quantities. This project brings those tasks into one interface and produces a readable handoff for email or messaging.
 
-## Local development
+The repository demonstrates a commercial workflow translated into a deployed application. Customer adoption, time savings, and revenue impact have not been measured in this repository; those are validation questions, not claimed results.
 
-```bash
-npm install
+## What it does
+
+- Filter and search across brands, product categories, and types.
+- Compare wholesale prices and suggested retail prices; calculate displayed margins.
+- Use a table on larger screens and product cards on smaller screens.
+- Save named catalog views and local price adjustments in the browser.
+- Assemble an RFQ with quantities, buyer information, delivery instructions, and payment choice.
+- Copy a **product link** containing quantities and payment choice, without buyer contact details, delivery addresses, or free-text notes.
+- Copy **full RFQ text**, including the buyer information, for an explicitly chosen recipient. Copying does not submit an order.
+- Open shared product selections in a dedicated quote view on mobile.
+
+## Try the workflow
+
+1. Open the catalog and narrow the products with search or filters.
+2. Add quantities and open **Your RFQ**.
+3. Choose **Copy product link** to share the selection without contact information.
+4. To send a complete RFQ, enter buyer details and payment choice, then choose **Copy full RFQ text**. Review the text before sending it yourself.
+
+This is a request-building interface. It does not process payments, reserve stock, authenticate buyers, or confirm an order.
+
+## Privacy and data boundaries
+
+- New product links contain product IDs, quantities, and an optional `cc` or `ach` payment-method choice. These links are readable and forwardable by anyone who has them.
+- Full RFQ text includes contact details and delivery information. Share it only with the intended recipient.
+- Draft RFQs, saved views, and local catalog overrides use `localStorage`. They are not encrypted or protected from other people using the same browser profile.
+- **Legacy links:** earlier versions included buyer details in URL query parameters. Those links still open for compatibility. This change cannot revoke existing links or erase browser history, server logs, forwarded messages, or other prior copies. Replace old links with newly generated product links where practical.
+- The app is statically hosted. Product files in this public repository and deployed application are public, including fields that may not be displayed in the interface. Do not put confidential pricing or customer records in those files.
+- There is no server-side admin service. The browser editor changes a local copy; publishing a catalog change requires a repository update and deployment.
+
+These are specific implementation boundaries, not a claim that the application has passed a comprehensive security audit.
+
+## Run locally
+
+Use Node.js 20 or later.
+
+```sh
+npm ci
+npm test
 npm run dev
 ```
 
-Dev server runs at `http://localhost:5173`.
+For a production build:
 
-## Build & deploy
-
-Push to `main`. The GitHub Action builds and deploys to Pages automatically. DNS is handled via Hover → the `CNAME` file in `public/` pins the site to `herban.drewcleaver.com`.
-
-```bash
-npm run build     # produces dist/
-npm run preview   # serve the production build locally
+```sh
+npm run build
+npm run preview
 ```
 
-## Editing the product catalog
+The five sharing regression tests check the URL privacy boundary, legacy compatibility, and preservation of full-text export. They are not a complete test suite for the catalog or pricing model.
 
-Two ways, pick whichever is more convenient:
+## Product data and local editing
 
-### Option A — Admin editor in the browser (recommended)
+`data/products.csv` is processed by `scripts/build-products.mjs` to generate `src/data/products.json` during development and builds. Update the CSV for persistent source changes. `CATALOG.md` and `SKU-LEGEND.md` provide additional reference material; they are not regenerated by this build script.
 
-1. Go to `https://herban.drewcleaver.com/?admin=1` (or press **Cmd/Ctrl + Shift + E** anywhere on the site)
-2. Edit rows inline — brand, category, SKU, grams, wholesale, MSRP, status, notes
-3. Add new rows with **+ Add row**
-4. Edits save to your browser's localStorage instantly and preview live when you close the drawer. Customers never see them — they're local to your browser.
-5. When you're happy, click **Export products.json**
-6. Replace `src/data/products.json` in the repo with the downloaded file, commit, push
-7. GitHub Actions redeploys in ~1 min
+The local browser editor opens with `?admin=1` or **Ctrl/Cmd + Shift + E**. Its changes are saved only in that browser; they do not publish to the live site. Exported JSON is useful for review, but a normal build regenerates the JSON from the CSV, so reconcile approved changes into the CSV before publishing.
 
-The admin panel is not secret — anyone who knows the shortcut can open it. But all it does is let them edit a local copy; it can't push anything to the live site.
+Review prices, units, and availability before commercial use. Unknown or inconsistent source values need owner verification; computed margins are not promised realized profit.
 
-### Option B — Edit the JSON directly
+## Project structure
 
-`src/data/products.json` is the source of truth. Each product looks like:
+| Location | Responsibility |
+| --- | --- |
+| `src/App.jsx` | Catalog state, filtering, local persistence, and drawers |
+| `src/components/` | Desktop table, mobile cards, RFQ editor, quote view, and local admin editor |
+| `src/lib/pricing.js` | Price display, margin calculations, and unit conversions |
+| `src/lib/rfq.js` | Link encoding, legacy decoding, RFQ storage, and text export |
+| `src/lib/state.js` | Shareable filter state and saved views |
+| `data/products.csv` | Catalog source data |
+| `scripts/build-products.mjs` | Data validation and generated catalog files |
+| `tests/rfq-sharing.test.js` | Sharing privacy and compatibility regression tests |
+| `.github/workflows/deploy.yml` | GitHub Pages build and deployment |
 
-```json
-{
-  "id": 1,
-  "brand": "Dope Pros",
-  "category": "Pre-Rolls",
-  "sku": "Dope Pros - (Single) Exotic Prerolls (1.5g)",
-  "master_distro": 3.0,
-  "distro": 4.0,
-  "wholesale": 6.0,
-  "msrp": 12.99,
-  "grams": 1.5,
-  "notes": "",
-  "availability": "available"
-}
-```
+## Deployment and feedback
 
-Fields:
+The stack is React 18, Vite 5, and Tailwind CSS 3. GitHub Pages serves the static build at the domain configured in `public/CNAME`. **Pushing to `main` deploys the site.** Use a feature branch and review changes first. Pull requests run the sharing tests and production build without deploying.
 
-- `id` — unique integer. Just pick the next one.
-- `brand` — string, free-form. Used for the Brand column and filter chips.
-- `category` — string. Categories are derived from this field; adding a new one automatically gets its own chip.
-- `sku` — full product name. Shown in the Product column (brand prefix stripped automatically).
-- `master_distro`, `distro`, `wholesale` — pricing tiers. Only `wholesale` is displayed to customers right now; the others are kept in the JSON in case you want to expose tier-switching later.
-- `msrp` — suggested retail.
-- `grams` — total grams in the package (e.g. 5-count × 1.5g = `7.5`). Powers the $/g math and the UOM toggle. Set to `null` if non-applicable (edibles, vapes).
-- `notes` — free-text. Shown as a small line under the SKU. Flavors, warnings, etc.
-- `availability` — `"available"` | `"preorder"` | `"unavailable"` | `"discontinued"`
+For a bug report, include the task you attempted, expected behavior, actual behavior, and reproduction steps with fictional data. Do not include real buyer details, private quote links, or confidential commercial information in a public issue.
 
-GM% and $/g are computed at render time, never stored.
+## Reuse status
 
-## Features
-
-- **Dense sortable table** — every column sorts, McMaster-Carr style
-- **Full pricing transparency** — cost, MSRP, $/g, GM $/g, GM%
-- **UOM toggle** — flip between Pack / $/g / $/8th / $/oz. Sorting respects the active unit.
-- **Saved views** — name a filter combo and recall it later (stored in localStorage per-device)
-- **Shareable URLs** — every filter/sort/UOM combo is a URL you can text a buyer
-- **Availability filter** — hide discontinued, show only pre-orders, etc.
-- **Data sanity flags** — MSRP rows that are below wholesale get a ⚠ icon. Fix them in the admin editor.
-- **Dark-mode-only** — indigo #292663 background, paper #FAF8F3 text. No light mode.
-
-## Known data issues in the source masterlist
-
-These are shipped as-is and flagged with ⚠ in the UI. Fix via the admin editor when you have a sec:
-
-- Herban 125ct Variety Taffy Tub — MSRP shows $3 (wholesale is $156.25)
-- Herban 125ct Caramel Tub — same pattern
-- FYRE 28ct 1g Premium Flower Tub — MSRP shows $9.99 (wholesale is $100)
-- Dope Pros 2ct Two Lil' Guys Prerolls — all prices marked `?`, row is skipped
-
-## File structure
-
-```
-src/
-  App.jsx                      Top-level shell, filter pipeline, keyboard shortcuts
-  main.jsx                     React entry
-  index.css                    Tailwind + base styles
-  components/
-    FilterBar.jsx              Search, chips, UOM toggle, saved views
-    ProductTable.jsx           The sortable table
-    AdminDrawer.jsx            Hidden editor (Cmd+Shift+E)
-  lib/
-    pricing.js                 GM, $/g, UOM conversions, money/percent formatting
-    state.js                   URL serialization + localStorage persistence
-  data/
-    products.json              The catalog. Source of truth.
-public/
-  CNAME                        Custom domain binding
-  favicon.svg
-.github/workflows/
-  deploy.yml                   Build & push to Pages on main
-```
+This repository currently has no general open-source license. Public source visibility does not itself grant broad reuse rights. A reusable edition with fictional data, configurable branding, documented setup, and an appropriate license is a proposed next step; it is not released here yet. Product names and third-party branding remain their owners' material.
